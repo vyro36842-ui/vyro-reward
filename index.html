@@ -2,194 +2,628 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vyro Reward</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #121212;
-            --surface-dark: #1e1e1e;
+            --bg-dark: #0a0a0c;
+            --card-bg: #141419;
+            --card-border: #262630;
             --primary-red: #e50914;
-            --gold-yellow: #ffd700;
-            --text-light: #ffffff;
-            --text-gray: #b3b3b3;
+            --red-glow: rgba(229, 9, 20, 0.4);
+            --gold-yellow: #ffbd14;
+            --gold-glow: rgba(255, 189, 20, 0.3);
+            --diamond-blue: #00d2ff;
+            --text-white: #ffffff;
+            --text-gray: #9e9ea7;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-dark);
-            color: var(--text-light);
+            color: var(--text-white);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             overflow: hidden;
         }
 
-        /* Loading Screen Style */
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-dark);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            transition: opacity 0.5s ease;
-        }
-
-        .logo-text {
-            color: var(--gold-yellow);
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-        }
-
-        .loader-bar-container {
-            width: 250px;
-            height: 6px;
-            background-color: var(--surface-dark);
-            border-radius: 3px;
-            overflow: hidden;
-            border: 1px solid #333;
-        }
-
-        .loader-bar {
-            width: 0%;
-            height: 100%;
-            background-color: var(--primary-red);
-            transition: width 0.1s linear;
-        }
-
-        .loading-percentage {
-            margin-top: 10px;
-            color: var(--text-gray);
-            font-size: 14px;
-        }
-
-        /* Main App Container (Hidden initially) */
-        #app-container {
-            display: none;
+        /* Container for Mobile View */
+        .app-wrapper {
             width: 100%;
             max-width: 480px;
             height: 100vh;
-            background-color: var(--surface-dark);
+            background-color: var(--bg-dark);
+            position: relative;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        /* ================= 1. LOADING SCREEN ================= */
+        #loading-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1a080a 0%, #0a0a0c 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin-bottom: 25px;
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px var(--gold-glow));
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .app-title-glow {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(180deg, #fff 0%, var(--gold-yellow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .loader-box {
+            width: 80%;
+            height: 8px;
+            background: #1f1f28;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
             position: relative;
         }
 
-        /* Top Header */
-        .app-header {
-            padding: 16px;
-            background-color: #181818;
-            border-bottom: 1px solid #282828;
+        .loader-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-red), var(--gold-yellow));
+            border-radius: 10px;
+            box-shadow: 0 0 12px var(--red-glow);
+            transition: width 0.1s linear;
+        }
+
+        .loading-text {
+            margin-top: 12px;
+            color: var(--text-gray);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Network Offline Alert Box */
+        .offline-card {
+            display: none;
+            background: rgba(229, 9, 20, 0.15);
+            border: 1px solid var(--primary-red);
+            padding: 15px 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .offline-card p {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .btn-retry {
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--red-glow);
+        }
+
+        /* ================= 2. LOGIN SCREEN ================= */
+        #login-screen {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark);
+            z-index: 900;
+            padding: 30px 24px;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-header h2 {
+            font-size: 24px;
+            color: var(--gold-yellow);
+            margin-top: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--gold-yellow);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--primary-red), #b30710);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--red-glow);
+        }
+
+        /* ================= 3. HOME DASHBOARD ================= */
+        #home-screen {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Header Bar */
+        .top-bar {
+            padding: 15px 18px;
+            background: #0f0f13;
+            border-bottom: 1px solid var(--card-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .app-header h1 {
-            color: var(--gold-yellow);
-            font-size: 20px;
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* Content Area */
-        .app-content {
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-yellow), var(--primary-red));
+            padding: 2px;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #000;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .user-tag {
+            font-size: 10px;
+            color: var(--gold-yellow);
+        }
+
+        /* Balances Widget */
+        .wallet-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 6px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .badge.diamond { color: var(--diamond-blue); }
+        .badge.coin { color: var(--gold-yellow); }
+
+        /* Main Content Scroll Area */
+        .content-body {
             flex: 1;
             padding: 16px;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        /* Bottom Navigation (4 Tabs only) */
+        /* Notice Board */
+        .notice-banner {
+            background: linear-gradient(90deg, rgba(255,189,20,0.1), rgba(229,9,20,0.1));
+            border: 1px dashed var(--gold-yellow);
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Feature Cards */
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary-red);
+        }
+
+        .feature-card.gold-border::before {
+            background: var(--gold-yellow);
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .card-info h3 {
+            font-size: 16px;
+            color: var(--text-white);
+            margin-bottom: 4px;
+        }
+
+        .card-info p {
+            font-size: 12px;
+            color: var(--text-gray);
+            line-height: 1.4;
+        }
+
+        .reward-badge-tag {
+            background: rgba(0, 210, 255, 0.15);
+            color: var(--diamond-blue);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .btn-card-action {
+            margin-top: 12px;
+            width: 100%;
+            padding: 10px;
+            background: #1f1f2a;
+            border: 1px solid var(--card-border);
+            color: var(--gold-yellow);
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-card-action:active {
+            transform: scale(0.98);
+            background: var(--gold-yellow);
+            color: #000;
+        }
+
+        /* ================= 4. BOTTOM NAVIGATION ================= */
         .bottom-nav {
-            height: 60px;
-            background-color: #181818;
-            border-top: 1px solid #282828;
+            height: 65px;
+            background: #0d0d11;
+            border-top: 1px solid var(--card-border);
             display: flex;
             justify-content: space-around;
             align-items: center;
         }
 
-        .nav-item {
-            color: var(--text-gray);
-            text-decoration: none;
-            font-size: 12px;
-            text-align: center;
+        .nav-btn {
             background: none;
             border: none;
+            color: var(--text-gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
             cursor: pointer;
+            width: 25%;
         }
 
-        .nav-item.active {
+        .nav-btn i {
+            font-size: 18px;
+        }
+
+        .nav-btn.active {
             color: var(--gold-yellow);
+        }
+
+        .nav-btn.active i {
+            color: var(--gold-yellow);
+            text-shadow: 0 0 10px var(--gold-glow);
         }
     </style>
 </head>
 <body>
 
-    <!-- Loading Screen 0 to 100% -->
+<div class="app-wrapper">
+
+    <!-- 1. LOADING SCREEN -->
     <div id="loading-screen">
-        <div class="logo-text">VYRO REWARD</div>
-        <div class="loader-bar-container">
-            <div class="loader-bar" id="loader-bar"></div>
+        <div class="logo-container">
+            <!-- Vyro Reward Logo -->
+            <img src="https://i.ibb.co/L8v8VzM/vyro-logo.png" alt="Vyro Logo" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2583/2583209.png'">
         </div>
-        <div class="loading-percentage" id="loading-percentage">0%</div>
+        <div class="app-title-glow">VYRO REWARD</div>
+        
+        <div class="loader-box">
+            <div class="loader-fill" id="loader-fill"></div>
+        </div>
+        <div class="loading-text" id="loading-text">0% लोडिंग हो रहा है...</div>
+
+        <!-- Offline Box -->
+        <div class="offline-card" id="offline-card">
+            <p><i class="fa-solid => fa-wifi"></i> इंटरनेट कनेक्शन चालू नहीं है!</p>
+            <button class="btn-retry" onclick="startAppLoading()">फिर से कोशिश करें</button>
+        </div>
     </div>
 
-    <!-- Main App Screen (Loads after 100%) -->
-    <div id="app-container" style="display: none;">
-        <header class="app-header">
-            <h1>Vyro Reward</h1>
-            <span style="font-size: 12px; color: var(--gold-yellow);">Test Mode</span>
-        </header>
-
-        <div class="app-content">
-            <h2 style="color: var(--gold-yellow); margin-bottom: 10px;">स्वागत है!</h2>
-            <p style="color: var(--text-gray); font-size: 14px;">यह Vyro Reward का प्रीमियम होम पेज है। पासवर्ड (123456) और अन्य सेटिंग्स अगले चरणों में जोड़ी जाएंगी।</p>
+    <!-- 2. LOGIN SCREEN -->
+    <div id="login-screen">
+        <div class="login-header">
+            <i class="fa-solid fa-crown" style="font-size: 40px; color: var(--gold-yellow);"></i>
+            <h2>लॉगिन करें</h2>
+            <p style="color: var(--text-gray); font-size: 12px; margin-top: 5px;">अपने Vyro Reward खाते में प्रवेश करें</p>
         </div>
 
+        <div class="input-group">
+            <label>User ID / Mobile</label>
+            <input type="text" id="login-id" value="VyroUser1" placeholder="User ID दर्ज करें">
+        </div>
+
+        <div class="input-group">
+            <label>Password (default: 123456)</label>
+            <input type="password" id="login-pass" value="123456" placeholder="पासवर्ड दर्ज करें">
+        </div>
+
+        <button class="btn-primary" onclick="performLogin()">प्रवेश करें (Login)</button>
+    </div>
+
+    <!-- 3. HOME DASHBOARD -->
+    <div id="home-screen">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User">
+                </div>
+                <div>
+                    <div class="user-name" id="display-user-name">Vyro Member</div>
+                    <div class="user-tag">PRO GAMER</div>
+                </div>
+            </div>
+
+            <div class="wallet-badges">
+                <div class="badge diamond">
+                    <i class="fa-solid fa-gem"></i>
+                    <span id="diamond-bal">0</span>
+                </div>
+                <div class="badge coin">
+                    <i class="fa-solid fa-coins"></i>
+                    <span id="coin-bal">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Body -->
+        <main class="content-body">
+            
+            <!-- Notice Banner -->
+            <div class="notice-banner">
+                <i class="fa-solid fa-bullhorn" style="color: var(--gold-yellow); font-size: 16px;"></i>
+                <div>Vyro Reward में आपका स्वागत है! खेलें और डायमंड्स कमाएं।</div>
+            </div>
+
+            <!-- Cricket Mini Game Card -->
+            <div>
+                <div class="card-title">
+                    <span><i class="fa-solid fa-baseball-bat-ball" style="color: var(--primary-red);"></i> क्रिकेट मिनी-गेम</span>
+                    <span style="font-size: 11px; color: var(--gold-yellow);">6 Balls Match</span>
+                </div>
+                <div class="feature-card">
+                    <div class="card-header-flex">
+                        <div class="card-info">
+                            <h3>क्रिकेट मैच खेलें</h3>
+                            <p>हर गेंद पर शॉट मारें! 6 बॉल्स पूरी करने और विज्ञापन देखने पर पाएँ 1 डायमंड।</p>
+                        </div>
+                        <div class="reward-badge-tag">+1 💎</div>
+                    </div>
+                    <button class="btn-card-action" onclick="alert('क्रिकेट गेम जल्द ही शुरू हो रहा है!')">मैच खेलें (Play Match)</button>
+                </div>
+            </div>
+
+            <!-- Prime Offer Card -->
+            <div>
+                <div class="card-title">
+                    <span><i class="fa-solid fa-bolt" style="color: var(--gold-yellow);"></i> प्राइम ऑफर (Prime Offer)</span>
+                    <span style="font-size: 11px; color: var(--text-gray);">Limit: 5/Day</span>
+                </div>
+                <div class="feature-card gold-border">
+                    <div class="card-header-flex">
+                        <div class="card-info">
+                            <h3>35 Diamonds → 240 Coins</h3>
+                            <p>डिस्प्ले वैल्यू: 20 Coins = ₹1 ( nominal ₹12 )। हर 2 सफल ऑफर्स के बीच 1 घंटे का अंतराल।</p>
+                        </div>
+                    </div>
+                    <button class="btn-card-action" style="border-color: var(--gold-yellow);" onclick="alert('प्राइम ऑफर नियम: आपके पास कम से कम 35 डायमंड्स होने चाहिए!')">ऑफ़र कन्वर्ट करें</button>
+                </div>
+            </div>
+
+            <!-- Daily Check-In Card -->
+            <div>
+                <div class="card-title">
+                    <span><i class="fa-solid fa-calendar-check" style="color: #00d2ff;"></i> डेली चेक-इन</span>
+                </div>
+                <div class="feature-card">
+                    <div class="card-header-flex">
+                        <div class="card-info">
+                            <h3>आज का रिवॉर्ड</h3>
+                            <p>रोज़ाना ऐप खोलें और Verified Ad पूरा करके 1 डायमंड प्राप्त करें।</p>
+                        </div>
+                        <div class="reward-badge-tag">+1 💎</div>
+                    </div>
+                    <button class="btn-card-action" onclick="alert('आज का चेक-इन पूरा करने के लिए Ad वेरिफाई किया जाएगा!')">Claim Check-In</button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- 4. BOTTOM NAVIGATION (Strictly 4 Tabs) -->
         <nav class="bottom-nav">
-            <button class="nav-item active">Home</button>
-            <button class="nav-item">Wallet</button>
-            <button class="nav-item">Refer</button>
-            <button class="nav-item">Setting</button>
+            <button class="nav-btn active">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </button>
+            <button class="nav-btn" onclick="alert('Wallet जल्द चालू होगा')">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Wallet</span>
+            </button>
+            <button class="nav-btn" onclick="alert('Referral System जल्द चालू होगा')">
+                <i class="fa-solid fa-users"></i>
+                <span>Refer</span>
+            </button>
+            <button class="nav-btn" onclick="alert('Settings जल्द चालू होगी')">
+                <i class="fa-solid fa-gear"></i>
+                <span>Setting</span>
+            </button>
         </nav>
     </div>
 
-    <script>
-        // 0 to 100% Loading Simulator
-        let width = 0;
-        const bar = document.getElementById('loader-bar');
-        const percentageText = document.getElementById('loading-percentage');
-        const loadingScreen = document.getElementById('loading-screen');
-        const appContainer = document.getElementById('app-container');
+</div>
 
-        const loadingInterval = setInterval(() => {
+<script>
+    // State Variables
+    let appLoaded = false;
+
+    // Start App & Check Network
+    function startAppLoading() {
+        document.getElementById('offline-card').style.display = 'none';
+        document.getElementById('loading-text').innerText = '0% लोडिंग हो रहा है...';
+        
+        // Network Check
+        if (!navigator.onLine) {
+            setTimeout(() => {
+                document.getElementById('offline-card').style.display = 'block';
+                document.getElementById('loading-text').innerText = 'कनेक्शन एरर!';
+            }, 1000);
+            return;
+        }
+
+        let width = 0;
+        const fill = document.getElementById('loader-fill');
+        const text = document.getElementById('loading-text');
+
+        const interval = setInterval(() => {
             if (width >= 100) {
-                clearInterval(loadingInterval);
-                loadingScreen.style.opacity = '0';
+                clearInterval(interval);
+                text.innerText = '100% पूरा हुआ!';
                 setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    appContainer.style.display = 'flex';
+                    document.getElementById('loading-screen').style.display = 'none';
+                    checkLoginStatus();
                 }, 500);
             } else {
-                width += 2; // Speed control
-                bar.style.width = width + '%';
-                percentageText.innerText = width + '%';
+                width += 2;
+                fill.style.width = width + '%';
+                text.innerText = width + '% लोडिंग हो रहा है...';
             }
-        }, 30); // 30ms interval for smooth loading
-    </script>
-</body>
-  </html>
-  
+        }, 30);
+    }
+
+    // Check Auto Login Logic
+    function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem('vyro_logged_in');
+        if (isLoggedIn === 'true') {
+            showHomeScreen();
+        } else {
+            document.

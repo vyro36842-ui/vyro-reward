@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#071b40">
+<title>Vyro Reward - Home</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:#f4fbff;
+  min-height:100vh;
+  min-height:100dvh;
+  background:
+    radial-gradient(ellipse at 10% 5%,#1678c7 0,transparent 38%),
+    radial-gradient(ellipse at 100% 60%,#293ba0 0,transparent 40%),
+    linear-gradient(145deg,#06142e,#0b2857,#07152f);
+}
+header{
+  padding:27px 20px 15px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+.logo{
+  height:53px;width:53px;flex-shrink:0;
+  border-radius:17px;
+  display:grid;place-items:center;
+  font-size:28px;font-weight:900;
+  background:linear-gradient(145deg,#5be6ff70,#637cff45);
+  border:1px solid #a4eaff70;
+  box-shadow:0 0 25px #44d9ff25;
+}
+.brand{font-size:20px;font-weight:900;letter-spacing:.5px}
+.brand span{color:#70e9ff}
+.tagline{font-size:11px;color:#b6d3f5;margin-top:5px}
+.container{padding:12px 18px 35px;max-width:600px;margin:auto}
+.welcome{font-size:27px;font-weight:900;line-height:1.3;margin:12px 0 8px}
+.welcome span{color:#77eaff}
+.description{font-size:14px;color:#b5cdec;line-height:1.7;margin:0 0 24px}
+.balance{
+  padding:21px;border-radius:24px;
+  background:linear-gradient(120deg,#299de54a,#777dff25);
+  border:1px solid #a7e5ff38;
+  box-shadow:0 15px 40px #0002;
+  backdrop-filter:blur(18px);
+}
+.balance-label{font-size:12px;color:#c3e1ff}
+.balance-number{font-size:32px;font-weight:900;margin:12px 0}
+.balance-number span{font-size:13px;color:#bceeff;font-weight:500}
+.pills{display:flex;gap:9px;flex-wrap:wrap}
+.pill{
+  border:1px solid #ffffff20;
+  background:#ffffff12;
+  border-radius:30px;padding:9px 12px;font-size:12px
+}
+.section-title{font-size:19px;font-weight:800;margin:29px 0 7px}
+.section-desc{font-size:13px;color:#aec8e8;margin:0 0 17px;line-height:1.6}
+.feature{
+  position:relative;overflow:hidden;
+  width:100%;display:flex;align-items:center;gap:15px;
+  padding:18px;margin-bottom:14px;
+  border:1px solid #a9e7ff30;border-radius:23px;
+  background:linear-gradient(120deg,#ffffff13,#ffffff05);
+  backdrop-filter:blur(18px);
+  color:white;text-align:left;cursor:pointer;
+  box-shadow:0 12px 28px #00000012;
+  transition:transform .18s,border-color .18s;
+}
+.feature:active{transform:scale(.98)}
+.feature:focus-visible{outline:2px solid #73eaff}
+.feature-icon{
+  width:65px;height:65px;flex-shrink:0;
+  display:grid;place-items:center;
+  font-size:32px;border-radius:20px;
+  background:linear-gradient(145deg,#5bdfff25,#7387ff25);
+  border:1px solid #b6edff28;
+}
+.feature-info{flex:1;min-width:0}
+.feature-info h3{font-size:17px;margin:0 0 7px}
+.feature-info p{font-size:12px;line-height:1.6;color:#b6cdea;margin:0}
+.arrow{
+  color:#8ceaff;font-size:26px;
+  padding-left:2px;
+}
+.label{
+  display:inline-block;margin-top:9px;
+  padding:5px 9px;border-radius:20px;
+  background:#65ddff17;color:#9deeff;font-size:10px;
+  border:1px solid #82e7ff25;
+}
+.footer{text-align:center;font-size:11px;color:#89a8cf;padding:15px 0}
+#toast{
+  position:fixed;left:50%;bottom:25px;
+  transform:translate(-50%,20px);
+  background:#102e54;border:1px solid #70dcff66;
+  padding:13px 18px;border-radius:14px;
+  font-size:13px;width:max-content;max-width:90%;
+  opacity:0;pointer-events:none;transition:.25s;
+  box-shadow:0 8px 30px #0005;
+}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">V</div>
+  <div>
+    <div class="brand">VYRO <span>REWARD</span></div>
+    <div class="tagline">PLAY • EARN • ENJOY</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <h1 class="welcome">Welcome back,<br><span>Champion!</span> ✨</h1>
+  <p class="description">
+    आपका रिवॉर्ड सफ़र यहाँ से शुरू होता है। अपना पसंदीदा विकल्प चुनें और आगे बढ़ें।
+  </p>
+
+  <section class="balance">
+    <div class="balance-label">आपका कुल बैलेंस</div>
+    <div class="balance-number">0 <span>Coins</span></div>
+    <div class="pills">
+      <div class="pill">💎 0 Diamonds</div>
+      <div class="pill">✨ Vyro Member</div>
+    </div>
+  </section>
+
+  <h2 class="section-title">आपके लिए खास</h2>
+  <p class="section-desc">नीचे किसी भी कार्ड पर टैप करके आगे बढ़ें।</p>
+
+  <button class="feature" onclick="openFeature('game')">
+    <div class="feature-icon">🏏</div>
+    <div class="feature-info">
+      <h3>Play Game</h3>
+      <p>क्रिकेट खेलें और अपने गेमिंग सफ़र की शुरुआत करें।</p>
+      <span class="label">क्रिकेट गेम • जल्द आ रहा है</span>
+    </div>
+    <div class="arrow">›</div>
+  </button>
+
+  <button class="feature" onclick="openFeature('checkin')">
+    <div class="feature-icon">🎁</div>
+    <div class="feature-info">
+      <h3>Daily Check-in</h3>
+      <p>रोज़ वापस आएँ और दैनिक रिवॉर्ड फीचर देखें।</p>
+      <span class="label">दैनिक इनाम • जल्द आ रहा है</span>
+    </div>
+    <div class="arrow">›</div>
+  </button>
+
+  <button class="feature" onclick="openFeature('prime')">
+    <div class="feature-icon">👑</div>
+    <div class="feature-info">
+      <h3>Prime Offer</h3>
+      <p>प्रीमियम ऑफ़र की जानकारी और कॉइन एक्सचेंज।</p>
+      <span class="label">35 💎 → 240 Coins • डेमो</span>
+    </div>
+    <div class="arrow">›</div>
+  </button>
+
+  <div class="footer">Vyro Reward · आपका सफ़र, आपके रिवॉर्ड</div>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+let toastTimer;
+
+function openFeature(feature){
+  const messages = {
+    game:"क्रिकेट गेम अगला बनाएँगे, भाई! 🏏",
+    checkin:"Daily Check-in का पेज अगला बनाएँगे! 🎁",
+    prime:"Prime Offer का पेज अगला बनाएँगे! 👑"
+  };
+
+  const toast = document.getElementById("toast");
+  toast.textContent = messages[feature];
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{
+    toast.classList.remove("show");
+  },2200);
+}
+</script>
+
+</body>
+  </html>
+  

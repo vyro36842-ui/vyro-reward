@@ -1,370 +1,136 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#240817">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#061a3a">
 <title>Vyro Reward</title>
-
 <style>
-* {
-  box-sizing: border-box;
-}
-
-:root {
-  --red: #ff3158;
-  --pink: #ff72bd;
-  --light: #ffe1ef;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  min-height: 100dvh;
-  font-family: Arial, sans-serif;
-  color: white;
-  background:
-    radial-gradient(ellipse at 15% 15%, #83133f 0%, transparent 45%),
-    radial-gradient(ellipse at 90% 85%, #71164d 0%, transparent 45%),
-    linear-gradient(145deg, #180610, #350b25, #200817);
-}
-
-.screen {
-  min-height: 100vh;
-  min-height: 100dvh;
-  width: 100%;
-  padding: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.logo {
-  width: 120px;
-  height: 120px;
-  border-radius: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 57px;
-  font-weight: 900;
-  color: white;
-  background: linear-gradient(145deg, #ff3158, #e52b91);
-  border: 2px solid #ffb5d6;
-  box-shadow: 0 0 45px #ff315844,
-              inset 0 0 20px #ffffff22;
-}
-
-.brand {
-  margin: 23px 0 8px;
-  font-size: 29px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.brand span {
-  color: var(--pink);
-}
-
-.subtitle {
-  color: #f0bfd5;
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.progress {
-  width: 100%;
-  max-width: 310px;
-  height: 9px;
-  margin-top: 32px;
-  background: #ffffff18;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.bar {
-  width: 0%;
-  height: 100%;
-  border-radius: 20px;
-  background: linear-gradient(90deg, var(--red), var(--pink));
-  box-shadow: 0 0 15px #ff72bd88;
-}
-
-.percent {
-  margin-top: 12px;
-  color: var(--pink);
-  font-size: 14px;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 380px;
-  padding: 28px 23px;
-  border-radius: 27px;
-  border: 1px solid #ff72bd55;
-  background: linear-gradient(145deg,
-    #ffffff12, #ff31580b);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 20px 60px #0003;
-}
-
-.login-card .logo {
-  width: 82px;
-  height: 82px;
-  border-radius: 25px;
-  font-size: 39px;
-  margin: auto;
-}
-
-.login-card .brand {
-  font-size: 24px;
-  margin-top: 20px;
-}
-
-input {
-  width: 100%;
-  margin-top: 24px;
-  padding: 16px;
-  border: 1px solid #ff72bd66;
-  border-radius: 14px;
-  background: #210b19;
-  color: white;
-  text-align: center;
-  font-size: 19px;
-  outline: none;
-}
-
-input:focus {
-  border-color: var(--pink);
-  box-shadow: 0 0 15px #ff72bd22;
-}
-
-input::placeholder {
-  color: #d5a4bd;
-}
-
-button {
-  width: 100%;
-  margin-top: 17px;
-  padding: 16px;
-  border: 0;
-  border-radius: 14px;
-  background: linear-gradient(100deg, var(--red), var(--pink));
-  color: white;
-  font-size: 17px;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: 0 8px 25px #ff315822;
-}
-
-button:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.message {
-  min-height: 24px;
-  margin-top: 15px;
-  color: var(--light);
-  font-size: 13px;
-  line-height: 1.6;
-}
+:root{--bg:#04132e;--cyan:#13d8ff;--blue:#087bff;--muted:#9eb9d9;--line:#20bfff65}
+*{box-sizing:border-box}
+body{margin:0;color:#f3f8ff;font-family:Arial,sans-serif;background:radial-gradient(ellipse at top,#073d80,transparent 45%),linear-gradient(155deg,#020b1c,#061a3a);min-height:100vh}
+button,input{font:inherit}button{cursor:pointer;color:inherit}
+.hidden{display:none!important}
+.center{width:100%;max-width:390px;text-align:center}
+.centerScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+.logo,.miniLogo{display:grid;place-items:center;font-weight:900;background:linear-gradient(145deg,#087bff,#0ee2ff);border:1px solid #b8f6ff;box-shadow:0 0 30px #08aaff65}
+.logo{margin:auto;width:85px;height:85px;border-radius:27px;font-size:45px}
+.brand{font-size:26px;font-weight:900;margin:17px 0 7px}
+.cyan{color:var(--cyan)}.muted,.desc,.small{color:var(--muted)}
+.small,.desc{font-size:13px;line-height:1.6}
+.progress{height:7px;background:#ffffff19;border-radius:20px;overflow:hidden;margin:25px auto 10px;max-width:300px}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.glass,.loginBox{background:linear-gradient(135deg,#0a3260e8,#061b3be8);border:1px solid var(--line);border-radius:21px;box-shadow:0 12px 35px #0003}
+.loginBox{padding:24px 20px}
+input{width:100%;padding:15px;border-radius:13px;border:1px solid var(--line);background:#03142e;color:white;margin-top:18px;text-align:center}
+.btn{border:1px solid #65e9ff8c;border-radius:14px;background:linear-gradient(100deg,#087bff,#08c9ef);padding:13px 16px;font-weight:bold}
+.full{width:100%;margin-top:13px}.secondary{background:#0a2a51}
+#app{padding-bottom:85px}
+.topbar{max-width:700px;margin:auto;padding:16px;display:flex;align-items:center;justify-content:space-between}
+.miniBrand{display:flex;align-items:center;gap:10px}
+.miniLogo{width:43px;height:43px;border-radius:14px;font-size:22px}
+.miniBrand small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.content{max-width:700px;margin:auto;padding:0 16px}
+.page{display:none}.page.active{display:block}
+h1{font-size:25px;margin:10px 0 7px}h2{font-size:18px;margin:23px 0 8px}h3{font-size:16px;margin:0 0 7px}
+.desc{margin:0 0 16px}
+.balance{padding:20px;background:linear-gradient(120deg,#075bbd,#07417c 60%,#0a2b56)}
+.label{font-size:11px;letter-spacing:.6px;color:#c7e9ff}
+.big{font-size:34px;font-weight:900;margin:10px 0}
+.big small{font-size:13px;color:#c6e9ff}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-size:11px;padding:7px 10px;border-radius:30px;background:#ffffff13;border:1px solid #ffffff21}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{padding:14px}.statIcon{font-size:23px}.statName{font-size:11px;color:var(--muted);margin-top:8px}.statVal{font-size:22px;font-weight:850;margin-top:3px}
+.featureGrid{display:grid;grid-template-columns:1fr;gap:11px}
+.feature{display:flex;align-items:center;gap:13px;text-align:left;width:100%;padding:15px;background:linear-gradient(110deg,#0a3263,#061d3e);border:1px solid var(--line);border-radius:19px}
+.fIcon{flex:0 0 53px;width:53px;height:53px;border-radius:16px;display:grid;place-items:center;font-size:27px;background:#087bff35;border:1px solid #4cdfff57}
+.fBody{flex:1}.fBody p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
+.tag{display:inline-block;font-size:9px;color:#a7f5ff;margin-top:7px;padding:4px 7px;border:1px solid #20bfff50;border-radius:20px}
+.arrow{font-size:25px;color:var(--cyan)}
+.pad{padding:17px;margin-top:12px}
+.rowLine{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid #ffffff12;font-size:13px}
+.callout{border:1px solid #ffc94d55;background:#ffc94d0d;border-radius:14px;padding:13px;font-size:12px;line-height:1.6;color:#ffe9ad;margin-top:13px}
+.back{margin:4px 0 15px;padding:9px 12px;border-radius:11px;border:1px solid var(--line);background:#0a2a51}
+.bottomNav{position:fixed;bottom:0;left:0;right:0;max-width:700px;margin:auto;padding:8px 8px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);background:#03142ef5;border-top:1px solid #20bfff45}
+.navBtn{border:0;border-radius:13px;background:transparent;color:#91afd1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 2px;font-size:10px}
+.navBtn .ico{font-size:21px}.navBtn.active{color:var(--cyan);background:#0b4b7b70}
+.toast{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:#092a50;border:1px solid var(--line);border-radius:13px;padding:12px;max-width:90%;font-size:12px;display:none}
+.pitch{height:150px;border-radius:15px;background:repeating-linear-gradient(90deg,#15784c,#15784c 20px,#167d50 20px,#167d50 40px);display:flex;align-items:center;justify-content:center;flex-direction:column;margin:12px 0}
+@media(min-width:520px){.featureGrid{grid-template-columns:1fr 1fr}.feature:last-child{grid-column:1/-1}}
 </style>
 </head>
-
 <body>
 
-<!-- LOADING SCREEN -->
-<section class="screen" id="loadingScreen">
-  <div class="logo">V</div>
-
-  <div class="brand">
-    VYRO <span>REWARD</span>
-  </div>
-
-  <p class="subtitle">Welcome to Vyro Reward</p>
-
-  <div class="progress">
-    <div class="bar" id="bar"></div>
-  </div>
-
-  <div class="percent" id="percent">0%</div>
-  <p class="subtitle" id="loadMessage">Loading your experience...</p>
+<section id="loading" class="centerScreen">
+ <div class="center"><div class="logo">V</div><div class="brand">VYRO <span class="cyan">REWARD</span></div>
+ <p class="muted">Your rewards journey starts here</p>
+ <div class="progress"><div id="loadBar"></div></div><div id="loadPct" class="cyan">0%</div></div>
 </section>
 
-<!-- LOGIN SCREEN -->
-<section class="screen hidden" id="loginScreen">
-  <div class="login-card">
-    <div class="logo">V</div>
-
-    <div class="brand">
-      VYRO <span>REWARD</span>
-    </div>
-
-    <p class="subtitle">Welcome back! Enter your password.</p>
-
-    <input
-      id="password"
-      type="password"
-      inputmode="numeric"
-      maxlength="6"
-      placeholder="Enter Password"
-      autocomplete="current-password"
-    >
-
-    <button id="loginButton" disabled onclick="login()">
-      LOGIN →
-    </button>
-
-    <div class="message" id="message">
-      इंटरनेट कनेक्शन जाँचा जा रहा है...
-    </div>
-  </div>
+<section id="login" class="centerScreen hidden">
+ <div class="center loginBox"><div class="logo">V</div><div class="brand">VYRO <span class="cyan">REWARD</span></div>
+ <p class="small">Welcome! Demo login screen.</p>
+ <input id="password" type="password" maxlength="6" inputmode="numeric" placeholder="Demo password: 123456">
+ <button class="btn full" onclick="login()">Login →</button>
+ <p id="loginMsg" class="small">Demo password: 123456</p></div>
 </section>
+
+<section id="app" class="hidden">
+<header class="topbar"><div class="miniBrand"><div class="miniLogo">V</div><div><strong>VYRO <span class="cyan">REWARD</span></strong><small>Your rewards journey</small></div></div><span class="cyan">●</span></header>
+<main class="content">
+
+<section class="page active" id="page-home">
+<h1>Hello, <span class="cyan">Champion!</span> ✨</h1>
+<p class="desc">आपके rewards space में स्वागत है।</p>
+<div class="glass balance"><div class="label">YOUR TOTAL BALANCE</div><div class="big">0 <small>Coins</small></div><div class="chips"><span class="chip">💎 0 Diamonds</span><span class="chip">✦ Demo Account</span></div></div>
+<h2>Your Overview</h2><div class="stats">
+<div class="glass stat"><div class="statIcon">💎</div><div class="statName">Total Diamonds</div><div class="statVal">0</div></div>
+<div class="glass stat"><div class="statIcon">🪙</div><div class="statName">Total Coins</div><div class="statVal">0</div></div></div>
+<h2>Explore Rewards ✨</h2><p class="desc">किसी कार्ड पर टैप करके उसका पेज खोलें।</p>
+<div class="featureGrid">
+<button class="feature" onclick="openFeature('game')"><span class="fIcon">🏏</span><span class="fBody"><h3>Play Game</h3><p>Cricket game का डेमो खेलें।</p><span class="tag">GAME ZONE</span></span><span class="arrow">›</span></button>
+<button class="feature" onclick="openFeature('checkin')"><span class="fIcon">🎁</span><span class="fBody"><h3>Daily Check-in</h3><p>दैनिक चेक-इन स्क्रीन देखें।</p><span class="tag">DAILY REWARD</span></span><span class="arrow">›</span></button>
+<button class="feature" onclick="openFeature('prime')"><span class="fIcon">👑</span><span class="fBody"><h3>Prime Offer</h3><p>35 Diamonds → 240 Coins का प्रस्ताव।</p><span class="tag">PRIME CLUB</span></span><span class="arrow">›</span></button>
+</div>
+<div class="glass pad"><h3>💡 Important</h3><p class="small">यह फ्रंटएंड डेमो है। असली विज्ञापन, भुगतान या रियल रिवॉर्ड अभी सक्रिय नहीं हैं।</p></div>
+</section>
+
+<section class="page" id="page-game"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>🏏 Cricket <span class="cyan">Game</span></h1><p class="desc">6-ball timing game का डेमो।</p><div class="glass pad" style="text-align:center"><div class="pitch"><div style="font-size:38px">🏏 🏟️</div><strong id="ballLabel">Ready to play?</strong></div><p id="gameResult" class="small">Start दबाएँ, फिर Shot मारें।</p><button class="btn full" id="startGame" onclick="startGame()">Start 6-Ball Match</button><button class="btn full secondary" id="shotBtn" onclick="hitShot()" disabled>🏏 Shot मारो</button></div><div class="callout">इस डेमो में मैच जीतने पर असली रिवॉर्ड नहीं मिलता।</div></section>
+
+<section class="page" id="page-checkin"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>🎁 Daily <span class="cyan">Check-in</span></h1><p class="desc">दैनिक रिवॉर्ड का प्रीव्यू।</p><div class="glass pad"><div class="stats"><div class="glass stat">🪙<div class="statName">Day 1</div><div class="statVal">+10</div></div><div class="glass stat">🎁<div class="statName">Day 2</div><div class="statVal">+20</div></div><div class="glass stat">💎<div class="statName">Day 3</div><div class="statVal">+30</div></div><div class="glass stat">👑<div class="statName">Day 7</div><div class="statVal">Bonus</div></div></div><button class="btn full" onclick="toast('Daily reward अभी demo में सक्रिय नहीं है।')">Check-in Now</button></div></section>
+
+<section class="page" id="page-prime"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>👑 Prime <span class="cyan">Offers</span></h1><p class="desc">विशेष ऑफ़र का प्रीव्यू।</p><div class="glass pad"><h3>Prime Exchange</h3><p class="small">प्रस्तावित ऑफ़र</p><div class="big">💎 35 → 🪙 240</div><button class="btn full" onclick="toast('असली खरीद अभी सक्रिय नहीं है।')">View Offer</button></div><div class="callout">प्रस्तावित नियम: रोज़ अधिकतम 5 सफल ऑफ़र और खरीद के बीच कम-से-कम 1 घंटा।</div></section>
+
+<section class="page" id="page-referral"><h1>Invite & <span class="cyan">Earn</span> 🤝</h1><p class="desc">अपने दोस्तों को invite करने के लिए Referral सेक्शन।</p><div class="glass pad"><h3>Your Referral Code</h3><div class="rowLine"><span class="cyan">VYRO-DEMO</span><button class="btn" onclick="toast('Demo code: VYRO-DEMO')">Copy</button></div><div class="stats"><div class="glass stat"><div class="statName">Successful Referrals</div><div class="statVal">0</div></div><div class="glass stat"><div class="statName">Total Earned</div><div class="statVal">0</div></div></div><button class="btn full" onclick="toast('Referral sharing बाद में जोड़ा जाएगा।')">Share Invite</button></div></section>
+
+<section class="page" id="page-wallet"><h1>My <span class="cyan">Wallet</span> 👛</h1><p class="desc">Balance और transaction history का डेमो।</p><div class="glass balance"><div class="label">AVAILABLE BALANCE</div><div class="big">0 <small>Coins</small></div><div class="chips"><span class="chip">💎 0 Diamonds</span></div></div><div class="stats" style="margin-top:12px"><button class="glass stat" onclick="toast('Demo में coins जोड़ना बंद है।')">🪙<div class="statName">Add Coins</div><div class="statVal">Explore</div></button><button class="glass stat" onclick="toast('Secure backend के बाद withdrawal बनेगा।')">👛<div class="statName">Withdraw</div><div class="statVal">Coming Soon</div></button></div><h2>Transaction History</h2><div class="glass pad"><h3>No transactions yet</h3><p class="small">रिवॉर्ड इतिहास यहाँ दिखाई देगा।</p></div></section>
+
+<section class="page" id="page-setting"><h1>App <span class="cyan">Settings</span> ⚙️</h1><p class="desc">ऐप की जानकारी और account options।</p><div class="glass pad"><div class="rowLine"><span>App Name</span><strong>Vyro Reward</strong></div><div class="rowLine"><span>Version</span><strong>Demo 1.0</strong></div><div class="rowLine"><span>Account</span><strong>Local Demo</strong></div><div class="rowLine"><span>Status</span><strong class="cyan">Demo Active</strong></div></div><h2>Help & Information</h2><div class="glass pad"><button class="feature" onclick="openFeature('history')"><span class="fIcon">📜</span><span class="fBody"><h3>Game & Reward History</h3><p>Activity screen खोलें।</p></span><span class="arrow">›</span></button><button class="feature" style="margin-top:10px" onclick="openFeature('support')"><span class="fIcon">💬</span><span class="fBody"><h3>Help & Support</h3><p>Support और FAQ।</p></span><span class="arrow">›</span></button><button class="btn full secondary" onclick="logout()">Log Out</button></div></section>
+
+<section class="page" id="page-history"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>Game <span class="cyan">History</span></h1><div class="glass pad"><h3>🏏 Cricket Game</h3><p class="small">अभी कोई मैच रिकॉर्ड नहीं है।</p><div class="rowLine"><span>Verified rewards</span><strong>0</strong></div><div class="rowLine"><span>Pending rewards</span><strong>0</strong></div></div></section>
+<section class="page" id="page-support"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>Help & <span class="cyan">Support</span></h1><div class="glass pad"><div class="rowLine"><span>क्या wallet असली है?</span><strong>नहीं, demo है</strong></div><div class="rowLine"><span>क्या payout चालू है?</span><strong>नहीं</strong></div><p class="small">Public launch से पहले support contact, privacy policy और terms जोड़ें।</p></div></section>
+</main>
+<nav class="bottomNav"><button class="navBtn active" data-tab="home" onclick="openTab('home',this)"><span class="ico">⌂</span>Home</button><button class="navBtn" data-tab="referral" onclick="openTab('referral',this)"><span class="ico">♧</span>Referral</button><button class="navBtn" data-tab="wallet" onclick="openTab('wallet',this)"><span class="ico">▣</span>Wallet</button><button class="navBtn" data-tab="setting" onclick="openTab('setting',this)"><span class="ico">⚙</span>Setting</button></nav>
+</section>
+<div id="toast" class="toast"></div>
 
 <script>
-const loadingScreen = document.getElementById("loadingScreen");
-const loginScreen = document.getElementById("loginScreen");
-const bar = document.getElementById("bar");
-const percent = document.getElementById("percent");
-const loadMessage = document.getElementById("loadMessage");
-const password = document.getElementById("password");
-const loginButton = document.getElementById("loginButton");
-const message = document.getElementById("message");
-
-let internetOK = false;
-let checking = false;
-let pageReady = false;
-
-function showLogin() {
-  loadingScreen.classList.add("hidden");
-  loginScreen.classList.remove("hidden");
-}
-
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function checkInternet() {
-  if (checking) return false;
-
-  checking = true;
-  internetOK = false;
-  loginButton.disabled = true;
-
-  if (!navigator.onLine) {
-    message.textContent = "इंटरनेट चालू करो और दोबारा कोशिश करो।";
-    checking = false;
-    return false;
-  }
-
-  message.textContent = "इंटरनेट कनेक्शन जाँचा जा रहा है...";
-
-  let timer;
-
-  try {
-    const controller = new AbortController();
-
-    timer = setTimeout(() => controller.abort(), 6000);
-
-    await fetch("https://www.google.com/generate_204", {
-      mode: "no-cors",
-      cache: "no-store",
-      signal: controller.signal
-    });
-
-    internetOK = true;
-    message.textContent = "कनेक्शन तैयार है।";
-  } catch (error) {
-    internetOK = false;
-    message.textContent = "इंटरनेट नहीं चल रहा। दोबारा कोशिश करो।";
-  } finally {
-    clearTimeout(timer);
-    checking = false;
-    loginButton.disabled = !internetOK || !pageReady;
-  }
-
-  return internetOK;
-}
-
-async function startApp() {
-  for (let i = 0; i <= 100; i++) {
-    bar.style.width = i + "%";
-    percent.textContent = i + "%";
-    await wait(20);
-  }
-
-  loadMessage.textContent = "Checking connection...";
-  showLogin();
-
-  const connected = await checkInternet();
-
-  if (connected) {
-    pageReady = true;
-
-    if (localStorage.getItem("vyroLoggedIn") === "yes") {
-      window.location.replace("home.html");
-      return;
-    }
-
-    loginButton.disabled = false;
-  }
-}
-
-async function login() {
-  if (!pageReady || checking) return;
-
-  loginButton.disabled = true;
-
-  const connected = await checkInternet();
-
-  if (!connected) return;
-
-  if (password.value !== "123456") {
-    message.textContent = "गलत पासवर्ड! दोबारा कोशिश करो।";
-    loginButton.disabled = false;
-    password.value = "";
-    return;
-  }
-
-  try {
-    localStorage.setItem("vyroLoggedIn", "yes");
-    window.location.href = "home.html";
-  } catch (error) {
-    message.textContent = "ब्राउज़र में डेटा सेव नहीं हो पाया।";
-    loginButton.disabled = false;
-  }
-}
-
-window.addEventListener("online", async () => {
-  if (!loginScreen.classList.contains("hidden")) {
-    const connected = await checkInternet();
-
-    if (connected) {
-      pageReady = true;
-      loginButton.disabled = false;
-    }
-  }
-});
-
-window.addEventListener("offline", () => {
-  internetOK = false;
-  loginButton.disabled = true;
-
-  if (!loginScreen.classList.contains("hidden")) {
-    message.textContent = "इंटरनेट बंद है। इंटरनेट चालू करो।";
-  }
-});
-
-startApp();
+const $=id=>document.getElementById(id);
+function show(id){['loading','login','app'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+let progress=0;const timer=setInterval(()=>{progress=Math.min(100,progress+10);$('loadBar').style.width=progress+'%';$('loadPct').textContent=progress+'%';if(progress===100){clearInterval(timer);setTimeout(()=>show('login'),250)}},90);
+function login(){if($('password').value==='123456'){show('app');openTab('home',document.querySelector('[data-tab="home"]'))}else $('loginMsg').textContent='Password गलत है। Demo password 123456 है।'}
+$('password').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+function openTab(n,b){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+n).classList.add('active');document.querySelectorAll('.navBtn').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');window.scrollTo(0,0)}
+function openFeature(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+n).classList.add('active');document.querySelectorAll('.navBtn').forEach(x=>x.classList.remove('active'));window.scrollTo(0,0)}
+function goHome(){openTab('home',document.querySelector('[data-tab="home"]'))}
+function logout(){$('password').value='';show('login')}
+let toastTimer;function toast(s){$('toast').textContent=s;$('toast').style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.display='none',2500)}
+let ball=0,shots=0,waiting=false,active=false;
+function startGame(){ball=0;shots=0;active=true;$('startGame').disabled=true;$('shotBtn').disabled=false;nextBall()}
+function nextBall(){if(!active)return;if(ball>=6){active=false;$('ballLabel').textContent='Match complete';$('gameResult').textContent='Demo score: '+shots+'/6. कोई real reward नहीं दिया गया।';$('startGame').disabled=false;$('shotBtn').disabled=true;return}ball++;waiting=true;$('ballLabel').textContent='Ball '+ball+' / 6 — READY';$('gameResult').textContent='अब Shot मारें!';setTimeout(()=>{if(active&&waiting){waiting=false;$('ballLabel').textContent='Missed!';setTimeout(nextBall,600)}},1800)}
+function hitShot(){if(!active||!waiting){toast('Ball आने का इंतज़ार करें।');return}waiting=false;shots++;$('ballLabel').textContent=['Single!','FOUR!','Good shot!','SIX!'][Math.floor(Math.random()*4)];$('gameResult').textContent='Demo hit '+shots+' — '+ball+'/6';setTimeout(nextBall,600)}
 </script>
-
 </body>
-</html>
+  </html>
+                                       

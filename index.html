@@ -1,507 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0c0814">
-<title>Vyro Reward</title>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
-
-:root {
-  --bg-base: #0c0814;
-  --panel-bg: rgba(25, 18, 38, 0.65);
-  --panel-border: rgba(255, 255, 255, 0.08);
-  --primary-gold: #ffd54a;
-  --primary-glow: rgba(255, 213, 74, 0.25);
-  --accent-rose: #ff304f;
-  --text-main: #ffffff;
-  --text-muted: #8e889b;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  min-height: 100vh;
-  background: var(--bg-base);
-  color: var(--text-main);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  overflow-x: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Background Glowing Mesh */
-.app-container {
-  width: 100%;
-  max-width: 480px;
-  height: 100vh;
-  position: relative;
-  background: 
-    radial-gradient(circle at 10% 10%, rgba(255, 48, 79, 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 90% 88%, rgba(255, 213, 74, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(120, 45, 200, 0.1) 0%, transparent 65%),
-    var(--bg-base);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.screen {
-  position: absolute;
-  inset: 0;
-  display: none;
-  flex-direction: column;
-  z-index: 10;
-}
-
-.screen.active {
-  display: flex;
-}
-
-/* ------------------
-   1. LOADING SCREEN
------------------- */
-#loading {
-  justify-content: center;
-  align-items: center;
-  padding: 30px;
-  text-align: center;
-}
-
-.logo-wrap {
-  position: relative;
-  margin-bottom: 30px;
-}
-
-.brand-logo {
-  width: 90px;
-  height: 90px;
-  margin: 0 auto;
-  border-radius: 28px;
-  background: linear-gradient(135deg, #ffd54a 0%, #ff8c20 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 
-    0 12px 35px rgba(255, 213, 74, 0.3),
-    inset 0 2px 4px rgba(255, 255, 255, 0.5);
-}
-
-.brand-logo svg {
-  width: 52px;
-  height: 52px;
-  fill: #120a1c;
-}
-
-.brand-title {
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-  margin-bottom: 6px;
-}
-
-.brand-title span {
-  color: var(--primary-gold);
-}
-
-.brand-tagline {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.loader-box {
-  width: 100%;
-  max-width: 240px;
-  margin-top: 50px;
-}
-
-.progress-track {
-  height: 8px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-.progress-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: 20px;
-  background: linear-gradient(90deg, var(--accent-rose), var(--primary-gold));
-  transition: width 0.1s linear;
-  box-shadow: 0 0 12px rgba(255, 213, 74, 0.4);
-}
-
-.progress-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-
-#percent {
-  color: var(--primary-gold);
-  font-weight: 800;
-}
-
-/* ------------------
-   2. LOGIN SCREEN
------------------- */
-#login {
-  justify-content: center;
-  padding: 36px 28px;
-}
-
-.welcome-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 20px;
-  background: rgba(255, 213, 74, 0.1);
-  border: 1px solid rgba(255, 213, 74, 0.25);
-  color: var(--primary-gold);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  margin-bottom: 20px;
-}
-
-.login-header h1 {
-  font-size: 32px;
-  font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: -1px;
-  margin-bottom: 10px;
-}
-
-.login-header p {
-  color: var(--text-muted);
-  font-size: 14px;
-  line-height: 1.6;
-  margin-bottom: 35px;
-}
-
-.field-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  color: #c2bbc9;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
-
-.input-box {
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  border-radius: 18px;
-  padding: 4px 18px;
-  margin-bottom: 20px;
-  backdrop-filter: blur(10px);
-}
-
-.input-box input {
-  width: 100%;
-  padding: 16px 0;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 6px;
-}
-
-.login-btn {
-  width: 100%;
-  border: none;
-  border-radius: 18px;
-  padding: 18px;
-  background: linear-gradient(135deg, #ffd54a 0%, #ff9d20 100%);
-  color: #120a1c;
-  font-size: 15px;
-  font-weight: 900;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  box-shadow: 0 10px 30px var(--primary-glow);
-}
-
-.error-msg {
-  color: var(--accent-rose);
-  font-size: 12px;
-  font-weight: 600;
-  text-align: center;
-  margin-top: 14px;
-  min-height: 18px;
-}
-
-/* ------------------
-   3. APP SCREEN
------------------- */
-#app {
-  padding-bottom: 85px;
-}
-
-.app-header {
-  padding: 24px 24px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.header-brand {
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-}
-
-.header-brand span {
-  color: var(--primary-gold);
-}
-
-.header-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--accent-rose), #a31c34);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  box-shadow: 0 4px 15px rgba(255, 48, 79, 0.3);
-}
-
-.page-viewport {
-  flex: 1;
-  position: relative;
-  overflow-y: auto;
-}
-
-.page {
-  display: none;
-  padding: 12px 24px;
-}
-
-.page.active {
-  display: block;
-}
-
-/* ------------------
-   4. BOTTOM NAVIGATION
------------------- */
-.bottom-nav {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 75px;
-  background: rgba(15, 10, 24, 0.85);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  align-items: center;
-  z-index: 100;
-}
-
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 8px 0;
-  transition: all 0.2s ease;
-}
-
-.nav-icon {
-  width: 22px;
-  height: 22px;
-  fill: currentColor;
-}
-
-.nav-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-}
-
-.nav-item.active {
-  color: var(--primary-gold);
-}
-
-.nav-item.active .nav-icon {
-  filter: drop-shadow(0 0 8px var(--primary-glow));
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyro - Step 1 Real Login</title>
+    <!-- Firebase Standard SDK Libraries -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .login-card { background: white; padding: 40px 30px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; width: 100%; max-width: 380px; }
+        .logo-area { font-size: 48px; margin-bottom: 10px; }
+        h2 { color: #333; margin-bottom: 8px; font-size: 24px; }
+        p { color: #666; font-size: 14px; margin-bottom: 30px; }
+        .google-btn { background: #fff; color: #444; border: 2px solid #e1e1e1; padding: 12px 16px; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .google-btn:hover { background: #f5f5f5; border-color: #ccc; }
+        .google-icon { width: 20px; height: 20px; }
+        .welcome-box { display: none; }
+        .welcome-box.active { display: block; }
+        .login-box { display: block; }
+        .login-box.hidden { display: none; }
+        .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid #667eea; margin-bottom: 15px; }
+        .logout-btn { background: #ff4d4d; color: white; border: none; padding: 12px; border-radius: 8px; margin-top: 20px; cursor: pointer; width: 100%; font-weight: bold; font-size: 15px; }
+    </style>
 </head>
-
 <body>
 
-<div class="app-container">
+    <div class="login-card">
+        <!-- लॉगिन बॉक्स (शुरुआत में दिखेगा) -->
+        <div id="login-container" class="login-box">
+            <div class="logo-area">💰</div>
+            <h2>Vyro Reward</h2>
+            <p>लॉगिन करें और असली रिवॉर्ड्स कमाना शुरू करें</p>
+            <button id="btn-login" class="google-btn">
+                <img class="google-icon" src="https://gstatic.com" alt="Google">
+                Google अकाउंट से जुड़ें
+            </button>
+        </div>
 
-  <!-- 1. LOADING SCREEN -->
-  <section id="loading" class="screen active">
-    <div class="logo-wrap">
-      <div class="brand-logo">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-    </div>
-    
-    <div class="brand-title">VYRO <span>REWARD</span></div>
-    <div class="brand-tagline">A smarter rewards experience</div>
+        <!-- लॉगिन होने के बाद का डैशबोर्ड बॉक्स -->
+        <div id="welcome-container" class="welcome-box">
+            <img id="user-avatar" class="profile-img" src="" alt="User">
+            <h2>नमस्ते, <span id="user-display-name">User</span>!</h2>
+            <p id="user-display-email">user@gmail.com</p>
+            
+            <!-- कॉइन का स्ट्रक्चर (स्टेप 2 में इसे असली डेटाबेस से लिंक करेंगे) -->
+            <div style="background: #f0f2ff; border: 1px dashed #667eea; padding: 15px; border-radius: 12px; margin-top: 15px;">
+                <span style="font-size: 14px; color: #555;">आपका बैलेंस</span>
+                <h3 style="font-size: 28px; color: #764ba2; margin-top: 5px;">0 Coins</h3>
+            </div>
 
-    <div class="loader-box">
-      <div class="progress-track">
-        <div class="progress-fill" id="progress"></div>
-      </div>
-      <div class="progress-labels">
-        <span>Loading Engine...</span>
-        <span id="percent">0%</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. LOGIN SCREEN -->
-  <section id="login" class="screen">
-    <div class="login-header">
-      <div class="welcome-badge">WELCOME TO VYRO</div>
-      <h1>Your next chapter<br>starts here.</h1>
-      <p>Sign in to continue to your Vyro Reward experience.</p>
+            <button id="btn-logout" class="logout-btn">अकाउंट लॉगआउट करें</button>
+        </div>
     </div>
 
-    <form id="loginForm">
-      <label class="field-label" for="loginCode">ACCESS CODE</label>
-      <div class="input-box">
-        <input id="loginCode" type="password" inputmode="numeric" maxlength="6" placeholder="******" required>
-      </div>
-      <button class="login-btn" type="submit">Continue →</button>
-      <div class="error-msg" id="loginMessage"></div>
-    </form>
-  </section>
+    <script>
+        // आपका असली Firebase कॉन्फिग जो आपने जनरेट किया है
+        const firebaseConfig = {
+          apiKey: "AIzaSyBWhmQlSv2Bz2hWspsE7M-I6lL1V4AeLy0",
+          authDomain: "://firebaseapp.com",
+          projectId: "vyro-75bbc",
+          storageBucket: "vyro-75bbc.firebasestorage.app",
+          messagingSenderId: "1077764939396",
+          appId: "1:1077764939396:web:ab5bc74dd831c7b33becd1"
+        };
 
-  <!-- 3. MAIN APP SCREEN (Clean & Non-Clickable Shell) -->
-  <section id="app" class="screen">
-    <header class="app-header">
-      <div class="header-brand">VYRO <span>REWARD</span></div>
-      <div class="header-avatar">V</div>
-    </header>
+        // Firebase को इनिशियलाइज़ करना
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
 
-    <main class="page-viewport">
-      <section class="page active" id="home"></section>
-      <section class="page" id="referral"></section>
-      <section class="page" id="wallet"></section>
-      <section class="page" id="setting"></section>
-    </main>
+        // UI एलिमेंट्स को सेलेक्ट करना
+        const loginContainer = document.getElementById('login-container');
+        const welcomeContainer = document.getElementById('welcome-container');
+        const btnLogin = document.getElementById('btn-login');
+        const btnLogout = document.getElementById('btn-logout');
 
-    <!-- 4. BOTTOM NAV -->
-    <nav class="bottom-nav">
-      <button class="nav-item active" data-page="home">
-        <svg class="nav-icon" viewBox="0 0 24 24">
-          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
-        <span class="nav-label">Home</span>
-      </button>
+        // असली गूगल लॉगिन ट्रिगर
+        btnLogin.addEventListener('click', () => {
+            auth.signInWithPopup(provider).catch(err => {
+                alert("लॉगिन में समस्या आई: " + err.message);
+            });
+        });
 
-      <button class="nav-item" data-page="referral">
-        <svg class="nav-icon" viewBox="0 0 24 24">
-          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-        </svg>
-        <span class="nav-label">Referral</span>
-      </button>
+        // लॉगआउट ट्रिगर
+        btnLogout.addEventListener('click', () => {
+            auth.signOut();
+        });
 
-      <button class="nav-item" data-page="wallet">
-        <svg class="nav-icon" viewBox="0 0 24 24">
-          <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-        </svg>
-        <span class="nav-label">Wallet</span>
-      </button>
-
-      <button class="nav-item" data-page="setting">
-        <svg class="nav-icon" viewBox="0 0 24 24">
-          <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-        </svg>
-        <span class="nav-label">Setting</span>
-      </button>
-    </nav>
-  </section>
-
-</div>
-
-<script>
-const $ = id => document.getElementById(id);
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  $(id).classList.add('active');
-}
-
-function openApp() {
-  showScreen('app');
-}
-
-function startLoading() {
-  let val = 0;
-  const timer = setInterval(() => {
-    val += 2;
-    $('progress').style.width = val + '%';
-    $('percent').textContent = val + '%';
-
-    if (val >= 100) {
-      clearInterval(timer);
-      setTimeout(() => {
-        if (localStorage.getItem('vyroLoggedIn') === 'true') {
-          openApp();
-        } else {
-          showScreen('login');
-        }
-      }, 200);
-    }
-  }, 30);
-}
-
-$('loginForm').addEventListener('submit', e => {
-  e.preventDefault();
-  if ($('loginCode').value === '123456') {
-    localStorage.setItem('vyroLoggedIn', 'true');
-    $('loginMessage').textContent = '';
-    openApp();
-  } else {
-    $('loginMessage').textContent = 'Invalid access code. Try again.';
-  }
-});
-
-document.querySelectorAll('.nav-item').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const pageId = btn.dataset.page;
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    
-    $(pageId).classList.add('active');
-    btn.classList.add('active');
-  });
-});
-
-startLoading();
-</script>
-
+        // रियल-टाइम यूजर स्टेट मॉनिटर (Real Auth State)
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // अगर यूजर सफलतापूर्वक लॉगिन हो जाता है
+                loginContainer.classList.add('hidden');
+                welcomeContainer.classList.add('active');
+                document.getElementById('user-avatar').src = user.photoURL || 'https://placeholder.com';
+                document.getElementById('user-display-name').innerText = user.displayName || 'User';
+                document.getElementById('user-display-email').innerText = user.email;
+            } else {
+                // अगर यूजर लॉगआउट है या लॉगिन नहीं हुआ है
+                loginContainer.classList.remove('hidden');
+                welcomeContainer.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

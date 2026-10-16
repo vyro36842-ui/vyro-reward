@@ -4,409 +4,303 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080707">
 <title>Vyro Reward</title>
 
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- color:#fff8e8;
- background:radial-gradient(circle at top,#49130d,#100807 48%,#050505);
+* {
+  box-sizing: border-box;
 }
-.app{
- max-width:460px;
- min-height:100vh;
- margin:auto;
- padding:25px 22px;
- display:flex;
- flex-direction:column;
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #100909;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.brand{text-align:center;margin:12px 0 28px}
-.logo{
- width:96px;height:96px;margin:auto;
- border:2px solid #ffd34d;border-radius:50%;
- display:grid;place-items:center;
- background:radial-gradient(circle,#46170c,#080707);
- box-shadow:0 0 28px #ffad0040;
- position:relative;
+
+.screen {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
-.logo:before{
- content:"";position:absolute;inset:6px;
- border:1px solid #ffd34d;border-radius:50%;
+
+.logo {
+  width: 125px;
+  height: 125px;
+  border: 4px solid #ffca28;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffca28;
+  font-size: 48px;
+  font-weight: bold;
+  background: linear-gradient(145deg, #5e0808, #190606);
+  box-shadow: 0 0 30px #a91d1d55;
 }
-.v{
- font:bold italic 72px Georgia,serif;
- color:#ffd34d;
- text-shadow:0 0 18px #ff9500;
+
+h1 {
+  margin: 22px 0 8px;
+  font-size: 30px;
 }
-.brand h1{
- margin:10px 0 0;font:900 36px Georgia,serif;
- letter-spacing:4px;color:#ffd34d;
+
+.gold {
+  color: #ffca28;
 }
-.brand h3{
- margin:2px 0;color:#ffb900;letter-spacing:5px;
+
+p {
+  color: #c9bdbd;
 }
-.tagline{font-size:11px;margin-top:12px;color:#eee}
-.goldtext{color:#ffd34d}
-.screen{display:none;animation:fade .3s}
-.screen.active{display:block}
-#loading.active{display:flex}
-#loading{
- flex:1;flex-direction:column;
- justify-content:center;text-align:center;
+
+.progress {
+  width: 100%;
+  height: 10px;
+  margin-top: 30px;
+  background: #392020;
+  border-radius: 20px;
+  overflow: hidden;
 }
-@keyframes fade{
- from{opacity:0;transform:translateY(7px)}
- to{opacity:1;transform:translateY(0)}
+
+.bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #ed2727, #ffca28);
+  border-radius: 20px;
 }
-.welcome{
- font:italic 28px Georgia,serif;color:#ffd34d;
+
+#percent {
+  margin-top: 12px;
+  color: #ffca28;
 }
-h2{text-align:center;font-size:25px}
-.desc{
- text-align:center;color:#c9bdb0;
- font-size:14px;line-height:1.6;
+
+input {
+  width: 100%;
+  padding: 16px;
+  margin-top: 22px;
+  border: 1px solid #9b2929;
+  border-radius: 12px;
+  background: #211313;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  outline: none;
 }
-.track{
- width:100%;height:13px;padding:2px;
- border:1px solid #ffbd26;border-radius:20px;
- background:#160908;margin-top:20px;
+
+button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #e32222, #ffbd22);
+  color: #160808;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
 }
-.fill{
- width:0;height:100%;border-radius:20px;
- background:linear-gradient(90deg,#e50020,#ff9800,#ffe45c);
- box-shadow:0 0 12px #ffb900;
+
+button:disabled {
+  opacity: 0.5;
 }
-.percent{
- display:flex;justify-content:space-between;
- font-size:12px;color:#ffe4a0;margin-top:8px;
+
+.message {
+  min-height: 24px;
+  color: #ffca28;
+  font-size: 14px;
+  margin-top: 16px;
 }
-.card{
- border:1px solid #ffd34d65;border-radius:18px;
- padding:17px;margin:12px 0;
- background:linear-gradient(135deg,#29160e,#0b0909);
- box-shadow:0 10px 25px #0007;
-}
-.card h3{margin:0 0 8px}
-.card p{font-size:13px;color:#c9bdb0;line-height:1.5}
-.btn{
- width:100%;padding:14px;border:0;
- border-radius:12px;margin-top:12px;
- font-size:15px;font-weight:bold;cursor:pointer;
-}
-.gold{
- color:#291700;
- background:linear-gradient(100deg,#ffb900,#ffe66b,#ffb300);
-}
-.red{color:white;background:linear-gradient(100deg,#b60015,#ff2434)}
-.dark{color:white;background:#100e0d;border:1px solid #66513b}
-.field{
- width:100%;padding:14px;margin:5px 0 12px;
- border-radius:10px;border:1px solid #69543a;
- background:#0b0b0b;color:white;font-size:15px;
-}
-label{font-size:13px;color:#f1d9a6}
-.back{
- color:#ffd34d;background:none;border:0;
- font-size:28px;cursor:pointer;
-}
-.note{font-size:12px;color:#c6b9a7;line-height:1.6}
-.notice{
- display:none;background:#291b09;
- border:1px solid #b58a2e;border-radius:10px;
- padding:10px;color:#ffe4a0;font-size:13px;
-}
-footer{
- margin-top:auto;padding-top:25px;
- text-align:center;font-size:11px;
- color:#9f8e7b;line-height:1.7;
-}
-.otpbox{display:flex;gap:7px;margin:25px 0}
-.otpbox input{
- width:16.66%;min-width:0;padding:12px 0;
- text-align:center;font-size:22px;font-weight:bold;
- color:white;background:#0b0b0b;
- border:1px solid #ffd34d;border-radius:9px;
+
+.hidden {
+  display: none !important;
 }
 </style>
 </head>
 
 <body>
-<main class="app">
 
-<header class="brand">
- <div class="logo"><span class="v">V</span></div>
- <h1>VYRO</h1>
- <h3>REWARD</h3>
- <div class="tagline">
- PLAY <span class="goldtext">•</span>
- WATCH <span class="goldtext">•</span>
- EARN <span class="goldtext">•</span>
- REDEEM
- </div>
-</header>
+<!-- LOADING SCREEN -->
+<section class="screen" id="loadingScreen">
+  <div class="logo">V</div>
+  <h1>VYRO <span class="gold">REWARD</span></h1>
+  <p>Welcome to Vyro Reward</p>
 
-<!-- Welcome loading -->
-<section class="screen active" id="loading">
- <div class="welcome">Welcome To</div>
- <h2 class="goldtext">VYRO REWARD</h2>
- <p class="desc">
- Your time. Your game. Your rewards.<br>
- एक नई Reward Journey की शुरुआत करें।
- </p>
- <div class="track"><div class="fill" id="fill"></div></div>
- <div class="percent">
-  <span id="loadText">आपका अनुभव तैयार हो रहा है...</span>
-  <b id="pct">0%</b>
- </div>
- <p class="welcome">Big Dreams • Bigger Rewards</p>
- <div style="font-size:38px">💎 ✦ 🎁</div>
+  <div class="progress">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <div id="percent">0%</div>
+  <p id="loadingMessage">Loading...</p>
 </section>
 
-<!-- Choose login or signup -->
-<section class="screen" id="welcome">
- <h2>Welcome to Vyro</h2>
- <p class="desc">अपनी Reward Journey शुरू करें।</p>
+<!-- LOGIN SCREEN -->
+<section class="screen hidden" id="loginScreen">
+  <div class="logo">V</div>
+  <h1>VYRO <span class="gold">REWARD</span></h1>
+  <p>Enter your password to continue</p>
 
- <div class="card">
-  <h3>✨ नए यूज़र हैं?</h3>
-  <p>अपना नया अकाउंट बनाएँ और शुरुआत करें।</p>
-  <button class="btn gold" onclick="show('signup')">
-   नया अकाउंट बनाएँ
+  <input
+    id="password"
+    type="password"
+    inputmode="numeric"
+    maxlength="6"
+    placeholder="Enter Password"
+    autocomplete="current-password"
+  >
+
+  <button id="loginButton" onclick="login()" disabled>
+    Login
   </button>
- </div>
 
- <div class="card">
-  <h3>🔐 पहले से अकाउंट है?</h3>
-  <p>अपने अकाउंट में Login करके आगे बढ़ें।</p>
-  <button class="btn red" onclick="show('login')">
-   पहले से Login करें
-  </button>
- </div>
- <p class="note">यह अभी टेस्ट वर्ज़न है। असली अकाउंट सर्वर से जुड़ने के बाद बनेगा।</p>
+  <div class="message" id="message">
+    Checking internet connection...
+  </div>
 </section>
 
-<!-- New account -->
-<section class="screen" id="signup">
- <button class="back" onclick="show('welcome')">‹ वापस</button>
- <h2>नया अकाउंट बनाएँ</h2>
- <p class="desc">Vyro Reward में आपका स्वागत है।</p>
- <div class="notice" id="signupMsg"></div>
-
- <form id="signupForm">
-  <label>पूरा नाम</label>
-  <input class="field" id="name" placeholder="अपना नाम लिखें" required>
-
-  <label>मोबाइल नंबर या ईमेल</label>
-  <input class="field" id="newId" placeholder="मोबाइल / ईमेल" required>
-
-  <label>पासवर्ड</label>
-  <input class="field" id="pass" type="password"
-   minlength="6" placeholder="कम-से-कम 6 अक्षर" required>
-
-  <label>पासवर्ड दोबारा लिखें</label>
-  <input class="field" id="confirm" type="password"
-   minlength="6" placeholder="पासवर्ड की पुष्टि करें" required>
-
-  <label>रेफरल कोड (वैकल्पिक)</label>
-  <input class="field" id="ref" placeholder="रेफरल कोड">
-
-  <button class="btn gold" type="submit">टेस्ट अकाउंट बनाएँ</button>
- </form>
-
- <button class="btn dark" onclick="googleDemo()">
-  🌐 Google से जारी रखें (डेमो)
- </button>
- <p class="desc">
- पहले से अकाउंट है?
- <button class="back" onclick="show('login')">Login करें</button>
- </p>
+<!-- NEXT SCREEN -->
+<section class="screen hidden" id="homeScreen">
+  <div class="logo">V</div>
+  <h1>Welcome to <span class="gold">Vyro Reward</span></h1>
+  <p>Login successful!</p>
 </section>
-
-<!-- Login -->
-<section class="screen" id="login">
- <button class="back" onclick="show('welcome')">‹ वापस</button>
- <h2>वापस स्वागत है</h2>
- <p class="desc">अपने Vyro Reward अकाउंट में Login करें।</p>
- <div class="notice" id="loginMsg"></div>
-
- <form id="loginForm">
-  <label>मोबाइल नंबर या ईमेल</label>
-  <input class="field" id="loginId" placeholder="मोबाइल / ईमेल" required>
-
-  <label>पासवर्ड</label>
-  <input class="field" id="loginPass" type="password"
-   placeholder="पासवर्ड" required>
-
-  <button class="btn gold" type="submit">Login करें</button>
- </form>
-
- <button class="btn dark" onclick="googleDemo()">
-  🌐 Google से जारी रखें (डेमो)
- </button>
- <p class="desc">
- नए यूज़र हैं?
- <button class="back" onclick="show('signup')">अकाउंट बनाएँ</button>
- </p>
- <p class="note">टेस्ट OTP: <b class="goldtext">123456</b>। यह असली SMS OTP नहीं है।</p>
-</section>
-
-<!-- Test OTP -->
-<section class="screen" id="otp">
- <button class="back" onclick="show('signup')">‹ वापस</button>
- <h2>डेमो OTP डालें</h2>
- <p class="desc">टेस्ट कोड के छह अंक डालें। कोई SMS नहीं भेजा गया है।</p>
- <div class="notice" id="otpMsg"></div>
- <div class="otpbox">
-  <input maxlength="1" inputmode="numeric" aria-label="OTP 1">
-  <input maxlength="1" inputmode="numeric" aria-label="OTP 2">
-  <input maxlength="1" inputmode="numeric" aria-label="OTP 3">
-  <input maxlength="1" inputmode="numeric" aria-label="OTP 4">
-  <input maxlength="1" inputmode="numeric" aria-label="OTP 5">
-  <input maxlength="1" inputmode="numeric" aria-label="OTP 6">
- </div>
- <button class="btn gold" onclick="verifyOTP()">कोड जाँचें</button>
- <p class="desc">टेस्ट कोड: <b class="goldtext">123456</b></p>
-</section>
-
-<!-- Demo home -->
-<section class="screen" id="dashboard">
- <h2 id="hello">स्वागत है!</h2>
- <p class="desc">आप Vyro Reward के टेस्ट वर्ज़न में हैं।</p>
- <div class="card">
-  <h3>💎 0 Diamonds</h3>
-  <p>यह टेस्ट बैलेंस है। अभी कोई असली रिवॉर्ड नहीं मिला है।</p>
- </div>
- <div class="card">
-  <h3>🪙 0 Coins</h3>
-  <p>असली बैलेंस सुरक्षित सर्वर बनने के बाद जोड़ा जाएगा।</p>
- </div>
- <button class="btn red" onclick="logout()">Logout करें</button>
-</section>
-
-<footer>
- <b class="goldtext">VYRO REWARD</b><br>
- Premium Rewards Experience<br>
- Demo Version • Real Money Payments Not Enabled
-</footer>
-
-</main>
 
 <script>
-const screens=['loading','welcome','signup','login','otp','dashboard'];
-let demoUser=null;
-let draft=null;
+const loadingScreen = document.getElementById("loadingScreen");
+const loginScreen = document.getElementById("loginScreen");
+const homeScreen = document.getElementById("homeScreen");
+const bar = document.getElementById("bar");
+const percent = document.getElementById("percent");
+const loadingMessage = document.getElementById("loadingMessage");
+const password = document.getElementById("password");
+const loginButton = document.getElementById("loginButton");
+const message = document.getElementById("message");
 
-function show(id){
- screens.forEach(s=>{
-  document.getElementById(s).classList.toggle('active',s===id);
- });
- window.scrollTo(0,0);
+let internetOK = false;
+let checking = false;
+let pageReady = false;
+
+function showScreen(screen) {
+  loadingScreen.classList.add("hidden");
+  loginScreen.classList.add("hidden");
+  homeScreen.classList.add("hidden");
+  screen.classList.remove("hidden");
 }
 
-function msg(id,text){
- const e=document.getElementById(id);
- e.textContent=text;
- e.style.display='block';
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let progress=0;
-const loader=setInterval(()=>{
- progress=Math.min(100,progress+Math.ceil(Math.random()*4));
- document.getElementById('fill').style.width=progress+'%';
- document.getElementById('pct').textContent=progress+'%';
+// Check whether the internet can actually be reached
+async function checkInternet() {
+  if (checking) return internetOK;
+  checking = true;
+  internetOK = false;
+  loginButton.disabled = true;
 
- document.getElementById('loadText').textContent=
-  progress<40?'ब्रांड अनुभव लोड हो रहा है...':
-  progress<80?'आपकी स्क्रीन तैयार हो रही है...':
-  progress<100?'लगभग तैयार...':'स्वागत है!';
-
- if(progress>=100){
-  clearInterval(loader);
-  setTimeout(()=>show('welcome'),500);
- }
-},70);
-
-document.getElementById('signupForm').addEventListener('submit',e=>{
- e.preventDefault();
-
- const password=document.getElementById('pass').value;
- const confirm=document.getElementById('confirm').value;
-
- if(password!==confirm){
-  msg('signupMsg','दोनों पासवर्ड एक जैसे होने चाहिए।');
-  return;
- }
-
- draft={
-  name:document.getElementById('name').value.trim(),
-  id:document.getElementById('newId').value.trim(),
-  password:password
- };
-
- show('otp');
-});
-
-document.getElementById('loginForm').addEventListener('submit',e=>{
- e.preventDefault();
-
- const id=document.getElementById('loginId').value.trim();
- const password=document.getElementById('loginPass').value;
-
- if(demoUser && id===demoUser.id && password===demoUser.password){
-  dashboard(demoUser.name);
- }else{
-  msg('loginMsg','यह डेमो है। पहले इसी पेज पर टेस्ट अकाउंट बनाएँ।');
- }
-});
-
-function verifyOTP(){
- const code=[...document.querySelectorAll('.otpbox input')]
-  .map(input=>input.value).join('');
-
- if(code!=='123456'){
-  msg('otpMsg','गलत कोड। टेस्ट कोड 123456 डालें।');
-  return;
- }
-
- if(draft){
-  demoUser=draft;
-  draft=null;
-  dashboard(demoUser.name);
- }else{
-  dashboard('Vyro User');
- }
-}
-
-document.querySelectorAll('.otpbox input').forEach((input,i,all)=>{
- input.addEventListener('input',()=>{
-  input.value=input.value.replace(/\D/g,'').slice(-1);
-  if(input.value && all[i+1]) all[i+1].focus();
- });
- input.addEventListener('keydown',e=>{
-  if(e.key==='Backspace' && !input.value && all[i-1]){
-   all[i-1].focus();
+  if (!navigator.onLine) {
+    message.textContent = "Internet band hai. Internet on karo.";
+    checking = false;
+    return false;
   }
- });
+
+  message.textContent = "Checking internet connection...";
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    await fetch("https://www.google.com/generate_204", {
+      mode: "no-cors",
+      cache: "no-store",
+      signal: controller.signal
+    });
+
+    clearTimeout(timeout);
+    internetOK = true;
+    message.textContent = "Internet connected.";
+  } catch (error) {
+    internetOK = false;
+    message.textContent = "Internet nahi chal raha. Dobara check karo.";
+  }
+
+  checking = false;
+  loginButton.disabled = !internetOK;
+  return internetOK;
+}
+
+// Loading from 0 to 100
+async function startApp() {
+  for (let i = 0; i <= 100; i++) {
+    bar.style.width = i + "%";
+    percent.textContent = i + "%";
+    await wait(25);
+  }
+
+  loadingMessage.textContent = "Checking internet...";
+  const connected = await checkInternet();
+
+  if (!connected) {
+    showScreen(loginScreen);
+    return;
+  }
+
+  pageReady = true;
+
+  if (localStorage.getItem("vyroLoggedIn") === "yes") {
+    showScreen(homeScreen);
+  } else {
+    showScreen(loginScreen);
+  }
+}
+
+async function login() {
+  if (!pageReady || checking) return;
+
+  loginButton.disabled = true;
+  const connected = await checkInternet();
+
+  if (!connected) {
+    loginButton.disabled = true;
+    return;
+  }
+
+  if (password.value !== "123456") {
+    message.textContent = "Wrong password. Try again.";
+    loginButton.disabled = !internetOK;
+    return;
+  }
+
+  localStorage.setItem("vyroLoggedIn", "yes");
+  password.value = "";
+  showScreen(homeScreen);
+}
+
+window.addEventListener("online", () => {
+  if (!loginScreen.classList.contains("hidden")) {
+    checkInternet();
+  }
 });
 
-function dashboard(name){
- document.getElementById('hello').textContent='स्वागत है, '+name+'!';
- show('dashboard');
-}
+window.addEventListener("offline", () => {
+  internetOK = false;
+  loginButton.disabled = true;
 
-function googleDemo(){
- alert('Google Login अभी डेमो है। असली Google Login के लिए Firebase Authentication सेटअप करना होगा।');
-}
+  if (!loginScreen.classList.contains("hidden")) {
+    message.textContent = "Internet band hai. Internet on karo.";
+  }
+});
 
-function logout(){
- demoUser=null;
- draft=null;
- document.getElementById('loginForm').reset();
- show('welcome');
-}
+startApp();
 </script>
+
 </body>
 </html>

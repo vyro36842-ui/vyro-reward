@@ -3,183 +3,343 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07152f">
 <title>Vyro Reward</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+:root{
+  --blue:#42d9ff;
+  --cyan:#8cf2ff;
+  --white:#f5fbff;
+  --muted:#a9c4e5;
+  --glass:rgba(114,190,255,.10);
+  --line:rgba(157,218,255,.22);
 }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: #100909;
-  color: white;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  color:var(--white);
+  background:
+    radial-gradient(ellipse at 15% 15%,#145ca8 0%,transparent 42%),
+    radial-gradient(ellipse at 90% 45%,#123b86 0%,transparent 40%),
+    linear-gradient(145deg,#061126,#0a2250 55%,#07152d);
+  min-height:100vh;
+  min-height:100dvh;
 }
-
-.screen {
-  width: 100%;
-  max-width: 420px;
-  min-height: 100vh;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+button,input{font:inherit}
+button{cursor:pointer}
+.screen{
+  min-height:100vh;
+  min-height:100dvh;
+  width:100%;
 }
+.hidden{display:none!important}
 
-.logo {
-  width: 125px;
-  height: 125px;
-  border: 4px solid #ffca28;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffca28;
-  font-size: 48px;
-  font-weight: bold;
-  background: linear-gradient(145deg, #5e0808, #190606);
-  box-shadow: 0 0 30px #a91d1d55;
+/* LOADING AND LOGIN */
+.center-screen{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  padding:28px;
 }
-
-h1 {
-  margin: 22px 0 8px;
-  font-size: 30px;
+.logo{
+  height:112px;width:112px;border-radius:34px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:52px;font-weight:900;
+  color:#fff;
+  background:linear-gradient(145deg,rgba(73,216,255,.4),rgba(64,101,255,.2));
+  border:1px solid rgba(185,240,255,.6);
+  box-shadow:0 0 45px #29caff38,inset 0 0 25px #70e7ff25;
 }
-
-.gold {
-  color: #ffca28;
+.brand{font-size:29px;font-weight:900;letter-spacing:1px;margin:22px 0 8px}
+.brand span{color:var(--blue)}
+.subtitle{color:var(--muted);font-size:14px;line-height:1.6}
+.progress{
+  margin-top:34px;width:100%;max-width:300px;height:8px;
+  background:#ffffff16;border-radius:20px;overflow:hidden;
 }
-
-p {
-  color: #c9bdbd;
+.bar{
+  width:0;height:100%;
+  background:linear-gradient(90deg,#438bff,#46e8ff);
+  border-radius:20px;box-shadow:0 0 15px #42d9ff;
 }
-
-.progress {
-  width: 100%;
-  height: 10px;
-  margin-top: 30px;
-  background: #392020;
-  border-radius: 20px;
-  overflow: hidden;
+.percent{color:var(--cyan);margin-top:12px;font-size:14px}
+.login-card{
+  width:100%;max-width:380px;
+  padding:28px 22px;border:1px solid var(--line);
+  border-radius:26px;background:rgba(255,255,255,.075);
+  backdrop-filter:blur(20px);
+  box-shadow:0 20px 60px #0003;
 }
-
-.bar {
-  width: 0%;
-  height: 100%;
-  background: linear-gradient(90deg, #ed2727, #ffca28);
-  border-radius: 20px;
+.login-card .logo{width:76px;height:76px;border-radius:24px;font-size:36px;margin:auto}
+.login-card .brand{font-size:24px;margin-top:18px}
+input{
+  width:100%;padding:16px;margin-top:25px;
+  border:1px solid var(--line);border-radius:14px;
+  background:#061a37a8;color:white;outline:none;
+  text-align:center;font-size:19px;
 }
-
-#percent {
-  margin-top: 12px;
-  color: #ffca28;
+input::placeholder{color:#9ab5d8}
+.primary{
+  width:100%;padding:16px;margin-top:16px;border:0;
+  border-radius:14px;color:#06152c;font-weight:800;
+  background:linear-gradient(100deg,#54c9ff,#8cf5ff);
+  box-shadow:0 8px 25px #32c8ff25;
 }
+.primary:disabled{opacity:.4}
+.message{min-height:24px;margin-top:14px;color:var(--cyan);font-size:13px}
 
-input {
-  width: 100%;
-  padding: 16px;
-  margin-top: 22px;
-  border: 1px solid #9b2929;
-  border-radius: 12px;
-  background: #211313;
-  color: white;
-  font-size: 20px;
-  text-align: center;
-  outline: none;
+/* APP */
+#appScreen{padding-bottom:calc(95px + env(safe-area-inset-bottom))}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 20px 15px;gap:12px;
 }
-
-button {
-  width: 100%;
-  padding: 16px;
-  margin-top: 18px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #e32222, #ffbd22);
-  color: #160808;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
+.mini-brand{display:flex;align-items:center;gap:11px}
+.mini-logo{
+  width:46px;height:46px;border-radius:15px;
+  display:grid;place-items:center;font-size:23px;font-weight:900;
+  background:linear-gradient(145deg,#4bdcff66,#6c82ff44);
+  border:1px solid var(--line);color:white;
 }
-
-button:disabled {
-  opacity: 0.5;
+.mini-brand strong{font-size:19px;letter-spacing:.4px}
+.mini-brand small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.online{
+  width:9px;height:9px;border-radius:50%;background:#55f2be;
+  box-shadow:0 0 12px #55f2be;
 }
-
-.message {
-  min-height: 24px;
-  color: #ffca28;
-  font-size: 14px;
-  margin-top: 16px;
+.content{padding:0 18px}
+.page{display:none;animation:fade .25s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hello{font-size:25px;font-weight:800;margin:12px 0 7px}
+.hello span{color:var(--cyan)}
+.section-note{color:var(--muted);font-size:13px;line-height:1.6;margin:0 0 20px}
+.glass{
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:linear-gradient(135deg,rgba(132,203,255,.15),rgba(104,143,255,.055));
+  backdrop-filter:blur(16px);
+  box-shadow:0 12px 35px #00000012;
 }
-
-.hidden {
-  display: none !important;
+.balance-card{
+  position:relative;overflow:hidden;padding:23px;
+  background:linear-gradient(135deg,#1c8ddc66,#4054d855 70%,#53d9ed25);
+}
+.balance-card:after{
+  content:"";position:absolute;width:160px;height:160px;border-radius:50%;
+  right:-65px;top:-75px;border:1px solid #ffffff24;
+  box-shadow:0 0 0 20px #ffffff08,0 0 0 40px #ffffff05;
+}
+.balance-label{font-size:13px;color:#d4eaff}
+.balance-number{font-size:38px;font-weight:900;margin:13px 0}
+.balance-number small{font-size:14px;color:#b7eaff}
+.balance-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pill{padding:8px 12px;border-radius:30px;background:#ffffff16;font-size:12px;border:1px solid #ffffff19}
+.section-title{font-size:17px;font-weight:800;margin:25px 0 14px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{padding:18px 15px}
+.stat-icon{
+  width:42px;height:42px;border-radius:14px;
+  display:grid;place-items:center;font-size:22px;
+  background:#6edfff18;border:1px solid #a5e9ff20;
+}
+.stat-name{font-size:12px;color:var(--muted);margin-top:14px}
+.stat-value{font-size:24px;font-weight:800;margin-top:6px}
+.stat-value small{font-size:12px;color:var(--muted);font-weight:500}
+.welcome-card{padding:20px;margin-top:14px}
+.welcome-card h3{margin:0 0 9px;font-size:16px}
+.welcome-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.info-card{padding:22px;margin-top:12px}
+.info-icon{font-size:32px;margin-bottom:12px}
+.info-card h3{margin:0 0 8px}
+.info-card p{font-size:13px;color:var(--muted);line-height:1.7;margin:0}
+.info-line{display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid #ffffff12;font-size:13px}
+.info-line:last-child{border-bottom:0}
+.muted{color:var(--muted)}
+.bottom-nav{
+  position:fixed;z-index:10;bottom:0;left:0;right:0;
+  padding:10px 10px calc(10px + env(safe-area-inset-bottom));
+  display:grid;grid-template-columns:repeat(4,1fr);gap:5px;
+  background:rgba(5,17,42,.88);
+  border-top:1px solid #a4dfff22;
+  backdrop-filter:blur(24px);
+}
+.nav-btn{
+  min-width:0;border:0;background:transparent;color:#94afd2;
+  padding:9px 2px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;
+  font-size:11px;
+}
+.nav-btn .nav-icon{font-size:22px;line-height:1}
+.nav-btn.active{
+  color:#8ceeff;background:linear-gradient(180deg,#45cfff20,#4c8cff12);
+}
+.nav-btn.active .nav-icon{filter:drop-shadow(0 0 7px #4edbff88)}
+@media(min-width:600px){
+  .content{max-width:600px;margin:auto}
+  .topbar{max-width:600px;margin:auto}
+  .bottom-nav{left:50%;transform:translateX(-50%);width:100%;max-width:600px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOADING SCREEN -->
-<section class="screen" id="loadingScreen">
+<!-- LOADING -->
+<section class="screen center-screen" id="loadingScreen">
   <div class="logo">V</div>
-  <h1>VYRO <span class="gold">REWARD</span></h1>
-  <p>Welcome to Vyro Reward</p>
-
-  <div class="progress">
-    <div class="bar" id="bar"></div>
-  </div>
-
-  <div id="percent">0%</div>
-  <p id="loadingMessage">Loading...</p>
+  <div class="brand">VYRO <span>REWARD</span></div>
+  <p class="subtitle">Your rewards journey starts here</p>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="percent" id="percent">0%</div>
+  <p class="subtitle" id="loadMessage">Loading your experience...</p>
 </section>
 
-<!-- LOGIN SCREEN -->
-<section class="screen hidden" id="loginScreen">
-  <div class="logo">V</div>
-  <h1>VYRO <span class="gold">REWARD</span></h1>
-  <p>Enter your password to continue</p>
-
-  <input
-    id="password"
-    type="password"
-    inputmode="numeric"
-    maxlength="6"
-    placeholder="Enter Password"
-    autocomplete="current-password"
-  >
-
-  <button id="loginButton" onclick="login()" disabled>
-    Login
-  </button>
-
-  <div class="message" id="message">
-    Checking internet connection...
+<!-- LOGIN -->
+<section class="screen center-screen hidden" id="loginScreen">
+  <div class="login-card">
+    <div class="logo">V</div>
+    <div class="brand">VYRO <span>REWARD</span></div>
+    <p class="subtitle">Welcome back! Enter your password.</p>
+    <input id="password" type="password" inputmode="numeric"
+      maxlength="6" placeholder="Enter Password">
+    <button class="primary" id="loginButton" onclick="login()" disabled>Login →</button>
+    <div class="message" id="message">Checking internet connection...</div>
   </div>
 </section>
 
-<!-- NEXT SCREEN -->
-<section class="screen hidden" id="homeScreen">
-  <div class="logo">V</div>
-  <h1>Welcome to <span class="gold">Vyro Reward</span></h1>
-  <p>Login successful!</p>
+<!-- MAIN APP -->
+<section class="screen hidden" id="appScreen">
+  <header class="topbar">
+    <div class="mini-brand">
+      <div class="mini-logo">V</div>
+      <div><strong>VYRO <span style="color:#66e4ff">REWARD</span></strong>
+        <small>Your rewards journey</small>
+      </div>
+    </div>
+    <div class="online" title="Connection indicator"></div>
+  </header>
+
+  <main class="content">
+
+    <!-- HOME -->
+    <section class="page active" id="page-home">
+      <h1 class="hello">Hello, <span>Champion!</span> ✨</h1>
+      <p class="section-note">Welcome to your personal rewards space.</p>
+
+      <div class="glass balance-card">
+        <div class="balance-label">YOUR TOTAL BALANCE</div>
+        <div class="balance-number">0 <small>Coins</small></div>
+        <div class="balance-bottom">
+          <span class="pill">💎 0 Diamonds</span>
+          <span class="pill">My Balance</span>
+        </div>
+      </div>
+
+      <div class="section-title">Your Overview</div>
+      <div class="stats">
+        <div class="glass stat">
+          <div class="stat-icon">💎</div>
+          <div class="stat-name">Total Diamonds</div>
+          <div class="stat-value">0</div>
+        </div>
+        <div class="glass stat">
+          <div class="stat-icon">🪙</div>
+          <div class="stat-name">Total Coins</div>
+          <div class="stat-value">0</div>
+        </div>
+      </div>
+
+      <div class="glass welcome-card">
+        <h3>🌟 Welcome to Vyro Reward</h3>
+        <p>Your dashboard is ready. More exciting features will be added here step by step.</p>
+      </div>
+
+      <div class="section-title">Coming Soon</div>
+      <div class="glass welcome-card">
+        <h3>🎮 Reward Games</h3>
+        <p>Game and reward features will be added in a future update.</p>
+      </div>
+    </section>
+
+    <!-- REFERRAL -->
+    <section class="page" id="page-referral">
+      <h1 class="hello">Invite & <span>Earn</span> 🤝</h1>
+      <p class="section-note">Your referral space will appear here.</p>
+      <div class="glass info-card">
+        <div class="info-icon">🎁</div>
+        <h3>Refer Friends</h3>
+        <p>Invite friends and track referrals here. Referral codes and rewards are not active yet.</p>
+      </div>
+      <div class="glass welcome-card">
+        <div class="info-line"><span class="muted">Your Referral Code</span><strong>Coming Soon</strong></div>
+        <div class="info-line"><span class="muted">Successful Referrals</span><strong>0</strong></div>
+      </div>
+    </section>
+
+    <!-- WALLET -->
+    <section class="page" id="page-wallet">
+      <h1 class="hello">My <span>Wallet</span> 👛</h1>
+      <p class="section-note">Your balances and transaction history.</p>
+      <div class="glass balance-card">
+        <div class="balance-label">AVAILABLE COINS</div>
+        <div class="balance-number">0 <small>Coins</small></div>
+        <div class="balance-bottom"><span class="pill">💎 0 Diamonds</span></div>
+      </div>
+      <div class="glass info-card">
+        <div class="info-icon">📋</div>
+        <h3>Transaction History</h3>
+        <p>No transactions yet. Your reward history will appear here when the wallet system is implemented.</p>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="page" id="page-setting">
+      <h1 class="hello">App <span>Settings</span> ⚙️</h1>
+      <p class="section-note">Your app preferences.</p>
+      <div class="glass welcome-card">
+        <div class="info-line"><span>App Name</span><strong>Vyro Reward</strong></div>
+        <div class="info-line"><span>Version</span><strong>Demo 1.0</strong></div>
+        <div class="info-line"><span>Account</span><strong>Demo Login</strong></div>
+        <div class="info-line"><span>Status</span><strong style="color:#70f0cb">Active</strong></div>
+      </div>
+      <div class="glass welcome-card">
+        <h3>🔐 Account</h3>
+        <p>This is a demo app. Secure account settings will be added later.</p>
+        <button class="primary" onclick="logout()">Log Out</button>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="openTab('home',this)">
+      <span class="nav-icon">⌂</span><span>Home</span>
+    </button>
+    <button class="nav-btn" onclick="openTab('referral',this)">
+      <span class="nav-icon">♧</span><span>Referral</span>
+    </button>
+    <button class="nav-btn" onclick="openTab('wallet',this)">
+      <span class="nav-icon">▣</span><span>Wallet</span>
+    </button>
+    <button class="nav-btn" onclick="openTab('setting',this)">
+      <span class="nav-icon">⚙</span><span>Setting</span>
+    </button>
+  </nav>
 </section>
 
 <script>
 const loadingScreen = document.getElementById("loadingScreen");
 const loginScreen = document.getElementById("loginScreen");
-const homeScreen = document.getElementById("homeScreen");
+const appScreen = document.getElementById("appScreen");
 const bar = document.getElementById("bar");
 const percent = document.getElementById("percent");
-const loadingMessage = document.getElementById("loadingMessage");
+const loadMessage = document.getElementById("loadMessage");
 const password = document.getElementById("password");
 const loginButton = document.getElementById("loginButton");
 const message = document.getElementById("message");
@@ -191,7 +351,7 @@ let pageReady = false;
 function showScreen(screen) {
   loadingScreen.classList.add("hidden");
   loginScreen.classList.add("hidden");
-  homeScreen.classList.add("hidden");
+  appScreen.classList.add("hidden");
   screen.classList.remove("hidden");
 }
 
@@ -199,9 +359,8 @@ function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Check whether the internet can actually be reached
 async function checkInternet() {
-  if (checking) return internetOK;
+  if (checking) return false;
   checking = true;
   internetOK = false;
   loginButton.disabled = true;
@@ -216,7 +375,7 @@ async function checkInternet() {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
+    const timer = setTimeout(() => controller.abort(), 5000);
 
     await fetch("https://www.google.com/generate_204", {
       mode: "no-cors",
@@ -224,12 +383,12 @@ async function checkInternet() {
       signal: controller.signal
     });
 
-    clearTimeout(timeout);
+    clearTimeout(timer);
     internetOK = true;
     message.textContent = "Internet connected.";
   } catch (error) {
     internetOK = false;
-    message.textContent = "Internet nahi chal raha. Dobara check karo.";
+    message.textContent = "Internet nahi chal raha. Dobara try karo.";
   }
 
   checking = false;
@@ -237,63 +396,67 @@ async function checkInternet() {
   return internetOK;
 }
 
-// Loading from 0 to 100
 async function startApp() {
   for (let i = 0; i <= 100; i++) {
     bar.style.width = i + "%";
     percent.textContent = i + "%";
-    await wait(25);
+    await wait(18);
   }
 
-  loadingMessage.textContent = "Checking internet...";
+  loadMessage.textContent = "Checking connection...";
+  showScreen(loginScreen);
   const connected = await checkInternet();
 
-  if (!connected) {
-    showScreen(loginScreen);
-    return;
-  }
-
-  pageReady = true;
-
-  if (localStorage.getItem("vyroLoggedIn") === "yes") {
-    showScreen(homeScreen);
-  } else {
-    showScreen(loginScreen);
+  if (connected) {
+    pageReady = true;
+    if (localStorage.getItem("vyroLoggedIn") === "yes") {
+      showScreen(appScreen);
+    }
   }
 }
 
 async function login() {
   if (!pageReady || checking) return;
 
-  loginButton.disabled = true;
   const connected = await checkInternet();
-
-  if (!connected) {
-    loginButton.disabled = true;
-    return;
-  }
+  if (!connected) return;
 
   if (password.value !== "123456") {
     message.textContent = "Wrong password. Try again.";
-    loginButton.disabled = !internetOK;
+    loginButton.disabled = false;
     return;
   }
 
   localStorage.setItem("vyroLoggedIn", "yes");
   password.value = "";
-  showScreen(homeScreen);
+  showScreen(appScreen);
+}
+
+function openTab(name, button) {
+  document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+  document.getElementById("page-" + name).classList.add("active");
+
+  document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+  button.classList.add("active");
+
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+function logout() {
+  localStorage.removeItem("vyroLoggedIn");
+  password.value = "";
+  pageReady = true;
+  showScreen(loginScreen);
+  checkInternet();
 }
 
 window.addEventListener("online", () => {
-  if (!loginScreen.classList.contains("hidden")) {
-    checkInternet();
-  }
+  if (!loginScreen.classList.contains("hidden")) checkInternet();
 });
 
 window.addEventListener("offline", () => {
   internetOK = false;
   loginButton.disabled = true;
-
   if (!loginScreen.classList.contains("hidden")) {
     message.textContent = "Internet band hai. Internet on karo.";
   }
@@ -301,6 +464,6 @@ window.addEventListener("offline", () => {
 
 startApp();
 </script>
-
 </body>
-</html>
+          </html>
+          

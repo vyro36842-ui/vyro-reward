@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vyro - Step 1 Real Login</title>
-    <!-- Firebase Standard SDK Libraries -->
+    <title>Vyro Reward - Step 2 Live</title>
+    <!-- Firebase Standard Libraries -->
+    <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     
@@ -29,7 +30,7 @@
 <body>
 
     <div class="login-card">
-        <!-- लॉगिन बॉक्स (शुरुआत में दिखेगा) -->
+        <!-- लॉगिन बॉक्स -->
         <div id="login-container" class="login-box">
             <div class="logo-area">💰</div>
             <h2>Vyro Reward</h2>
@@ -40,16 +41,15 @@
             </button>
         </div>
 
-        <!-- लॉगिन होने के बाद का डैशबोर्ड बॉक्स -->
+        <!-- डैशबोर्ड बॉक्स -->
         <div id="welcome-container" class="welcome-box">
             <img id="user-avatar" class="profile-img" src="" alt="User">
             <h2>नमस्ते, <span id="user-display-name">User</span>!</h2>
             <p id="user-display-email">user@gmail.com</p>
             
-            <!-- कॉइन का स्ट्रक्चर (स्टेप 2 में इसे असली डेटाबेस से लिंक करेंगे) -->
             <div style="background: #f0f2ff; border: 1px dashed #667eea; padding: 15px; border-radius: 12px; margin-top: 15px;">
-                <span style="font-size: 14px; color: #555;">आपका बैलेंस</span>
-                <h3 style="font-size: 28px; color: #764ba2; margin-top: 5px;">0 Coins</h3>
+                <span style="font-size: 14px; color: #555;">आपका असली बैलेंस</span>
+                <h3 style="font-size: 28px; color: #764ba2; margin-top: 5px;"><span id="user-coins">Loading...</span> Coins</h3>
             </div>
 
             <button id="btn-logout" class="logout-btn">अकाउंट लॉगआउट करें</button>
@@ -57,7 +57,6 @@
     </div>
 
     <script>
-        // आपका असली Firebase कॉन्फिग जो आपने जनरेट किया है
         const firebaseConfig = {
           apiKey: "AIzaSyBWhmQlSv2Bz2hWspsE7M-I6lL1V4AeLy0",
           authDomain: "://firebaseapp.com",
@@ -67,40 +66,54 @@
           appId: "1:1077764939396:web:ab5bc74dd831c7b33becd1"
         };
 
-        // Firebase को इनिशियलाइज़ करना
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebase.firestore(); 
         const provider = new firebase.auth.GoogleAuthProvider();
 
-        // UI एलिमेंट्स को सेलेक्ट करना
         const loginContainer = document.getElementById('login-container');
         const welcomeContainer = document.getElementById('welcome-container');
         const btnLogin = document.getElementById('btn-login');
         const btnLogout = document.getElementById('btn-logout');
 
-        // असली गूगल लॉगिन ट्रिगर
         btnLogin.addEventListener('click', () => {
-            auth.signInWithPopup(provider).catch(err => {
-                alert("लॉगिन में समस्या आई: " + err.message);
-            });
+            auth.signInWithRedirect(provider); // मोबाइल ब्राउज़र के लिए पॉप-अप से बेस्ट रीडायरेक्ट होता है
         });
 
-        // लॉगआउट ट्रिगर
         btnLogout.addEventListener('click', () => {
             auth.signOut();
         });
 
-        // रियल-टाइम यूजर स्टेट मॉनिटर (Real Auth State)
         auth.onAuthStateChanged(user => {
             if (user) {
-                // अगर यूजर सफलतापूर्वक लॉगिन हो जाता है
                 loginContainer.classList.add('hidden');
                 welcomeContainer.classList.add('active');
                 document.getElementById('user-avatar').src = user.photoURL || 'https://placeholder.com';
                 document.getElementById('user-display-name').innerText = user.displayName || 'User';
                 document.getElementById('user-display-email').innerText = user.email;
+
+                const userRef = db.collection('users').doc(user.uid);
+
+                userRef.onSnapshot(doc => {
+                    if (doc.exists) {
+                        document.getElementById('user-coins').innerText = doc.data().coins;
+                    } else {
+                        userRef.set({
+                            uid: user.uid,
+                            name: user.displayName || 'User',
+                            email: user.email,
+                            coins: 100, 
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }).then(() => {
+                            document.getElementById('user-coins').innerText = "100";
+                        }).catch(err => {
+                            console.error("डेटाबेस में एरर आया: ", err);
+                            document.getElementById('user-coins').innerText = "100 (Local)";
+                        });
+                    }
+                });
+
             } else {
-                // अगर यूजर लॉगआउट है या लॉगिन नहीं हुआ है
                 loginContainer.classList.remove('hidden');
                 welcomeContainer.classList.remove('active');
             }

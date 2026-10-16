@@ -1,804 +1,639 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0b1023">
-  <meta name="description" content="Vyro Reward - Your Reward Dashboard">
-  <title>Vyro Reward</title>
-
-  <style>
-    :root {
-      --bg: #0b1023;
-      --card: #151e3a;
-      --card2: #1c294b;
-      --red: #ff405b;
-      --blue: #4385ff;
-      --yellow: #ffd447;
-      --white: #ffffff;
-      --muted: #aab6d4;
-      --border: rgba(255,255,255,.09);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      min-height: 100vh;
-      background:
-        radial-gradient(ellipse at 0% 0%, #27245a 0, transparent 38%),
-        radial-gradient(ellipse at 100% 35%, #12375a 0, transparent 32%),
-        var(--bg);
-      color: var(--white);
-      font-family: Arial, sans-serif;
-      padding-bottom: 90px;
-    }
-
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    .hidden { display: none !important; }
-
-    .screen {
-      min-height: 100vh;
-      width: 100%;
-    }
-
-    .center-screen {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 18px;
-    }
-
-    .logo {
-      width: 92px;
-      height: 92px;
-      margin: 0 auto 20px;
-      border-radius: 29px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(140deg, var(--red), #ff8156 53%, var(--yellow));
-      box-shadow: 0 12px 38px rgba(255,64,91,.25);
-      transform: rotate(-5deg);
-    }
-
-    .logo span {
-      transform: rotate(5deg);
-      color: #11162d;
-      font-size: 49px;
-      font-weight: 1000;
-      letter-spacing: -5px;
-    }
-
-    .brand {
-      font-size: 29px;
-      font-weight: 1000;
-      letter-spacing: -.8px;
-    }
-
-    .brand .vyro { color: var(--yellow); }
-
-    .tagline {
-      margin-top: 9px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.8;
-    }
-
-    /* Loading */
-
-    .loading-card {
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-    }
-
-    .progress-track {
-      height: 9px;
-      margin-top: 34px;
-      background: #293451;
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    #progressBar {
-      width: 0%;
-      height: 100%;
-      border-radius: 20px;
-      background: linear-gradient(90deg, var(--red), var(--yellow), var(--blue));
-      transition: width .12s linear;
-    }
-
-    .progress-info {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 12px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    #progressPercent {
-      color: var(--yellow);
-      font-weight: 900;
-    }
-
-    #loadingMessage {
-      min-height: 44px;
-      margin-top: 22px;
-      font-size: 13px;
-      line-height: 1.8;
-      color: #e0e8ff;
-    }
-
-    /* Buttons and cards */
-
-    .primary-btn {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      margin-top: 20px;
-      border: 0;
-      border-radius: 14px;
-      color: #14152b;
-      font-weight: 900;
-      background: linear-gradient(100deg, var(--red), #ff8056, var(--yellow));
-      box-shadow: 0 8px 24px rgba(255,64,91,.15);
-    }
-
-    .primary-btn:disabled {
-      opacity: .65;
-      cursor: wait;
-    }
-
-    .secondary-btn {
-      width: 100%;
-      padding: 14px;
-      margin-top: 12px;
-      border-radius: 13px;
-      border: 1px solid var(--border);
-      background: var(--card2);
-      color: var(--white);
-    }
-
-    .error-card, .login-card {
-      width: 100%;
-      max-width: 390px;
-      padding: 27px 22px;
-      border: 1px solid var(--border);
-      border-radius: 25px;
-      background: linear-gradient(150deg, #1b2648, #11172d);
-      box-shadow: 0 20px 60px rgba(0,0,0,.25);
-    }
-
-    .error-card { text-align: center; }
-    .error-icon { font-size: 44px; margin-bottom: 16px; }
-    .error-card h2 { font-size: 22px; margin-bottom: 12px; }
-
-    .description {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.9;
-    }
-
-    .error-message {
-      color: #ff9aaa;
-      font-size: 12px;
-      line-height: 1.8;
-      margin-top: 12px;
-    }
-
-    /* Login */
-
-    .login-brand {
-      text-align: center;
-      margin-bottom: 27px;
-    }
-
-    .login-brand .logo {
-      width: 75px;
-      height: 75px;
-      border-radius: 23px;
-    }
-
-    .login-brand .logo span { font-size: 40px; }
-
-    .login-card h1 {
-      font-size: 24px;
-      text-align: center;
-      margin-bottom: 9px;
-    }
-
-    .login-card .description {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .field-label {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .code-input {
-      width: 100%;
-      padding: 16px;
-      color: white;
-      background: #0b1228;
-      border: 1px solid #354365;
-      border-radius: 14px;
-      outline: none;
-      text-align: center;
-      letter-spacing: 6px;
-      font-size: 23px;
-    }
-
-    .code-input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(67,133,255,.14);
-    }
-
-    .small-note {
-      margin-top: 19px;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.9;
-      text-align: center;
-    }
-
-    /* Main application */
-
-    .container {
-      width: 100%;
-      max-width: 520px;
-      padding: 21px 17px;
-      margin: 0 auto;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 27px;
-    }
-
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
-
-    .small-logo {
-      width: 45px;
-      height: 45px;
-      flex-shrink: 0;
-      display: grid;
-      place-items: center;
-      border-radius: 15px;
-      background: linear-gradient(140deg, var(--red), var(--yellow));
-      color: #11162d;
-      font-size: 25px;
-      font-weight: 1000;
-    }
-
-    .topbar h2 { font-size: 17px; font-weight: 900; }
-    .topbar small {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .network-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 10px;
-      border-radius: 20px;
-      background: rgba(50,220,140,.09);
-      border: 1px solid rgba(50,220,140,.16);
-      color: #a6f7ca;
-      font-size: 10px;
-      white-space: nowrap;
-    }
-
-    .network-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #50e39a;
-    }
-
-    .welcome { margin-bottom: 20px; }
-    .welcome h1 {
-      font-size: 25px;
-      line-height: 1.5;
-      font-weight: 900;
-    }
-
-    .welcome h1 span { color: var(--yellow); }
-
-    .welcome p {
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.9;
-    }
-
-    .balance-card {
-      position: relative;
-      overflow: hidden;
-      padding: 23px 20px;
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: linear-gradient(125deg, #e73558, #a52e78 49%, #354fe2);
-      box-shadow: 0 16px 36px rgba(73,55,190,.2);
-    }
-
-    .balance-card::after {
-      content: "";
-      position: absolute;
-      width: 165px;
-      height: 165px;
-      top: -85px;
-      right: -55px;
-      border: 25px solid rgba(255,255,255,.09);
-      border-radius: 50%;
-    }
-
-    .balance-label { color: #ffedf3; font-size: 12px; }
-    .balance-number { margin-top: 8px; font-size: 35px; font-weight: 1000; }
-    .balance-caption { margin-top: 7px; color: #ffe6ef; font-size: 11px; }
-
-    .balance-items {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 11px;
-      margin-top: 22px;
-    }
-
-    .balance-item {
-      position: relative;
-      z-index: 1;
-      padding: 13px;
-      border-radius: 14px;
-      background: rgba(12,19,55,.23);
-      border: 1px solid rgba(255,255,255,.13);
-    }
-
-    .balance-item small { font-size: 11px; color: #f8eaff; }
-    .balance-item strong { display: block; margin-top: 7px; font-size: 21px; }
-
-    .section-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin: 27px 0 14px;
-    }
-
-    .section-heading h3 { font-size: 17px; font-weight: 900; }
-    .section-heading span { color: var(--muted); font-size: 10px; }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .feature-card {
-      min-height: 143px;
-      padding: 16px 13px;
-      border: 1px solid var(--border);
-      border-radius: 19px;
-      background: linear-gradient(145deg, #1c2748, #131a32);
-    }
-
-    .feature-icon {
-      width: 43px;
-      height: 43px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 14px;
-      border-radius: 14px;
-      font-size: 22px;
-    }
-
-    .icon-red { background: rgba(255,64,91,.15); }
-    .icon-blue { background: rgba(67,133,255,.16); }
-    .icon-yellow { background: rgba(255,212,71,.13); }
-    .icon-green { background: rgba(58,218,151,.12); }
-
-    .feature-card h4 { font-size: 13px; margin-bottom: 7px; }
-
-    .feature-card p {
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.8;
-    }
-
-    .welcome-panel {
-      margin-top: 21px;
-      padding: 19px;
-      border-radius: 19px;
-      border: 1px solid var(--border);
-      background: linear-gradient(120deg, #192647, #191d39);
-    }
-
-    .welcome-panel h3 { font-size: 15px; margin-bottom: 9px; }
-
-    .welcome-panel p {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.9;
-    }
-
-    /* Navigation pages */
-
-    .page { display: none; min-height: 70vh; }
-    .page.active { display: block; }
-
-    .page-title { font-size: 26px; font-weight: 900; margin: 8px 0; }
-
-    .page-description {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.9;
-      margin-bottom: 21px;
-    }
-
-    .content-card {
-      margin-top: 14px;
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: linear-gradient(145deg, #1a2545, #131a32);
-    }
-
-    .content-icon { font-size: 31px; margin-bottom: 13px; }
-    .content-card h3 { font-size: 15px; margin-bottom: 9px; }
-
-    .content-card p {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.9;
-    }
-
-    .setting-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .setting-row:last-of-type { border-bottom: 0; }
-
-    .setting-icon {
-      width: 42px;
-      height: 42px;
-      flex-shrink: 0;
-      display: grid;
-      place-items: center;
-      border-radius: 13px;
-      background: #222e50;
-      font-size: 20px;
-    }
-
-    .setting-text { flex: 1; }
-    .setting-text strong { display: block; font-size: 13px; }
-
-    .setting-text small {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.7;
-    }
-
-    /* Bottom navigation */
-
-    .bottom-nav {
-      position: fixed;
-      z-index: 10;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 9px 7px calc(9px + env(safe-area-inset-bottom));
-      background: rgba(12,17,37,.97);
-      backdrop-filter: blur(18px);
-      border-top: 1px solid var(--border);
-    }
-
-    .nav-btn {
-      min-height: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      border: 0;
-      border-radius: 13px;
-      background: transparent;
-      color: #8f9bbb;
-      font-size: 10px;
-      font-weight: 800;
-    }
-
-    .nav-icon { font-size: 21px; line-height: 1; }
-
-    .nav-btn.active {
-      color: var(--yellow);
-      background: rgba(255,212,71,.07);
-    }
-
-    @media (max-width: 360px) {
-      .container { padding-left: 13px; padding-right: 13px; }
-      .welcome h1 { font-size: 22px; }
-      .balance-number { font-size: 31px; }
-      .feature-card { padding: 13px 11px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { transition: none !important; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100d18">
+<title>Vyro Reward</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --bg: #100d18;
+  --panel: #1b1625;
+  --red: #ff304f;
+  --yellow: #ffd54a;
+  --text: #ffffff;
+  --muted: #a9a2b5;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+button, input { font: inherit; }
+button { cursor: pointer; }
+
+.screen {
+  min-height: 100vh;
+  display: none;
+  padding: 24px;
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+}
+
+#loading {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 38%, #47202e 0%, transparent 47%),
+    var(--bg);
+}
+
+.logo {
+  width: 88px;
+  height: 88px;
+  display: grid;
+  place-items: center;
+  border-radius: 27px;
+  background: linear-gradient(145deg, var(--yellow), #ff9d20);
+  color: #211323;
+  font-size: 43px;
+  font-weight: 900;
+  box-shadow: 0 0 55px #ff304f30;
+  margin: 0 auto 25px;
+}
+
+.brand {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+}
+
+.brand span { color: var(--yellow); }
+
+.tagline {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.loader {
+  width: 230px;
+  margin-top: 48px;
+}
+
+.progress-track {
+  height: 6px;
+  border-radius: 20px;
+  background: #302738;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--red), var(--yellow));
+  transition: width .12s linear;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+#percent { color: var(--yellow); font-weight: 800; }
+
+#login {
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 100% 0%, #47202e55, transparent 45%),
+    var(--bg);
+}
+
+.login-top { margin-bottom: 38px; }
+.login-top .logo {
+  width: 68px;
+  height: 68px;
+  border-radius: 21px;
+  font-size: 34px;
+  margin: 0 0 22px;
+}
+
+h1 {
+  font-size: 31px;
+  letter-spacing: -1.2px;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+
+.description {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ddd5e6;
+  margin: 24px 0 10px;
+}
+
+.input-wrap {
+  background: var(--panel);
+  border: 1px solid #393043;
+  border-radius: 15px;
+  padding: 4px 16px;
+}
+
+.input-wrap input {
+  width: 100%;
+  padding: 15px 0;
+  color: white;
+  outline: none;
+  border: 0;
+  background: transparent;
+  font-size: 16px;
+  letter-spacing: 4px;
+}
+
+.primary-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 15px;
+  padding: 17px;
+  margin-top: 20px;
+  color: #24131a;
+  font-size: 14px;
+  font-weight: 900;
+  background: linear-gradient(100deg, var(--yellow), #ffb62f);
+  box-shadow: 0 8px 28px #ffb62f1b;
+}
+
+.message {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #ff8193;
+  min-height: 18px;
+  margin-top: 12px;
+}
+
+#app {
+  padding: 0;
+  padding-bottom: 90px;
+}
+
+.app-header {
+  padding: 25px 22px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-small {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -.8px;
+}
+
+.brand-small span { color: var(--yellow); }
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(145deg, var(--red), #9f234d);
+  font-weight: 900;
+}
+
+.page {
+  display: none;
+  padding: 8px 22px 24px;
+}
+
+.page.active { display: block; }
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--yellow);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin: 0 0 9px;
+}
+
+.page-description {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0 0 25px;
+}
+
+.balance-card {
+  padding: 24px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 100% 0%, #ffcf4c28, transparent 48%),
+    linear-gradient(135deg, #40202e, #211827 75%);
+  border: 1px solid #5c3540;
+  margin-bottom: 24px;
+}
+
+.balance-label {
+  color: #d6c5d0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.balance-number {
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  margin: 13px 0 7px;
+}
+
+.balance-note {
+  font-size: 12px;
+  color: #c6b4c1;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 26px 0 14px;
+}
+
+.feature-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px;
+  background: var(--panel);
+  border: 1px solid #302739;
+  border-radius: 18px;
+  margin-bottom: 12px;
+}
+
+.feature-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  font-size: 23px;
+  background: #ff304f19;
+}
+
+.feature-card:nth-of-type(2) .feature-icon { background: #ffd54a19; }
+
+.feature-title {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.feature-subtitle {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.empty-card {
+  border: 1px dashed #403548;
+  background: #1b1625a8;
+  border-radius: 20px;
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.empty-icon { font-size: 30px; margin-bottom: 12px; }
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 18px 0;
+  border-bottom: 1px solid #302739;
+  font-size: 13px;
+}
+
+.setting-row span:last-child { color: var(--muted); }
+
+.logout-btn {
+  width: 100%;
+  margin-top: 25px;
+  border: 1px solid #ff304f65;
+  border-radius: 14px;
+  padding: 15px;
+  background: #ff304f12;
+  color: #ff7186;
+  font-weight: 800;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 5;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+  background: #17121fee;
+  backdrop-filter: blur(20px);
+  border-top: 1px solid #352a3b;
+}
+
+.nav-btn {
+  border: 0;
+  background: transparent;
+  color: #898193;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.nav-icon { font-size: 21px; }
+
+.nav-btn.active { color: var(--yellow); }
+
+.nav-btn.active .nav-icon {
+  filter: drop-shadow(0 0 8px #ffd54a55);
+}
+
+@media (min-width: 600px) {
+  .screen#login, .screen#loading {
+    max-width: 480px;
+    margin: auto;
+  }
+
+  #app {
+    max-width: 480px;
+    margin: auto;
+    border-left: 1px solid #2d2434;
+    border-right: 1px solid #2d2434;
+  }
+
+  .bottom-nav {
+    max-width: 480px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Loading Screen -->
-  <section id="loadingScreen" class="screen center-screen">
-    <div class="loading-card">
-      <div class="logo"><span>V</span></div>
-      <div class="brand"><span class="vyro">VYRO</span> REWARD</div>
-      <p class="tagline">Your Reward Dashboard<br>A Better Experience Starts Here</p>
+<section id="loading" class="screen active">
+  <div>
+    <div class="logo">V</div>
+    <div class="brand">VYRO <span>REWARD</span></div>
+    <div class="tagline">A smarter rewards experience</div>
+  </div>
 
-      <div class="progress-track">
-        <div id="progressBar"></div>
+  <div class="loader">
+    <div class="progress-track">
+      <div class="progress-fill" id="progress"></div>
+    </div>
+    <div class="progress-info">
+      <span>Preparing your experience</span>
+      <span id="percent">0%</span>
+    </div>
+  </div>
+</section>
+
+<section id="login" class="screen">
+  <div class="login-top">
+    <div class="logo">V</div>
+    <div class="eyebrow">WELCOME TO VYRO</div>
+    <h1>Your next chapter<br>starts here.</h1>
+    <div class="description">
+      Sign in to continue to your Vyro Reward experience.
+    </div>
+  </div>
+
+  <form id="loginForm">
+    <label class="field-label" for="loginCode">ACCESS CODE</label>
+    <div class="input-wrap">
+      <input id="loginCode" type="password"
+        inputmode="numeric" maxlength="6"
+        placeholder="Enter your code" required>
+    </div>
+    <button class="primary-btn" type="submit">Continue <span>→</span></button>
+    <div class="message" id="loginMessage"></div>
+  </form>
+</section>
+
+<section id="app" class="screen">
+  <header class="app-header">
+    <div class="brand-small">VYRO <span>REWARD</span></div>
+    <div class="avatar">V</div>
+  </header>
+
+  <main>
+    <section class="page active" id="home">
+      <div class="eyebrow">YOUR SPACE</div>
+      <h1 class="page-title">Welcome to Vyro.</h1>
+      <p class="page-description">Your rewards journey starts here.</p>
+
+      <div class="balance-card">
+        <div class="balance-label">YOUR BALANCE</div>
+        <div class="balance-number">0 <span style="color:var(--yellow);font-size:24px">◆</span></div>
+        <div class="balance-note">Diamonds · Current balance</div>
       </div>
 
-      <div class="progress-info">
-        <span id="progressLabel">Preparing your experience...</span>
-        <span id="progressPercent">0%</span>
+      <div class="section-title">Explore Vyro</div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🏏</div>
+        <div>
+          <div class="feature-title">Cricket Game</div>
+          <div class="feature-subtitle">Coming soon to your experience</div>
+        </div>
       </div>
 
-      <p id="loadingMessage">Please wait while we get things ready.</p>
-    </div>
-  </section>
-
-  <!-- Internet Error -->
-  <section id="errorScreen" class="screen center-screen hidden">
-    <div class="error-card">
-      <div class="error-icon">📡</div>
-      <h2>Connection Unavailable</h2>
-      <p class="description">
-        We couldn't connect to the internet. Please check your mobile data
-        or Wi-Fi connection and try again.
-      </p>
-      <p id="networkError" class="error-message" role="alert"></p>
-      <button id="retryButton" class="primary-btn" type="button">
-        ↻ Try Again
-      </button>
-    </div>
-  </section>
-
-  <!-- Login Screen -->
-  <section id="loginScreen" class="screen center-screen hidden">
-    <div class="login-card">
-      <div class="login-brand">
-        <div class="logo"><span>V</span></div>
-        <div class="brand"><span class="vyro">VYRO</span> REWARD</div>
-        <p class="tagline">Your Journey Starts Here</p>
+      <div class="feature-card">
+        <div class="feature-icon">🎁</div>
+        <div>
+          <div class="feature-title">Daily Check-in</div>
+          <div class="feature-subtitle">A new feature is on its way</div>
+        </div>
       </div>
 
-      <h1>Welcome Back!</h1>
-      <p class="description">
-        Enter your login code to continue to your dashboard.
-      </p>
-
-      <form id="loginForm">
-        <label class="field-label" for="loginCode">Login Code</label>
-        <input
-          id="loginCode"
-          class="code-input"
-          type="password"
-          inputmode="numeric"
-          maxlength="6"
-          autocomplete="current-password"
-          placeholder="••••••"
-          required
-        >
-
-        <button id="loginButton" class="primary-btn" type="submit">
-          Continue Securely →
-        </button>
-
-        <p id="loginError" class="error-message" role="alert"></p>
-      </form>
-
-      <p class="small-note">
-        Enter your correct login code to continue.<br>
-        Enjoy a simple and organized dashboard experience.
-      </p>
-    </div>
-  </section>
-
-  <!-- Main App -->
-  <main id="appScreen" class="screen hidden">
-    <div class="container">
-
-      <header class="topbar">
-        <div class="topbar-brand">
-          <div class="small-logo">V</div>
-          <div>
-            <h2>Vyro Reward</h2>
-            <small>Your Personal Dashboard</small>
-          </div>
+      <div class="feature-card">
+        <div class="feature-icon">⭐</div>
+        <div>
+          <div class="feature-title">Prime Offer</div>
+          <div class="feature-subtitle">Exclusive offers coming soon</div>
         </div>
+      </div>
+    </section>
 
-        <div id="networkPill" class="network-pill">
-          <span class="network-dot"></span>
-          <span>Online</span>
+    <section class="page" id="referral">
+      <div class="eyebrow">GROW TOGETHER</div>
+      <h1 class="page-title">Referral</h1>
+      <p class="page-description">Your invitation space will appear here.</p>
+      <div class="empty-card">
+        <div class="empty-icon">✦</div>
+        <strong style="color:white">Something exciting is coming.</strong><br>
+        Referral features are not available yet.
+      </div>
+    </section>
+
+    <section class="page" id="wallet">
+      <div class="eyebrow">YOUR ASSETS</div>
+      <h1 class="page-title">My Wallet</h1>
+      <p class="page-description">Your balance and transaction space.</p>
+
+      <div class="balance-card">
+        <div class="balance-label">AVAILABLE DIAMONDS</div>
+        <div class="balance-number">0 <span style="color:var(--yellow);font-size:24px">◆</span></div>
+        <div class="balance-note">Current balance</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🪙</div>
+        <div>
+          <div class="feature-title">Coins</div>
+          <div class="feature-subtitle">0 Coins</div>
         </div>
-      </header>
+      </div>
 
-      <!-- Home -->
-      <section id="page-home" class="page active">
-        <div class="welcome">
-          <h1>Welcome Back <span>👋</span></h1>
-          <p>
-            Everything you need, organized in one place.
-            Explore your Vyro Reward dashboard.
-          </p>
-        </div>
+      <div class="section-title">Recent Transactions</div>
+      <div class="empty-card">No transactions yet.</div>
+    </section>
 
-        <div class="balance-card">
-          <p class="balance-label">Your Total Balance</p>
-          <div class="balance-number">0</div>
-          <p class="balance-caption">Your reward dashboard balance</p>
+    <section class="page" id="setting">
+      <div class="eyebrow">PERSONAL SPACE</div>
+      <h1 class="page-title">Settings</h1>
+      <p class="page-description">Manage your app experience.</p>
 
-          <div class="balance-items">
-            <div class="balance-item">
-              <small>💎 Diamond Balance</small>
-              <strong>0</strong>
-            </div>
-            <div class="balance-item">
-              <small>🪙 Coin Balance</small>
-              <strong>0</strong>
-            </div>
-          </div>
-        </div>
+      <div class="setting-row">
+        <span>Account</span><span>Vyro Member</span>
+      </div>
+      <div class="setting-row">
+        <span>App Version</span><span>1.0.0</span>
+      </div>
+      <div class="setting-row">
+        <span>Rewards</span><span>Not active</span>
+      </div>
 
-        <div class="section-heading">
-          <h3>Explore Your Dashboard</h3>
-          <span>VYRO REWARD</span>
-        </div>
+      <button class="logout-btn" id="logoutBtn">Sign Out</button>
+    </section>
+  </main>
 
-        <div class="feature-grid">
-          <article class="feature-card">
-            <div class="feature-icon icon-red">🏏</div>
-            <h4>Cricket Game</h4>
-            <p>Your cricket gaming section.</p>
-          </article>
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="home">
+      <span class="nav-icon">⌂</span><span>Home</span>
+    </button>
+    <button class="nav-btn" data-page="referral">
+      <span class="nav-icon">♧</span><span>Referral</span>
+    </button>
+    <button class="nav-btn" data-page="wallet">
+      <span class="nav-icon">◈</span><span>Wallet</span>
+    </button>
+    <button class="nav-btn" data-page="setting">
+      <span class="nav-icon">⚙</span><span>Setting</span>
+    </button>
+  </nav>
+</section>
 
-          <article class="feature-card">
-            <div class="feature-icon icon-yellow">🎁</div>
-            <h4>Daily Check-in</h4>
-            <p>Your daily check-in section.</p>
-          </article>
+<script>
+const $ = id => document.getElementById(id);
 
-          <article class="feature-card">
-            <div class="feature-icon icon-blue">💎</div>
-            <h4>Prime Offer</h4>
-            <p>Explore offers and diamond features.</p>
-          </article>
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(screen => {
+    screen.classList.toggle('active', screen.id === id);
+  });
+}
 
-          <article class="feature-card">
-            <div class="feature-icon icon-green">📜</div>
-            <h4>Activity History</h4>
-            <p>Keep track of your activities.</p>
-          </article>
-        </div>
+function openApp() {
+  showScreen('app');
+}
 
-        <div class="welcome-panel">
-          <h3>✨ Welcome to Vyro Reward</h3>
-          <p>
-            Your dashboard brings the main sections together in one place.
-            Enjoy a clean design built around simplicity and convenience.
-          </p>
-        </div>
-      </section>
+function startLoading() {
+  let value = 0;
+  const progress = $('progress');
+  const percent = $('percent');
 
-      <!-- Referral -->
-      <section id="page-referral" class="page">
-        <h1 class="page-title">👥 Referral</h1>
-        <p class="page-description">
-          Your dedicated space for referral information.
-        </p>
+  const timer = setInterval(() => {
+    value = Math.min(100, value + 2);
+    progress.style.width = value + '%';
+    percent.textContent = value + '%';
 
-        <div class="content-card">
-          <div class="content-icon">🤝</div>
-          <h3>Invite Your Friends</h3>
-          <p>
-            Referral codes, sharing options and invitation tracking
-            will be available in this section.
-          </p>
-        </div>
+    if (value >= 100) {
+      clearInterval(timer);
+      setTimeout(() => {
+        if (localStorage.getItem('vyroRewardLoggedIn') === 'yes') {
+          openApp();
+        } else {
+          showScreen('login');
+        }
+      }, 250);
+    }
+  }, 35);
+}
 
-        <div class="content-card">
-          <div class="content-icon">🎯</div>
-          <h3>Referral Overview</h3>
-          <p>Your referral information will appear here when available.</p>
-        </div>
-      </section>
+$('loginForm').addEventListener('submit', event => {
+  event.preventDefault();
 
-      <!-- Wallet -->
-      <section id="page-wallet" class="page">
-        <h1 class="page-title">👛 Wallet</h1>
-        <p class="page-description">
-          Your space for wallet and balance information.
-        </p>
+  if ($('loginCode').value === '123456') {
+    localStorage.setItem('vyroRewardLoggedIn', 'yes');
+    $('loginMessage').textContent = '';
+    openApp();
+  } else {
+    $('loginMessage').textContent = 'Invalid access code. Please try again.';
+  }
+});
 
-        <div class="content-card">
-          <div class="content-icon">💰</div>
-          <h3>Your Wallet</h3>
-          <p>
-            Balance management, transaction records and redemption
-            features will be connected to a secure wallet system.
-          </p>
-        </div>
+document.querySelectorAll('.nav-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    const page = button.dataset.page;
 
-        <div class="content-card">
-          <div class="content-icon">📋</div>
-          <h3>Transaction History</h3>
-          <p>Your wallet activity records will appear in this section.</p>
-        </div>
-      </section>
+    document.querySelectorAll('.page').forEach(item => {
+      item.classList.toggle('active', item.id === page);
+    });
 
-      <!-- Settings -->
-      <section id="page-setting" class="page">
-        <h1 class="page-title">⚙️ Settings</h1>
-        <p class="page-description">
-          Manage your app preferences and account options.
-        </p>
+    document.querySelectorAll('.nav-btn').forEach(item => {
+      item.classList.toggle('active', item === button);
+    });
+  });
+});
 
-        <div class="content-card">
-          <div class="setting-row">
-            <div class="setting-icon">👤</div>
-            <div class="setting-text">
-              <strong>Your Account</strong>
-              <small>Your Vyro Reward dashboard</small>
-            </div>
-          </div>
+$('logoutBtn').addEventListener('click', () => {
+  localStorage.removeItem('vyroRewardLoggedIn');
+  $('loginCode').value = '';
+  showScreen('login');
+});
 
-          <div class="setting-row">
-            <div class="setting-icon">🛡️</div>
-            <div class="setting-text">
-              <strong>Security</strong>
-              <small>Account security options</small>
-            </div>
-          </div>
+startLoading();
+</script>
 
-          <div class="setting-row">
-            <div class="setting-icon">ℹ️</div>
-            <div class="setting-text">
-              <strong>App Information</strong>
-              <small>Vyro Reward</small>
-            </div>
-          </div>
-
-          <button id="logoutButton" class="secondary-btn" type="button">
-            Log Out
-          </button>
-        </div>
-      </section>
-
-   
+</body>
+</html>

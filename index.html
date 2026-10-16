@@ -1,136 +1,804 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#061a3a">
-<title>Vyro Reward</title>
-<style>
-:root{--bg:#04132e;--cyan:#13d8ff;--blue:#087bff;--muted:#9eb9d9;--line:#20bfff65}
-*{box-sizing:border-box}
-body{margin:0;color:#f3f8ff;font-family:Arial,sans-serif;background:radial-gradient(ellipse at top,#073d80,transparent 45%),linear-gradient(155deg,#020b1c,#061a3a);min-height:100vh}
-button,input{font:inherit}button{cursor:pointer;color:inherit}
-.hidden{display:none!important}
-.center{width:100%;max-width:390px;text-align:center}
-.centerScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
-.logo,.miniLogo{display:grid;place-items:center;font-weight:900;background:linear-gradient(145deg,#087bff,#0ee2ff);border:1px solid #b8f6ff;box-shadow:0 0 30px #08aaff65}
-.logo{margin:auto;width:85px;height:85px;border-radius:27px;font-size:45px}
-.brand{font-size:26px;font-weight:900;margin:17px 0 7px}
-.cyan{color:var(--cyan)}.muted,.desc,.small{color:var(--muted)}
-.small,.desc{font-size:13px;line-height:1.6}
-.progress{height:7px;background:#ffffff19;border-radius:20px;overflow:hidden;margin:25px auto 10px;max-width:300px}
-.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan))}
-.glass,.loginBox{background:linear-gradient(135deg,#0a3260e8,#061b3be8);border:1px solid var(--line);border-radius:21px;box-shadow:0 12px 35px #0003}
-.loginBox{padding:24px 20px}
-input{width:100%;padding:15px;border-radius:13px;border:1px solid var(--line);background:#03142e;color:white;margin-top:18px;text-align:center}
-.btn{border:1px solid #65e9ff8c;border-radius:14px;background:linear-gradient(100deg,#087bff,#08c9ef);padding:13px 16px;font-weight:bold}
-.full{width:100%;margin-top:13px}.secondary{background:#0a2a51}
-#app{padding-bottom:85px}
-.topbar{max-width:700px;margin:auto;padding:16px;display:flex;align-items:center;justify-content:space-between}
-.miniBrand{display:flex;align-items:center;gap:10px}
-.miniLogo{width:43px;height:43px;border-radius:14px;font-size:22px}
-.miniBrand small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
-.content{max-width:700px;margin:auto;padding:0 16px}
-.page{display:none}.page.active{display:block}
-h1{font-size:25px;margin:10px 0 7px}h2{font-size:18px;margin:23px 0 8px}h3{font-size:16px;margin:0 0 7px}
-.desc{margin:0 0 16px}
-.balance{padding:20px;background:linear-gradient(120deg,#075bbd,#07417c 60%,#0a2b56)}
-.label{font-size:11px;letter-spacing:.6px;color:#c7e9ff}
-.big{font-size:34px;font-weight:900;margin:10px 0}
-.big small{font-size:13px;color:#c6e9ff}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{font-size:11px;padding:7px 10px;border-radius:30px;background:#ffffff13;border:1px solid #ffffff21}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{padding:14px}.statIcon{font-size:23px}.statName{font-size:11px;color:var(--muted);margin-top:8px}.statVal{font-size:22px;font-weight:850;margin-top:3px}
-.featureGrid{display:grid;grid-template-columns:1fr;gap:11px}
-.feature{display:flex;align-items:center;gap:13px;text-align:left;width:100%;padding:15px;background:linear-gradient(110deg,#0a3263,#061d3e);border:1px solid var(--line);border-radius:19px}
-.fIcon{flex:0 0 53px;width:53px;height:53px;border-radius:16px;display:grid;place-items:center;font-size:27px;background:#087bff35;border:1px solid #4cdfff57}
-.fBody{flex:1}.fBody p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
-.tag{display:inline-block;font-size:9px;color:#a7f5ff;margin-top:7px;padding:4px 7px;border:1px solid #20bfff50;border-radius:20px}
-.arrow{font-size:25px;color:var(--cyan)}
-.pad{padding:17px;margin-top:12px}
-.rowLine{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid #ffffff12;font-size:13px}
-.callout{border:1px solid #ffc94d55;background:#ffc94d0d;border-radius:14px;padding:13px;font-size:12px;line-height:1.6;color:#ffe9ad;margin-top:13px}
-.back{margin:4px 0 15px;padding:9px 12px;border-radius:11px;border:1px solid var(--line);background:#0a2a51}
-.bottomNav{position:fixed;bottom:0;left:0;right:0;max-width:700px;margin:auto;padding:8px 8px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);background:#03142ef5;border-top:1px solid #20bfff45}
-.navBtn{border:0;border-radius:13px;background:transparent;color:#91afd1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 2px;font-size:10px}
-.navBtn .ico{font-size:21px}.navBtn.active{color:var(--cyan);background:#0b4b7b70}
-.toast{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:#092a50;border:1px solid var(--line);border-radius:13px;padding:12px;max-width:90%;font-size:12px;display:none}
-.pitch{height:150px;border-radius:15px;background:repeating-linear-gradient(90deg,#15784c,#15784c 20px,#167d50 20px,#167d50 40px);display:flex;align-items:center;justify-content:center;flex-direction:column;margin:12px 0}
-@media(min-width:520px){.featureGrid{grid-template-columns:1fr 1fr}.feature:last-child{grid-column:1/-1}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1023">
+  <meta name="description" content="Vyro Reward - Your Reward Dashboard">
+  <title>Vyro Reward</title>
+
+  <style>
+    :root {
+      --bg: #0b1023;
+      --card: #151e3a;
+      --card2: #1c294b;
+      --red: #ff405b;
+      --blue: #4385ff;
+      --yellow: #ffd447;
+      --white: #ffffff;
+      --muted: #aab6d4;
+      --border: rgba(255,255,255,.09);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 0% 0%, #27245a 0, transparent 38%),
+        radial-gradient(ellipse at 100% 35%, #12375a 0, transparent 32%),
+        var(--bg);
+      color: var(--white);
+      font-family: Arial, sans-serif;
+      padding-bottom: 90px;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+
+    .screen {
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .center-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 18px;
+    }
+
+    .logo {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 20px;
+      border-radius: 29px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(140deg, var(--red), #ff8156 53%, var(--yellow));
+      box-shadow: 0 12px 38px rgba(255,64,91,.25);
+      transform: rotate(-5deg);
+    }
+
+    .logo span {
+      transform: rotate(5deg);
+      color: #11162d;
+      font-size: 49px;
+      font-weight: 1000;
+      letter-spacing: -5px;
+    }
+
+    .brand {
+      font-size: 29px;
+      font-weight: 1000;
+      letter-spacing: -.8px;
+    }
+
+    .brand .vyro { color: var(--yellow); }
+
+    .tagline {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    /* Loading */
+
+    .loading-card {
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .progress-track {
+      height: 9px;
+      margin-top: 34px;
+      background: #293451;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    #progressBar {
+      width: 0%;
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, var(--red), var(--yellow), var(--blue));
+      transition: width .12s linear;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    #progressPercent {
+      color: var(--yellow);
+      font-weight: 900;
+    }
+
+    #loadingMessage {
+      min-height: 44px;
+      margin-top: 22px;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #e0e8ff;
+    }
+
+    /* Buttons and cards */
+
+    .primary-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: 0;
+      border-radius: 14px;
+      color: #14152b;
+      font-weight: 900;
+      background: linear-gradient(100deg, var(--red), #ff8056, var(--yellow));
+      box-shadow: 0 8px 24px rgba(255,64,91,.15);
+    }
+
+    .primary-btn:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border-radius: 13px;
+      border: 1px solid var(--border);
+      background: var(--card2);
+      color: var(--white);
+    }
+
+    .error-card, .login-card {
+      width: 100%;
+      max-width: 390px;
+      padding: 27px 22px;
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      background: linear-gradient(150deg, #1b2648, #11172d);
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+
+    .error-card { text-align: center; }
+    .error-icon { font-size: 44px; margin-bottom: 16px; }
+    .error-card h2 { font-size: 22px; margin-bottom: 12px; }
+
+    .description {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .error-message {
+      color: #ff9aaa;
+      font-size: 12px;
+      line-height: 1.8;
+      margin-top: 12px;
+    }
+
+    /* Login */
+
+    .login-brand {
+      text-align: center;
+      margin-bottom: 27px;
+    }
+
+    .login-brand .logo {
+      width: 75px;
+      height: 75px;
+      border-radius: 23px;
+    }
+
+    .login-brand .logo span { font-size: 40px; }
+
+    .login-card h1 {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 9px;
+    }
+
+    .login-card .description {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .code-input {
+      width: 100%;
+      padding: 16px;
+      color: white;
+      background: #0b1228;
+      border: 1px solid #354365;
+      border-radius: 14px;
+      outline: none;
+      text-align: center;
+      letter-spacing: 6px;
+      font-size: 23px;
+    }
+
+    .code-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(67,133,255,.14);
+    }
+
+    .small-note {
+      margin-top: 19px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.9;
+      text-align: center;
+    }
+
+    /* Main application */
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      padding: 21px 17px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 27px;
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .small-logo {
+      width: 45px;
+      height: 45px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: linear-gradient(140deg, var(--red), var(--yellow));
+      color: #11162d;
+      font-size: 25px;
+      font-weight: 1000;
+    }
+
+    .topbar h2 { font-size: 17px; font-weight: 900; }
+    .topbar small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .network-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 20px;
+      background: rgba(50,220,140,.09);
+      border: 1px solid rgba(50,220,140,.16);
+      color: #a6f7ca;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .network-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #50e39a;
+    }
+
+    .welcome { margin-bottom: 20px; }
+    .welcome h1 {
+      font-size: 25px;
+      line-height: 1.5;
+      font-weight: 900;
+    }
+
+    .welcome h1 span { color: var(--yellow); }
+
+    .welcome p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .balance-card {
+      position: relative;
+      overflow: hidden;
+      padding: 23px 20px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(125deg, #e73558, #a52e78 49%, #354fe2);
+      box-shadow: 0 16px 36px rgba(73,55,190,.2);
+    }
+
+    .balance-card::after {
+      content: "";
+      position: absolute;
+      width: 165px;
+      height: 165px;
+      top: -85px;
+      right: -55px;
+      border: 25px solid rgba(255,255,255,.09);
+      border-radius: 50%;
+    }
+
+    .balance-label { color: #ffedf3; font-size: 12px; }
+    .balance-number { margin-top: 8px; font-size: 35px; font-weight: 1000; }
+    .balance-caption { margin-top: 7px; color: #ffe6ef; font-size: 11px; }
+
+    .balance-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .balance-item {
+      position: relative;
+      z-index: 1;
+      padding: 13px;
+      border-radius: 14px;
+      background: rgba(12,19,55,.23);
+      border: 1px solid rgba(255,255,255,.13);
+    }
+
+    .balance-item small { font-size: 11px; color: #f8eaff; }
+    .balance-item strong { display: block; margin-top: 7px; font-size: 21px; }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin: 27px 0 14px;
+    }
+
+    .section-heading h3 { font-size: 17px; font-weight: 900; }
+    .section-heading span { color: var(--muted); font-size: 10px; }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .feature-card {
+      min-height: 143px;
+      padding: 16px 13px;
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      background: linear-gradient(145deg, #1c2748, #131a32);
+    }
+
+    .feature-icon {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 14px;
+      border-radius: 14px;
+      font-size: 22px;
+    }
+
+    .icon-red { background: rgba(255,64,91,.15); }
+    .icon-blue { background: rgba(67,133,255,.16); }
+    .icon-yellow { background: rgba(255,212,71,.13); }
+    .icon-green { background: rgba(58,218,151,.12); }
+
+    .feature-card h4 { font-size: 13px; margin-bottom: 7px; }
+
+    .feature-card p {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .welcome-panel {
+      margin-top: 21px;
+      padding: 19px;
+      border-radius: 19px;
+      border: 1px solid var(--border);
+      background: linear-gradient(120deg, #192647, #191d39);
+    }
+
+    .welcome-panel h3 { font-size: 15px; margin-bottom: 9px; }
+
+    .welcome-panel p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    /* Navigation pages */
+
+    .page { display: none; min-height: 70vh; }
+    .page.active { display: block; }
+
+    .page-title { font-size: 26px; font-weight: 900; margin: 8px 0; }
+
+    .page-description {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+      margin-bottom: 21px;
+    }
+
+    .content-card {
+      margin-top: 14px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: linear-gradient(145deg, #1a2545, #131a32);
+    }
+
+    .content-icon { font-size: 31px; margin-bottom: 13px; }
+    .content-card h3 { font-size: 15px; margin-bottom: 9px; }
+
+    .content-card p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row:last-of-type { border-bottom: 0; }
+
+    .setting-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: #222e50;
+      font-size: 20px;
+    }
+
+    .setting-text { flex: 1; }
+    .setting-text strong { display: block; font-size: 13px; }
+
+    .setting-text small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    /* Bottom navigation */
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 10;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 9px 7px calc(9px + env(safe-area-inset-bottom));
+      background: rgba(12,17,37,.97);
+      backdrop-filter: blur(18px);
+      border-top: 1px solid var(--border);
+    }
+
+    .nav-btn {
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 0;
+      border-radius: 13px;
+      background: transparent;
+      color: #8f9bbb;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .nav-icon { font-size: 21px; line-height: 1; }
+
+    .nav-btn.active {
+      color: var(--yellow);
+      background: rgba(255,212,71,.07);
+    }
+
+    @media (max-width: 360px) {
+      .container { padding-left: 13px; padding-right: 13px; }
+      .welcome h1 { font-size: 22px; }
+      .balance-number { font-size: 31px; }
+      .feature-card { padding: 13px 11px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
 </head>
+
 <body>
 
-<section id="loading" class="centerScreen">
- <div class="center"><div class="logo">V</div><div class="brand">VYRO <span class="cyan">REWARD</span></div>
- <p class="muted">Your rewards journey starts here</p>
- <div class="progress"><div id="loadBar"></div></div><div id="loadPct" class="cyan">0%</div></div>
-</section>
+  <!-- Loading Screen -->
+  <section id="loadingScreen" class="screen center-screen">
+    <div class="loading-card">
+      <div class="logo"><span>V</span></div>
+      <div class="brand"><span class="vyro">VYRO</span> REWARD</div>
+      <p class="tagline">Your Reward Dashboard<br>A Better Experience Starts Here</p>
 
-<section id="login" class="centerScreen hidden">
- <div class="center loginBox"><div class="logo">V</div><div class="brand">VYRO <span class="cyan">REWARD</span></div>
- <p class="small">Welcome! Demo login screen.</p>
- <input id="password" type="password" maxlength="6" inputmode="numeric" placeholder="Demo password: 123456">
- <button class="btn full" onclick="login()">Login →</button>
- <p id="loginMsg" class="small">Demo password: 123456</p></div>
-</section>
+      <div class="progress-track">
+        <div id="progressBar"></div>
+      </div>
 
-<section id="app" class="hidden">
-<header class="topbar"><div class="miniBrand"><div class="miniLogo">V</div><div><strong>VYRO <span class="cyan">REWARD</span></strong><small>Your rewards journey</small></div></div><span class="cyan">●</span></header>
-<main class="content">
+      <div class="progress-info">
+        <span id="progressLabel">Preparing your experience...</span>
+        <span id="progressPercent">0%</span>
+      </div>
 
-<section class="page active" id="page-home">
-<h1>Hello, <span class="cyan">Champion!</span> ✨</h1>
-<p class="desc">आपके rewards space में स्वागत है।</p>
-<div class="glass balance"><div class="label">YOUR TOTAL BALANCE</div><div class="big">0 <small>Coins</small></div><div class="chips"><span class="chip">💎 0 Diamonds</span><span class="chip">✦ Demo Account</span></div></div>
-<h2>Your Overview</h2><div class="stats">
-<div class="glass stat"><div class="statIcon">💎</div><div class="statName">Total Diamonds</div><div class="statVal">0</div></div>
-<div class="glass stat"><div class="statIcon">🪙</div><div class="statName">Total Coins</div><div class="statVal">0</div></div></div>
-<h2>Explore Rewards ✨</h2><p class="desc">किसी कार्ड पर टैप करके उसका पेज खोलें।</p>
-<div class="featureGrid">
-<button class="feature" onclick="openFeature('game')"><span class="fIcon">🏏</span><span class="fBody"><h3>Play Game</h3><p>Cricket game का डेमो खेलें।</p><span class="tag">GAME ZONE</span></span><span class="arrow">›</span></button>
-<button class="feature" onclick="openFeature('checkin')"><span class="fIcon">🎁</span><span class="fBody"><h3>Daily Check-in</h3><p>दैनिक चेक-इन स्क्रीन देखें।</p><span class="tag">DAILY REWARD</span></span><span class="arrow">›</span></button>
-<button class="feature" onclick="openFeature('prime')"><span class="fIcon">👑</span><span class="fBody"><h3>Prime Offer</h3><p>35 Diamonds → 240 Coins का प्रस्ताव।</p><span class="tag">PRIME CLUB</span></span><span class="arrow">›</span></button>
-</div>
-<div class="glass pad"><h3>💡 Important</h3><p class="small">यह फ्रंटएंड डेमो है। असली विज्ञापन, भुगतान या रियल रिवॉर्ड अभी सक्रिय नहीं हैं।</p></div>
-</section>
+      <p id="loadingMessage">Please wait while we get things ready.</p>
+    </div>
+  </section>
 
-<section class="page" id="page-game"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>🏏 Cricket <span class="cyan">Game</span></h1><p class="desc">6-ball timing game का डेमो।</p><div class="glass pad" style="text-align:center"><div class="pitch"><div style="font-size:38px">🏏 🏟️</div><strong id="ballLabel">Ready to play?</strong></div><p id="gameResult" class="small">Start दबाएँ, फिर Shot मारें।</p><button class="btn full" id="startGame" onclick="startGame()">Start 6-Ball Match</button><button class="btn full secondary" id="shotBtn" onclick="hitShot()" disabled>🏏 Shot मारो</button></div><div class="callout">इस डेमो में मैच जीतने पर असली रिवॉर्ड नहीं मिलता।</div></section>
+  <!-- Internet Error -->
+  <section id="errorScreen" class="screen center-screen hidden">
+    <div class="error-card">
+      <div class="error-icon">📡</div>
+      <h2>Connection Unavailable</h2>
+      <p class="description">
+        We couldn't connect to the internet. Please check your mobile data
+        or Wi-Fi connection and try again.
+      </p>
+      <p id="networkError" class="error-message" role="alert"></p>
+      <button id="retryButton" class="primary-btn" type="button">
+        ↻ Try Again
+      </button>
+    </div>
+  </section>
 
-<section class="page" id="page-checkin"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>🎁 Daily <span class="cyan">Check-in</span></h1><p class="desc">दैनिक रिवॉर्ड का प्रीव्यू।</p><div class="glass pad"><div class="stats"><div class="glass stat">🪙<div class="statName">Day 1</div><div class="statVal">+10</div></div><div class="glass stat">🎁<div class="statName">Day 2</div><div class="statVal">+20</div></div><div class="glass stat">💎<div class="statName">Day 3</div><div class="statVal">+30</div></div><div class="glass stat">👑<div class="statName">Day 7</div><div class="statVal">Bonus</div></div></div><button class="btn full" onclick="toast('Daily reward अभी demo में सक्रिय नहीं है।')">Check-in Now</button></div></section>
+  <!-- Login Screen -->
+  <section id="loginScreen" class="screen center-screen hidden">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="logo"><span>V</span></div>
+        <div class="brand"><span class="vyro">VYRO</span> REWARD</div>
+        <p class="tagline">Your Journey Starts Here</p>
+      </div>
 
-<section class="page" id="page-prime"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>👑 Prime <span class="cyan">Offers</span></h1><p class="desc">विशेष ऑफ़र का प्रीव्यू।</p><div class="glass pad"><h3>Prime Exchange</h3><p class="small">प्रस्तावित ऑफ़र</p><div class="big">💎 35 → 🪙 240</div><button class="btn full" onclick="toast('असली खरीद अभी सक्रिय नहीं है।')">View Offer</button></div><div class="callout">प्रस्तावित नियम: रोज़ अधिकतम 5 सफल ऑफ़र और खरीद के बीच कम-से-कम 1 घंटा।</div></section>
+      <h1>Welcome Back!</h1>
+      <p class="description">
+        Enter your login code to continue to your dashboard.
+      </p>
 
-<section class="page" id="page-referral"><h1>Invite & <span class="cyan">Earn</span> 🤝</h1><p class="desc">अपने दोस्तों को invite करने के लिए Referral सेक्शन।</p><div class="glass pad"><h3>Your Referral Code</h3><div class="rowLine"><span class="cyan">VYRO-DEMO</span><button class="btn" onclick="toast('Demo code: VYRO-DEMO')">Copy</button></div><div class="stats"><div class="glass stat"><div class="statName">Successful Referrals</div><div class="statVal">0</div></div><div class="glass stat"><div class="statName">Total Earned</div><div class="statVal">0</div></div></div><button class="btn full" onclick="toast('Referral sharing बाद में जोड़ा जाएगा।')">Share Invite</button></div></section>
+      <form id="loginForm">
+        <label class="field-label" for="loginCode">Login Code</label>
+        <input
+          id="loginCode"
+          class="code-input"
+          type="password"
+          inputmode="numeric"
+          maxlength="6"
+          autocomplete="current-password"
+          placeholder="••••••"
+          required
+        >
 
-<section class="page" id="page-wallet"><h1>My <span class="cyan">Wallet</span> 👛</h1><p class="desc">Balance और transaction history का डेमो।</p><div class="glass balance"><div class="label">AVAILABLE BALANCE</div><div class="big">0 <small>Coins</small></div><div class="chips"><span class="chip">💎 0 Diamonds</span></div></div><div class="stats" style="margin-top:12px"><button class="glass stat" onclick="toast('Demo में coins जोड़ना बंद है।')">🪙<div class="statName">Add Coins</div><div class="statVal">Explore</div></button><button class="glass stat" onclick="toast('Secure backend के बाद withdrawal बनेगा।')">👛<div class="statName">Withdraw</div><div class="statVal">Coming Soon</div></button></div><h2>Transaction History</h2><div class="glass pad"><h3>No transactions yet</h3><p class="small">रिवॉर्ड इतिहास यहाँ दिखाई देगा।</p></div></section>
+        <button id="loginButton" class="primary-btn" type="submit">
+          Continue Securely →
+        </button>
 
-<section class="page" id="page-setting"><h1>App <span class="cyan">Settings</span> ⚙️</h1><p class="desc">ऐप की जानकारी और account options।</p><div class="glass pad"><div class="rowLine"><span>App Name</span><strong>Vyro Reward</strong></div><div class="rowLine"><span>Version</span><strong>Demo 1.0</strong></div><div class="rowLine"><span>Account</span><strong>Local Demo</strong></div><div class="rowLine"><span>Status</span><strong class="cyan">Demo Active</strong></div></div><h2>Help & Information</h2><div class="glass pad"><button class="feature" onclick="openFeature('history')"><span class="fIcon">📜</span><span class="fBody"><h3>Game & Reward History</h3><p>Activity screen खोलें।</p></span><span class="arrow">›</span></button><button class="feature" style="margin-top:10px" onclick="openFeature('support')"><span class="fIcon">💬</span><span class="fBody"><h3>Help & Support</h3><p>Support और FAQ।</p></span><span class="arrow">›</span></button><button class="btn full secondary" onclick="logout()">Log Out</button></div></section>
+        <p id="loginError" class="error-message" role="alert"></p>
+      </form>
 
-<section class="page" id="page-history"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>Game <span class="cyan">History</span></h1><div class="glass pad"><h3>🏏 Cricket Game</h3><p class="small">अभी कोई मैच रिकॉर्ड नहीं है।</p><div class="rowLine"><span>Verified rewards</span><strong>0</strong></div><div class="rowLine"><span>Pending rewards</span><strong>0</strong></div></div></section>
-<section class="page" id="page-support"><button class="back" onclick="goHome()">← Home पर वापस</button><h1>Help & <span class="cyan">Support</span></h1><div class="glass pad"><div class="rowLine"><span>क्या wallet असली है?</span><strong>नहीं, demo है</strong></div><div class="rowLine"><span>क्या payout चालू है?</span><strong>नहीं</strong></div><p class="small">Public launch से पहले support contact, privacy policy और terms जोड़ें।</p></div></section>
-</main>
-<nav class="bottomNav"><button class="navBtn active" data-tab="home" onclick="openTab('home',this)"><span class="ico">⌂</span>Home</button><button class="navBtn" data-tab="referral" onclick="openTab('referral',this)"><span class="ico">♧</span>Referral</button><button class="navBtn" data-tab="wallet" onclick="openTab('wallet',this)"><span class="ico">▣</span>Wallet</button><button class="navBtn" data-tab="setting" onclick="openTab('setting',this)"><span class="ico">⚙</span>Setting</button></nav>
-</section>
-<div id="toast" class="toast"></div>
+      <p class="small-note">
+        Enter your correct login code to continue.<br>
+        Enjoy a simple and organized dashboard experience.
+      </p>
+    </div>
+  </section>
 
-<script>
-const $=id=>document.getElementById(id);
-function show(id){['loading','login','app'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
-let progress=0;const timer=setInterval(()=>{progress=Math.min(100,progress+10);$('loadBar').style.width=progress+'%';$('loadPct').textContent=progress+'%';if(progress===100){clearInterval(timer);setTimeout(()=>show('login'),250)}},90);
-function login(){if($('password').value==='123456'){show('app');openTab('home',document.querySelector('[data-tab="home"]'))}else $('loginMsg').textContent='Password गलत है। Demo password 123456 है।'}
-$('password').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
-function openTab(n,b){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+n).classList.add('active');document.querySelectorAll('.navBtn').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');window.scrollTo(0,0)}
-function openFeature(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+n).classList.add('active');document.querySelectorAll('.navBtn').forEach(x=>x.classList.remove('active'));window.scrollTo(0,0)}
-function goHome(){openTab('home',document.querySelector('[data-tab="home"]'))}
-function logout(){$('password').value='';show('login')}
-let toastTimer;function toast(s){$('toast').textContent=s;$('toast').style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.display='none',2500)}
-let ball=0,shots=0,waiting=false,active=false;
-function startGame(){ball=0;shots=0;active=true;$('startGame').disabled=true;$('shotBtn').disabled=false;nextBall()}
-function nextBall(){if(!active)return;if(ball>=6){active=false;$('ballLabel').textContent='Match complete';$('gameResult').textContent='Demo score: '+shots+'/6. कोई real reward नहीं दिया गया।';$('startGame').disabled=false;$('shotBtn').disabled=true;return}ball++;waiting=true;$('ballLabel').textContent='Ball '+ball+' / 6 — READY';$('gameResult').textContent='अब Shot मारें!';setTimeout(()=>{if(active&&waiting){waiting=false;$('ballLabel').textContent='Missed!';setTimeout(nextBall,600)}},1800)}
-function hitShot(){if(!active||!waiting){toast('Ball आने का इंतज़ार करें।');return}waiting=false;shots++;$('ballLabel').textContent=['Single!','FOUR!','Good shot!','SIX!'][Math.floor(Math.random()*4)];$('gameResult').textContent='Demo hit '+shots+' — '+ball+'/6';setTimeout(nextBall,600)}
-</script>
-</body>
-  </html>
-                                       
+  <!-- Main App -->
+  <main id="appScreen" class="screen hidden">
+    <div class="container">
+
+      <header class="topbar">
+        <div class="topbar-brand">
+          <div class="small-logo">V</div>
+          <div>
+            <h2>Vyro Reward</h2>
+            <small>Your Personal Dashboard</small>
+          </div>
+        </div>
+
+        <div id="networkPill" class="network-pill">
+          <span class="network-dot"></span>
+          <span>Online</span>
+        </div>
+      </header>
+
+      <!-- Home -->
+      <section id="page-home" class="page active">
+        <div class="welcome">
+          <h1>Welcome Back <span>👋</span></h1>
+          <p>
+            Everything you need, organized in one place.
+            Explore your Vyro Reward dashboard.
+          </p>
+        </div>
+
+        <div class="balance-card">
+          <p class="balance-label">Your Total Balance</p>
+          <div class="balance-number">0</div>
+          <p class="balance-caption">Your reward dashboard balance</p>
+
+          <div class="balance-items">
+            <div class="balance-item">
+              <small>💎 Diamond Balance</small>
+              <strong>0</strong>
+            </div>
+            <div class="balance-item">
+              <small>🪙 Coin Balance</small>
+              <strong>0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-heading">
+          <h3>Explore Your Dashboard</h3>
+          <span>VYRO REWARD</span>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon icon-red">🏏</div>
+            <h4>Cricket Game</h4>
+            <p>Your cricket gaming section.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon icon-yellow">🎁</div>
+            <h4>Daily Check-in</h4>
+            <p>Your daily check-in section.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon icon-blue">💎</div>
+            <h4>Prime Offer</h4>
+            <p>Explore offers and diamond features.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon icon-green">📜</div>
+            <h4>Activity History</h4>
+            <p>Keep track of your activities.</p>
+          </article>
+        </div>
+
+        <div class="welcome-panel">
+          <h3>✨ Welcome to Vyro Reward</h3>
+          <p>
+            Your dashboard brings the main sections together in one place.
+            Enjoy a clean design built around simplicity and convenience.
+          </p>
+        </div>
+      </section>
+
+      <!-- Referral -->
+      <section id="page-referral" class="page">
+        <h1 class="page-title">👥 Referral</h1>
+        <p class="page-description">
+          Your dedicated space for referral information.
+        </p>
+
+        <div class="content-card">
+          <div class="content-icon">🤝</div>
+          <h3>Invite Your Friends</h3>
+          <p>
+            Referral codes, sharing options and invitation tracking
+            will be available in this section.
+          </p>
+        </div>
+
+        <div class="content-card">
+          <div class="content-icon">🎯</div>
+          <h3>Referral Overview</h3>
+          <p>Your referral information will appear here when available.</p>
+        </div>
+      </section>
+
+      <!-- Wallet -->
+      <section id="page-wallet" class="page">
+        <h1 class="page-title">👛 Wallet</h1>
+        <p class="page-description">
+          Your space for wallet and balance information.
+        </p>
+
+        <div class="content-card">
+          <div class="content-icon">💰</div>
+          <h3>Your Wallet</h3>
+          <p>
+            Balance management, transaction records and redemption
+            features will be connected to a secure wallet system.
+          </p>
+        </div>
+
+        <div class="content-card">
+          <div class="content-icon">📋</div>
+          <h3>Transaction History</h3>
+          <p>Your wallet activity records will appear in this section.</p>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section id="page-setting" class="page">
+        <h1 class="page-title">⚙️ Settings</h1>
+        <p class="page-description">
+          Manage your app preferences and account options.
+        </p>
+
+        <div class="content-card">
+          <div class="setting-row">
+            <div class="setting-icon">👤</div>
+            <div class="setting-text">
+              <strong>Your Account</strong>
+              <small>Your Vyro Reward dashboard</small>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-icon">🛡️</div>
+            <div class="setting-text">
+              <strong>Security</strong>
+              <small>Account security options</small>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-icon">ℹ️</div>
+            <div class="setting-text">
+              <strong>App Information</strong>
+              <small>Vyro Reward</small>
+            </div>
+          </div>
+
+          <button id="logoutButton" class="secondary-btn" type="button">
+            Log Out
+          </button>
+        </div>
+      </section>
+
+   

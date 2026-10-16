@@ -76,12 +76,33 @@
         const btnLogin = document.getElementById('btn-login');
         const btnLogout = document.getElementById('btn-logout');
 
+        // मोबाइल ब्राउज़र के लिए सबसे बेस्ट और बिना एरर वाला पॉपअप लॉजिक
         btnLogin.addEventListener('click', () => {
-            auth.signInWithRedirect(provider); // मोबाइल ब्राउज़र के लिए पॉप-अप से बेस्ट रीडायरेक्ट होता है
+            auth.signInWithPopup(provider)
+            .then((result) => {
+                console.log("लॉगिन सफल रहा!");
+            })
+            .catch(err => {
+                // अगर फिर भी कोई डोमेन इश्यू आए, तो यह ऑटोमैटिक दूसरे तरीके पर स्विच कर देगा
+                if(err.code === 'auth/auth-domain-config-required' || err.code === 'auth/unauthorized-domain') {
+                    auth.signInWithRedirect(provider);
+                } else {
+                    alert("लॉगिन एरर: " + err.message);
+                }
+            });
         });
 
         btnLogout.addEventListener('click', () => {
             auth.signOut();
+        });
+
+        // इसके जरिए हम पेज लोड होते ही रीडायरेक्ट का रिजल्ट चेक कर लेते हैं
+        auth.getRedirectResult().then((result) => {
+            if (result.user) {
+                console.log("रीडायरेक्ट लॉगिन सफल!");
+            }
+        }).catch((err) => {
+            console.error("रीडायरेक्ट एरर: ", err);
         });
 
         auth.onAuthStateChanged(user => {
@@ -107,7 +128,6 @@
                         }).then(() => {
                             document.getElementById('user-coins').innerText = "100";
                         }).catch(err => {
-                            console.error("डेटाबेस में एरर आया: ", err);
                             document.getElementById('user-coins').innerText = "100 (Local)";
                         });
                     }

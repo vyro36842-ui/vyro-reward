@@ -336,38 +336,6 @@
             line-height: 1.4;
         }
 
-        /* Referral History List */
-        .history-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .history-row:last-child {
-            border-bottom: none;
-        }
-
-        .user-meta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(138, 43, 226, 0.2);
-            color: var(--accent-purple);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 14px;
-        }
-
         /* Toast Popup */
         .toast {
             position: fixed;
@@ -445,7 +413,7 @@
             </div>
         </div>
 
-        <!-- Live Stats Grid -->
+        <!-- Live Stats Grid (Clean 0 State) -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-value" style="color: var(--primary-gold);" id="totalInvitedCount">0</div>
@@ -493,35 +461,16 @@
             </div>
         </div>
 
-        <!-- Recent Referral History -->
+        <!-- Recent Referral History (Real Fresh Empty State) -->
         <div class="dash-card">
             <div class="card-heading">
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <span>Recent Referrals</span>
             </div>
 
-            <div id="referralHistoryList">
-                <div class="history-row">
-                    <div class="user-meta">
-                        <div class="user-icon">R</div>
-                        <div>
-                            <div style="font-size: 13px; font-weight: 700; color: #FFF;">Rahul Sharma</div>
-                            <div style="font-size: 10px; color: var(--text-muted);">Today, 02:15 PM</div>
-                        </div>
-                    </div>
-                    <div style="font-size: 13px; font-weight: 800; color: var(--neon-green);">+500 Coins</div>
-                </div>
-
-                <div class="history-row">
-                    <div class="user-meta">
-                        <div class="user-icon">A</div>
-                        <div>
-                            <div style="font-size: 13px; font-weight: 700; color: #FFF;">Amit Kumar</div>
-                            <div style="font-size: 10px; color: var(--text-muted);">Yesterday</div>
-                        </div>
-                    </div>
-                    <div style="font-size: 13px; font-weight: 800; color: var(--neon-green);">+500 Coins</div>
-                </div>
+            <div id="referralHistoryList" style="text-align: center; padding: 25px 0; color: var(--text-muted); font-size: 13px;">
+                <i class="fa-solid fa-users-slash" style="font-size: 26px; margin-bottom: 8px; display: block; opacity: 0.4; color: var(--primary-gold);"></i>
+                Abhi tak koi referral nahi hai. Apna link share karein!
             </div>
         </div>
 
@@ -570,16 +519,19 @@
         }
 
         // Check Auth Status & Load Profile Code
-        auth.onAuthStateChanged(function(user) {
-            if (user) {
-                // Generates a short code based on User UID if available
-                userReferralCode = "VYRO-" + user.uid.substring(0, 5).toUpperCase();
-                document.getElementById('refCodeDisplay').innerText = userReferralCode;
-                setupShareLinks();
-            } else {
-                window.location.href = "index.html";
-            }
-        });        // Particle Background System
+        if (typeof auth !== 'undefined') {
+            auth.onAuthStateChanged(function(user) {
+                if (user) {
+                    userReferralCode = "VYRO-" + user.uid.substring(0, 5).toUpperCase();
+                    document.getElementById('refCodeDisplay').innerText = userReferralCode;
+                    setupShareLinks();
+                } else {
+                    window.location.href = "index.html";
+                }
+            });
+        }
+
+        // Particle Background System
         function initParticles() {
             var canvas = document.getElementById('particleCanvas');
             if (!canvas) return;
@@ -631,6 +583,3 @@
     </script>
 </body>
 </html>
-
-
-       

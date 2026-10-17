@@ -589,10 +589,9 @@
         import { auth } from "./firebase.js";
         import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
-        // Global flag to track user login status
         window.isUserLoggedIn = false;
 
-        // Automatically Check if User is Already Logged In
+        // Check persistent auth status
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log("User pehle se logged in hai:", user.displayName);
@@ -606,7 +605,7 @@
             }
         });
 
-        // Function for Google Login Click
+        // Google Login
         window.handleGoogleLogin = function() {
             if (!navigator.onLine) {
                 showOfflineOverlay();
@@ -625,4 +624,5 @@
                 })
                 .catch((error) => {
                     console.error("Login Error:", error);
-                    alert("Log
+                    alert("Login failed: " + error.message);
+                    if (btnText) btnText.innerText = "Sign

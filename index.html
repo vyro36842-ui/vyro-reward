@@ -11,13 +11,13 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDKs (CDN Version - No Module Blocking) -->
+    <!-- Firebase SDKs (CDN Version) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     
     <style>
         :root {
-            --bg-color: #060812;
+            --bg-gradient: radial-gradient(circle at 50% 30%, #121829 0%, #060812 100%);
             --primary-gold: #FFD700;
             --secondary-gold: #FFA500;
             --accent-purple: #8A2BE2;
@@ -39,7 +39,8 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            background: var(--bg-gradient);
+            background-color: #060812;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -49,7 +50,6 @@
             position: relative;
         }
 
-        /* Particle Canvas Background */
         #particleCanvas {
             position: absolute;
             top: 0;
@@ -60,7 +60,6 @@
             pointer-events: none;
         }
 
-        /* Glow Orbs */
         .glow-orb {
             position: absolute;
             border-radius: 50%;
@@ -82,7 +81,7 @@
         .orb-2 {
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.25), transparent);
             bottom: -10%;
             right: -10%;
             animation-delay: -4s;
@@ -93,7 +92,6 @@
             100% { transform: scale(1.3) translate(30px, -30px); opacity: 0.7; }
         }
 
-        /* Container */
         .app-container {
             position: relative;
             z-index: 10;
@@ -107,7 +105,6 @@
             min-height: 100vh;
         }
 
-        /* Stage Handling */
         .stage {
             width: 100%;
             display: flex;
@@ -130,7 +127,6 @@
             position: relative;
         }
 
-        /* ================= STAGE 1: SPLASH ================= */
         .logo-wrapper {
             position: relative;
             width: 140px;
@@ -163,7 +159,6 @@
             animation: spinReverse 6s linear infinite;
         }
 
-        /* 360 Rotating 'V' Logo */
         .logo-3d-v {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 72px;
@@ -254,12 +249,10 @@
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        /* ================= STAGE 2: LOGIN CARD ================= */
         .glass-card {
             width: 100%;
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-glow);
             border-radius: 28px;
             padding: 32px 24px;
@@ -320,7 +313,6 @@
             justify-content: center;
             align-items: center;
             flex-shrink: 0;
-            transition: all 0.2s ease;
         }
 
         .custom-checkbox i {
@@ -378,11 +370,6 @@
             box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
         }
 
-        .google-icon {
-            width: 20px;
-            height: 20px;
-        }
-
         .security-tag {
             display: flex;
             align-items: center;
@@ -392,11 +379,6 @@
             margin-top: 20px;
         }
 
-        .security-tag i {
-            color: #10B981;
-        }
-
-        /* ================= OFFLINE ERROR OVERLAY ================= */
         .offline-overlay {
             position: fixed;
             top: 0;
@@ -405,7 +387,6 @@
             height: 100vh;
             background: rgba(6, 8, 18, 0.96);
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             z-index: 9999;
             display: flex;
             justify-content: center;
@@ -435,35 +416,6 @@
             align-items: center;
         }
 
-        .offline-icon-box {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            background: rgba(255, 51, 102, 0.12);
-            border: 1px solid rgba(255, 51, 102, 0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 32px;
-            color: var(--neon-red);
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(255, 51, 102, 0.3);
-        }
-
-        .offline-title {
-            font-size: 22px;
-            font-weight: 800;
-            color: #FFF;
-            margin-bottom: 10px;
-        }
-
-        .offline-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 28px;
-        }
-
         .btn-retry {
             width: 100%;
             padding: 15px;
@@ -474,25 +426,16 @@
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(255, 51, 102, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Particle Canvas Background -->
     <canvas id="particleCanvas"></canvas>
-
-    <!-- Glow Orbs -->
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
 
     <div class="app-container">
-
         <!-- STAGE 1: SPLASH -->
         <div id="stageSplash" class="stage stage-active">
             <div class="logo-wrapper">
@@ -515,30 +458,22 @@
             </div>
         </div>
 
-        <!-- STAGE 2: AGE & AUTH -->
+        <!-- STAGE 2: LOGIN CARD -->
         <div id="stageAuth" class="stage stage-hidden">
             <div class="glass-card">
-                <div class="card-icon">
-                    <i class="fa-solid fa-gift"></i>
-                </div>
+                <div class="card-icon"><i class="fa-solid fa-gift"></i></div>
                 
                 <h2 class="welcome-title">Welcome to Vyro</h2>
                 <p class="welcome-subtitle">Join thousands of users earning daily rewards. Sign in to continue.</p>
 
-                <!-- 18+ Checkbox -->
                 <label class="age-checkbox-container" for="ageCheck">
                     <input type="checkbox" id="ageCheck" onchange="toggleGoogleBtn()">
-                    <div class="custom-checkbox">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                    <div class="checkbox-label">
-                        I confirm that I am <span>18 years</span> or older and accept terms.
-                    </div>
+                    <div class="custom-checkbox"><i class="fa-solid fa-check"></i></div>
+                    <div class="checkbox-label">I confirm that I am <span>18 years</span> or older and accept terms.</div>
                 </label>
 
-                <!-- Google Login Button -->
                 <button id="btnGoogle" class="btn-google" onclick="handleGoogleLogin()">
-                    <svg class="google-icon" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                    <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
                         <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.37 7.36 24 12 24z"/>
                         <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.15 0 9.99 0 12s.45 3.85 1.24 5.42l4.04-3.15z"/>
@@ -553,28 +488,24 @@
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- OFFLINE ERROR OVERLAY -->
+    <!-- OFFLINE OVERLAY -->
     <div id="offlineOverlay" class="offline-overlay">
         <div class="offline-card">
-            <div class="offline-icon-box">
+            <div style="width: 75px; height: 75px; border-radius: 50%; background: rgba(255, 51, 102, 0.12); color: var(--neon-red); font-size: 32px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
                 <i class="fa-solid fa-wifi"></i>
             </div>
-            <h3 class="offline-title">Connection Lost</h3>
-            <p class="offline-desc">Internet connection is required to access Vyro Reward. Please check your data or Wi-Fi network.</p>
-            <button class="btn-retry" onclick="location.reload()">
-                <i class="fa-solid fa-rotate-right"></i>
-                <span>Retry Connection</span>
-            </button>
+            <h3 style="color: #FFF; margin-bottom: 10px;">Connection Lost</h3>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">Internet connection is required.</p>
+            <button class="btn-retry" onclick="location.reload()">Retry Connection</button>
         </div>
     </div>
 
     <!-- Firebase Config File -->
     <script src="firebase.js"></script>
 
-    <!-- UI Script (Particles, 0-100% Loader & Persistent Auth Check) -->
+    <!-- Complete Code Script -->
     <script>
         var progress = 0;
         var pFill = document.getElementById('progressFill');
@@ -583,12 +514,10 @@
         var authStage = document.getElementById('stageAuth');
         var offlineBox = document.getElementById('offlineOverlay');
 
-        // Check offline first
         if (!navigator.onLine) {
             offlineBox.classList.add('active');
         }
 
-        // Guaranteed 0-100% Loader
         function runLoader() {
             if (!navigator.onLine) {
                 offlineBox.classList.add('active');
@@ -604,7 +533,6 @@
 
                 setTimeout(runLoader, 25);
             } else {
-                // 100% Reached -> Check Firebase Persistent Login
                 checkAuthSession();
             }
         }
@@ -612,10 +540,8 @@
         function checkAuthSession() {
             auth.onAuthStateChanged(function(user) {
                 if (user) {
-                    // Already logged in -> Direct Dashboard
                     window.location.href = "dashboard.html";
                 } else {
-                    // Show Login card with smooth transition
                     splashStage.classList.remove('stage-active');
                     splashStage.classList.add('stage-hidden');
                     setTimeout(function() {
@@ -626,4 +552,96 @@
             });
         }
 
-        
+        function handleGoogleLogin() {
+            if (!navigator.onLine) {
+                offlineBox.classList.add('active');
+                return;
+            }
+
+            var btnText = document.getElementById('btnText');
+            if (btnText) btnText.innerText = "Connecting Google...";
+
+            var provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then(function(result) {
+                    window.location.href = "dashboard.html";
+                })
+                .catch(function(error) {
+                    alert("Login failed: " + error.message);
+                    if (btnText) btnText.innerText = "Sign in with Google";
+                });
+        }
+
+        function toggleGoogleBtn() {
+            var isChecked = document.getElementById('ageCheck').checked;
+            var btnGoogle = document.getElementById('btnGoogle');
+            if (isChecked) {
+                btnGoogle.classList.add('active');
+            } else {
+                btnGoogle.classList.remove('active');
+            }
+        }
+
+        function initParticles() {
+            var canvas = document.getElementById('particleCanvas');
+            if (!canvas) return;
+            var ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            var particles = Array.from({ length: 40 }, function() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2.2 + 0.6,
+                    speedX: (Math.random() - 0.5) * 0.3,
+                    speedY: Math.random() * 0.6 + 0.2,
+                    color: Math.random() > 0.4 ? '#FFD700' : '#8A2BE2'
+                };
+            });
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, 
+                                          canvas.height);
+                particles.forEach(function(p) {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+
+                    if (p.y > canvas.height) {
+                        p.y = 0;
+                        p.x = Math.random() * canvas.width;
+                    }
+
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        window.onload = function() {
+            initParticles();
+            if (navigator.onLine) {
+                runLoader();
+            }
+        };
+
+        window.addEventListener('online', function() {
+            offlineBox.classList.remove('active');
+            if (progress >= 100) checkAuthSession();
+        });
+
+        window.addEventListener('offline', function() {
+            offlineBox.classList.add('active');
+        });
+    </script>
+</body>
+</html>

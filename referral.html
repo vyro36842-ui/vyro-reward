@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyro Reward - Refer & Earn</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at 50% 30%, #121829 0%, #060812 100%);
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFA500;
+            --accent-purple: #8A2BE2;
+            --neon-blue: #00F3FF;
+            --neon-green: #10B981;
+            --neon-red: #FF3366;
+            --text-main: #FFFFFF;
+            --text-muted: #94A3B8;
+            --nav-bg: rgba(12, 16, 32, 0.85);
+            --card-bg: rgba(18, 22, 41, 0.75);
+            --border-glow: rgba(255, 215, 0, 0.22);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-color: #060812;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.4;
+            animation: pulseGlow 8s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, var(--accent-purple), transparent);
+            top: -10%;
+            left: -10%;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.25), transparent);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -4s;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.3; }
+            100% { transform: scale(1.3) translate(30px, -30px); opacity: 0.6; }
+        }
+
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(6, 8, 18, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glow);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFF 0%, var(--primary-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-view {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .dash-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Hero Card Banner */
+        .hero-banner {
+            text-align: center;
+            padding: 24px 16px;
+            background: linear-gradient(180deg, rgba(138, 43, 226, 0.15) 0%, rgba(18, 22, 41, 0.8) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-icon-box {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 16px auto;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.2), transparent 70%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: var(--primary-gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #FFF;
+            margin-bottom: 6px;
+        }
+
+        .hero-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .bonus-highlight {
+            color: var(--primary-gold);
+            font-weight: 800;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            background: rgba(18, 22, 41, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 14px 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #FFF;
+            margin-bottom: 2px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Copy Code Box */
+        .code-container {
+            background: rgba(6, 8, 18, 0.8);
+            border: 1px dashed var(--primary-gold);
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 16px 0;
+        }
+
+        .code-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--primary-gold);
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+            color: #060812;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-copy:active {
+            transform: scale(0.95);
+        }
+
+        /* Share Buttons */
+        .share-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-share {
+            flex: 1;
+            padding: 14px;
+            border-radius: 16px;
+            border: none;
+            color: #FFF;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            text-decoration: none;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+        }
+
+        .btn-telegram {
+            background: linear-gradient(135deg, #0088cc, #005580);
+        }
+
+        /* Step Guide */
+        .card-heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .step-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid var(--border-glow);
+            color: var(--primary-gold);
+            font-weight: 800;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 2px;
+        }
+
+        .step-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Referral History List */
+        .history-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .history-row:last-child {
+            border-bottom: none;
+        }
+
+        .user-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(138, 43, 226, 0.2);
+            color: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        /* Toast Popup */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--primary-gold);
+            color: #060812;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 13px;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.5);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-title">
+            <i class="fa-solid fa-user-plus" style="color: var(--primary-gold);"></i>
+            <span>Refer & Earn</span>
+        </div>
+        <div style="font-size: 11px; color: var(--neon-green); background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+            Live Bonus
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-view">
+        
+        <!-- Hero Card -->
+        <div class="dash-card hero-banner">
+            <div class="hero-icon-box">
+                <i class="fa-solid fa-gift"></i>
+            </div>
+            <h2 class="hero-title">Invite Friends & Earn</h2>
+            <p class="hero-subtitle">
+                Har dost ke join karne par paayein <span class="bonus-highlight">500 Gold Coins</span>. Aapke dost ko bhi milega Signup Bonus!
+            </p>
+
+            <!-- Code Box -->
+            <div class="code-container">
+                <div>
+                    <div style="font-size: 10px; color: var(--text-muted); text-align: left;">YOUR REFERRAL CODE</div>
+                    <div class="code-text" id="refCodeDisplay">VYRO-8829</div>
+                </div>
+                <button class="btn-copy" onclick="copyReferralCode()">
+                    <i class="fa-solid fa-copy"></i>
+                    <span>COPY</span>
+                </button>
+            </div>
+
+            <!-- Share Buttons -->
+            <div class="share-actions">
+                <a id="whatsappShareBtn" href="#" target="_blank" class="btn-share btn-whatsapp">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a id="telegramShareBtn" href="#" target="_blank" class="btn-share btn-telegram">
+                    <i class="fa-brands fa-telegram" style="font-size: 18px;"></i>
+                    <span>Telegram</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Live Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--primary-gold);" id="totalInvitedCount">0</div>
+                <div class="stat-label">Total Invited</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--neon-green);" id="totalEarnedCoins">0</div>
+                <div class="stat-label">Coins Earned</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--neon-blue);" id="pendingBonusCount">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+        </div>
+
+        <!-- How It Works Guide -->
+        <div class="dash-card">
+            <div class="card-heading">
+                <i class="fa-solid fa-circle-nodes"></i>
+                <span>How It Works</span>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-info">
+                    <h4>Share Link or Code</h4>
+                    <p>Apna unique referral code ya link apne doston ke saath share karein.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-info">
+                    <h4>Friend Registers</h4>
+                    <p>Aapka dost Vyro Reward app par naya account banata hai.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-info">
+                    <h4>Instant Bonus Added</h4>
+                    <p>Dono ko turant reward coins mil jaate hain!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Referral History -->
+        <div class="dash-card">
+            <div class="card-heading">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Recent Referrals</span>
+            </div>
+
+            <div id="referralHistoryList">
+                <div class="history-row">
+                    <div class="user-meta">
+                        <div class="user-icon">R</div>
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #FFF;">Rahul Sharma</div>
+                            <div style="font-size: 10px; color: var(--text-muted);">Today, 02:15 PM</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 800; color: var(--neon-green);">+500 Coins</div>
+                </div>
+
+                <div class="history-row">
+                    <div class="user-meta">
+                        <div class="user-icon">A</div>
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #FFF;">Amit Kumar</div>
+                            <div style="font-size: 10px; color: var(--text-muted);">Yesterday</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 800; color: var(--neon-green);">+500 Coins</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Referral Code Copied!</div>
+
+    <!-- Firebase Config File -->
+    <script src="firebase.js"></script>
+
+    <script>
+        var userReferralCode = "VYRO-8829";
+
+        // Generate dynamic link for app/web
+        function getShareLink() {
+            var baseUrl = window.location.origin + window.location.pathname.replace("referral.html", "index.html");
+            return baseUrl + "?ref=" + userReferralCode;
+        }
+
+        // Setup Social Links
+        function setupShareLinks() {
+            var shareUrl = getShareLink();
+            var shareText = encodeURIComponent("Vyro Reward App join karein aur paayein Free Bonus Coins! Mera Referral Code use karein: " + userReferralCode + "\nDownload Link: " + shareUrl);
+
+            document.getElementById('whatsappShareBtn').href = "https://api.whatsapp.com/send?text=" + shareText;
+            document.getElementById('telegramShareBtn').href = "https://t.me/share/url?url=" + encodeURIComponent(shareUrl) + "&text=" + encodeURIComponent("Vyro Reward join karein aur Free Coins kamayein!");
+        }
+
+        // Copy Code Functionality
+        function copyReferralCode() {
+            navigator.clipboard.writeText(userReferralCode).then(function() {
+                showToast("Referral Code Copied!");
+            }).catch(function() {
+                showToast("Copied: " + userReferralCode);
+            });
+        }
+
+        function showToast(msg) {
+            var toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Check Auth Status & Load Profile Code
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // Generates a short code based on User UID if available
+                userReferralCode = "VYRO-" + user.uid.substring(0, 5).toUpperCase();
+                document.getElementById('refCodeDisplay').innerText = userReferralCode;
+                setupShareLinks();
+            } else {
+                window.location.href = "index.html";
+            }
+        });        // Particle Background System
+        function initParticles() {
+            var canvas = document.getElementById('particleCanvas');
+            if (!canvas) return;
+            var ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            var particles = Array.from({ length: 35 }, function() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    speedX: (Math.random() - 0.5) * 0.3,
+                    speedY: Math.random() * 0.5 + 0.2,
+                    color: Math.random() > 0.4 ? '#FFD700' : '#8A2BE2'
+                };
+            });
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(function(p) {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+
+                    if (p.y > canvas.height) {
+                        p.y = 0;
+                        p.x = Math.random() * canvas.width;
+                    }
+
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        window.onload = function() {
+            initParticles();
+            setupShareLinks();
+        };
+    </script>
+</body>
+</html>
+
+
+       

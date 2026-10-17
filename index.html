@@ -1,151 +1,616 @@
-
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#8b001b">
-  <title>Vyro Reward</title>
-  <link rel="stylesheet" href="./css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyro Reward - Welcome</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #060812;
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFA500;
+            --accent-purple: #8A2BE2;
+            --neon-blue: #00F3FF;
+            --card-bg: rgba(18, 22, 41, 0.65);
+            --border-glow: rgba(255, 215, 0, 0.25);
+            --text-main: #FFFFFF;
+            --text-muted: #94A3B8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Particle Canvas Background */
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Background Glow Orbs */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.5;
+            animation: pulseGlow 8s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, var(--accent-purple), transparent);
+            top: -10%;
+            left: -10%;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -4s;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.4; }
+            100% { transform: scale(1.3) translate(30px, -30px); opacity: 0.7; }
+        }
+
+        /* Main Container */
+        .app-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 440px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Stage View Controller */
+        .stage {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .stage-hidden {
+            opacity: 0;
+            transform: scale(0.92) translateY(30px);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .stage-active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+            position: relative;
+        }
+
+        /* ================= STAGE 1: SPLASH SCREEN ================= */
+        .logo-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 35px;
+            perspective: 1000px;
+        }
+
+        /* Continuous 360 Rotation Rings */
+        .ring-outer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: var(--primary-gold);
+            border-right-color: var(--neon-blue);
+            animation: spinContinuous 3s linear infinite;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .ring-inner {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            border: 2px dashed rgba(138, 43, 226, 0.6);
+            animation: spinReverse 6s linear infinite;
+        }
+
+        /* 360-Degree Continuous Rotating 3D 'V' Logo */
+        .logo-3d-v {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 72px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFF 0%, var(--primary-gold) 50%, var(--secondary-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.6));
+            transform-style: preserve-3d;
+            animation: rotateV3D 4s linear infinite;
+        }
+
+        @keyframes rotateV3D {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        @keyframes spinContinuous {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes spinReverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .brand-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #FFFFFF 0%, #CBD5E1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .brand-tagline {
+            font-size: 14px;
+            color: var(--primary-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 45px;
+            opacity: 0.9;
+        }
+
+        /* Progress Bar Section */
+        .progress-box {
+            width: 100%;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2px;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--primary-gold), var(--neon-blue));
+            border-radius: 20px;
+            box-shadow: 0 0 12px var(--primary-gold);
+            transition: width 0.1s ease-out;
+        }
+
+        .progress-text-group {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .counter-num {
+            color: var(--primary-gold);
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* ================= STAGE 2: LOGIN CARD ================= */
+        .glass-card {
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow);
+            border-radius: 28px;
+            padding: 32px 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7),
+                        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(138, 43, 226, 0.15));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #FFF;
+        }
+
+        .welcome-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 28px;
+            padding: 0 10px;
+        }
+
+        /* 18+ Checkbox Section */
+        .age-checkbox-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .age-checkbox-container:hover {
+            border-color: rgba(255, 215, 0, 0.4);
+            background: rgba(255, 215, 0, 0.02);
+        }
+
+        /* Custom Checkbox Design */
+        .custom-checkbox {
+            position: relative;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--text-muted);
+            border-radius: 6px;
+            transition: all 0.25s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .custom-checkbox i {
+            color: #060812;
+            font-size: 12px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s ease;
+        }
+
+        #ageCheck {
+            display: none;
+        }
+
+        #ageCheck:checked + .custom-checkbox {
+            background: var(--primary-gold);
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        #ageCheck:checked + .custom-checkbox i {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .checkbox-label {
+            font-size: 13px;
+            color: #E2E8F0;
+            font-weight: 500;
+            text-align: left;
+            line-height: 1.3;
+            cursor: pointer;
+        }
+
+        .checkbox-label span {
+            color: var(--primary-gold);
+            font-weight: 700;
+        }
+
+        /* Google Login Button */
+        .btn-google {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: none;
+            background: #FFFFFF;
+            color: #1E293B;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0.4;
+            pointer-events: none;
+            filter: grayscale(0.6);
+        }
+
+        /* Active Google Button state */
+        .btn-google.active {
+            opacity: 1;
+            pointer-events: all;
+            filter: grayscale(0);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.25);
+        }
+
+        .btn-google.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+            background: #FFFFFF;
+        }
+
+        .btn-google.active:active {
+            transform: translateY(1deg);
+        }
+
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .security-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 20px;
+        }
+
+        .security-tag i {
+            color: #10B981;
+        }
+    </style>
 </head>
-
 <body>
-  <main id="app">
-    <!-- Loading screen -->
-    <section id="loadingScreen" class="screen loading-screen">
-      <div class="glow glow-one"></div>
-      <div class="glow glow-two"></div>
 
-      <div class="brand-icon">V</div>
-      <h1 class="brand-title">VYRO <span>REWARD</span></h1>
-      <p class="tagline">A Smarter Rewards Experience</p>
+    <!-- Particle Canvas Background -->
+    <canvas id="particleCanvas"></canvas>
 
-      <div class="welcome">
-        <span class="welcome-line"></span>
-        <span>WELCOME TO</span>
-        <span class="welcome-line"></span>
-      </div>
+    <!-- Glowing Background Blur Orbs -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
 
-      <h2 class="welcome-title">VYRO <span>REWARD</span></h2>
+    <div class="app-container">
 
-      <div class="progress-track">
-        <div id="progressBar" class="progress-fill"></div>
-      </div>
+        <!-- ================= STAGE 1: SPLASH SCREEN ================= -->
+        <div id="stageSplash" class="stage stage-active">
+            <div class="logo-wrapper">
+                <div class="ring-outer"></div>
+                <div class="ring-inner"></div>
+                <!-- 360 Continuous Rotating 'V' Logo -->
+                <div class="logo-3d-v">V</div>
+            </div>
 
-      <p id="loadingMessage" class="loading-message">
-        Checking your connection...
-      </p>
-      <p id="loadingPercent" class="loading-percent">0%</p>
-    </section>
+            <h1 class="brand-title">VYRO REWARD</h1>
+            <p class="brand-tagline">Play • Earn • Redeem</p>
 
-    <!-- Offline screen -->
-    <section id="offlineScreen" class="screen message-screen hidden">
-      <div class="message-icon">!</div>
-      <h1>Connection Lost</h1>
-      <p>
-        भाई, इंटरनेट कनेक्शन उपलब्ध नहीं है।
-        कृपया इंटरनेट चालू करके फिर कोशिश करें।
-      </p>
-      <button id="retryButton" class="primary-button">
-        दोबारा कोशिश करें
-      </button>
-    </section>
-
-    <!-- Age eligibility screen -->
-    <section id="ageScreen" class="screen form-screen hidden">
-      <div class="small-brand">V<span>R</span></div>
-      <p class="eyebrow">WELCOME TO VYRO REWARD</p>
-      <h1>Before We Begin</h1>
-      <p class="description">
-        आगे बढ़ने से पहले कृपया ऐप की उम्र संबंधी पात्रता पढ़ें।
-      </p>
-
-      <label class="age-option">
-        <input type="checkbox" id="ageCheckbox">
-        <span class="custom-check"></span>
-        <span>
-          मैं पुष्टि करता/करती हूँ कि मैं ऐप की निर्धारित
-          उम्र की पात्रता पूरी करता/करती हूँ।
-        </span>
-      </label>
-
-      <p id="ageError" class="error-message hidden">
-        आगे बढ़ने के लिए पात्रता की पुष्टि आवश्यक है।
-      </p>
-
-      <button id="continueButton" class="primary-button" disabled>
-        आगे बढ़ें <span>→</span>
-      </button>
-
-      <p class="footer-note">
-        कृपया सही जानकारी दें।
-      </p>
-    </section>
-
-    <!-- Google login screen -->
-    <section id="loginScreen" class="screen form-screen hidden">
-      <div class="small-brand">V<span>R</span></div>
-      <p class="eyebrow">YOUR REWARDS JOURNEY STARTS HERE</p>
-      <h1>Welcome Back!</h1>
-      <p class="description">
-        अपने Google अकाउंट से सुरक्षित रूप से लॉगिन करें
-        और Vyro Reward में आगे बढ़ें।
-      </p>
-
-      <div class="login-card">
-        <div class="google-letter">G</div>
-        <h2>Continue with Google</h2>
-        <p>आगे बढ़ने के लिए अपना Google अकाउंट चुनें।</p>
-
-        <button id="googleLoginButton" class="google-button">
-          <span class="google-symbol">G</span>
-          <span>Google से लॉगिन करें</span>
-        </button>
-
-        <p id="loginError" class="error-message hidden"></p>
-      </div>
-
-      <p class="footer-note">
-        Secure sign-in powered by Firebase
-      </p>
-    </section>
-
-    <!-- Main app screen -->
-    <section id="mainScreen" class="screen main-screen hidden">
-      <header class="top-header">
-        <div class="small-brand">V<span>R</span></div>
-        <div>
-          <strong>VYRO REWARD</strong>
-          <p>Welcome to your journey</p>
+            <div class="progress-box">
+                <div class="progress-bar-bg">
+                    <div id="progressFill" class="progress-bar-fill"></div>
+                </div>
+                <div class="progress-text-group">
+                    <span>Loading resources...</span>
+                    <span class="counter-num"><span id="progressNum">0</span>%</span>
+                </div>
+            </div>
         </div>
-      </header>
 
-      <div id="pageContent" class="page-content">
-        <h1 id="pageTitle">Home</h1>
-        <p id="pageDescription">Welcome to Vyro Reward.</p>
-      </div>
+        <!-- ================= STAGE 2: AGE VERIFICATION & LOGIN ================= -->
+        <div id="stageAuth" class="stage stage-hidden">
+            <div class="glass-card">
+                <div class="card-icon">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+                
+                <h2 class="welcome-title">Welcome to Vyro</h2>
+                <p class="welcome-subtitle">Join thousands of users earning daily rewards. Sign in to continue your journey.</p>
 
-      <nav class="bottom-nav" aria-label="Main navigation">
-        <button class="nav-item active" data-page="home">
-          <span>⌂</span>
-          <small>Home</small>
-        </button>
-        <button class="nav-item" data-page="rewards">
-          <span>◇</span>
-          <small>Rewards</small>
-        </button>
-        <button class="nav-item" data-page="wallet">
-          <span>▣</span>
-          <small>Wallet</small>
-        </button>
-        <button class="nav-item" data-page="profile">
-          <span>○</span>
-          <small>Profile</small>
-        </button>
-      </nav>
-    </section>
-  </main>
+                <!-- 18+ Age Checkbox -->
+                <label class="age-checkbox-container" for="ageCheck">
+                    <input type="checkbox" id="ageCheck" onchange="toggleGoogleBtn()">
+                    <div class="custom-checkbox">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <div class="checkbox-label">
+                        I confirm that I am <span>18 years</span> or older and accept terms.
+                    </div>
+                </label>
 
-  <script type="module" src="./js/app.js"></script>
-</body>
-</html>
+                <!-- Google Sign In Button -->
+                <button id="btnGoogle" class="btn-google" onclick="handleGoogleLogin()">
+                    <svg class="google-icon" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.37 7.36 24 12 24z"/>
+                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.15 0 9.99 0 12s.45 3.85 1.24 5.42l4.04-3.15z"/>
+                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.36 0 3.26 2.63 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                    </svg>
+                    <span id="btnText">Sign in with Google</span>
+                </button>
+
+                <div class="security-tag">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Protected with Firebase Security</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ================= 1. CANVAS PARTICLES ================= */
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 45;
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.alpha = Math.random() * 0.6 + 0.2;
+                this.color = Math.random() > 0.5 ? '#FFD700' : '#8A2BE2';
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        /* ================= 2. SPLASH LOADING TIMER ================= */
+        let progress = 0;
+        const progressFill = document.getElementById('progressFill');
+        const progressNum = document.getElementById('progressNum');
+        const stageSplash = document.getElementById('stageSplash');
+        const stageAuth = document.getElementById('stageAuth');
+
+        const interval = setInterval(() => {
+            // Speed control for initial fast and smooth slowdown near end
+            let increment = Math.floor(Math.random() * 4) + 1;
+            if (progress > 80) increment = 1;
+            
+            progress += increment;
+
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                
+                // Smooth Transition to Stage 2
+                setTimeout(() => {
+                    stageSplash.classList.remove('stage-active');
+                    stageSplash.classList.add('stage-hidden');
+                    
+                    setTimeout(() => {
+                        stageAuth.classList.remove('stage-hidden');
+                        stageAuth.classList.add('stage-active');
+                    }

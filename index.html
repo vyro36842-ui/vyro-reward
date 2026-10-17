@@ -1,467 +1,585 @@
-```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vyro Reward - Premium App</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Vyro Reward - Welcome</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        :root {
+            --bg-color: #060812;
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFA500;
+            --accent-purple: #8A2BE2;
+            --neon-blue: #00F3FF;
+            --card-bg: rgba(18, 22, 41, 0.75);
+            --border-glow: rgba(255, 215, 0, 0.25);
+            --text-main: #FFFFFF;
+            --text-muted: #94A3B8;
+        }
+
         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Outfit', sans-serif;
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
         }
 
-        .font-tech {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        /* Dark Luxury Background */
         body {
-            background-color: #030308;
-            color: #ffffff;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Metallic Gold & Cyber Gradients */
-        .text-gradient-gold {
-            background: linear-gradient(135deg, #FFF5C0 0%, #F5D061 30%, #E6C875 50%, #D4AF37 70%, #997A15 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Glowing Background Ambient Orbs */
-        .ambient-glow-1 {
+        /* Particle Canvas Background */
+        #particleCanvas {
             position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Glow Orbs */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.5;
+            animation: pulseGlow 8s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, var(--accent-purple), transparent);
+            top: -10%;
+            left: -10%;
+        }
+
+        .orb-2 {
             width: 400px;
             height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, rgba(0,0,0,0) 70%);
-            filter: blur(80px);
-            animation: pulseOrb 8s infinite alternate ease-in-out;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -4s;
         }
 
-        .ambient-glow-2 {
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.4; }
+            100% { transform: scale(1.3) translate(30px, -30px); opacity: 0.7; }
+        }
+
+        /* Container */
+        .app-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 440px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Stage Handling */
+        .stage {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .stage-hidden {
+            opacity: 0;
+            transform: scale(0.92) translateY(20px);
+            pointer-events: none;
             position: absolute;
-            width: 450px;
-            height: 450px;
+        }
+
+        .stage-active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+            position: relative;
+        }
+
+        /* ================= STAGE 1: SPLASH ================= */
+        .logo-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 35px;
+            perspective: 1000px;
+        }
+
+        .ring-outer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(0,0,0,0) 70%);
-            filter: blur(90px);
-            animation: pulseOrb 10s infinite alternate-reverse ease-in-out;
+            border: 2px solid transparent;
+            border-top-color: var(--primary-gold);
+            border-right-color: var(--neon-blue);
+            animation: spinContinuous 3s linear infinite;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
         }
 
-        @keyframes pulseOrb {
-            0% { transform: scale(0.85) translate(-10%, -10%); opacity: 0.5; }
-            100% { transform: scale(1.25) translate(10%, 10%); opacity: 0.85; }
+        .ring-inner {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            border: 2px dashed rgba(138, 43, 226, 0.6);
+            animation: spinReverse 6s linear infinite;
         }
 
-        /* Glassmorphism Surface */
-        .glass-card {
-            background: rgba(15, 15, 26, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+        /* 360 Rotating 'V' Logo */
+        .logo-3d-v {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 72px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFF 0%, var(--primary-gold) 50%, var(--secondary-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.6));
+            transform-style: preserve-3d;
+            animation: rotateV3D 4s linear infinite;
         }
 
-        /* Continuous 360-degree Logo Spinner */
-        .spin-360 {
-            animation: rotate360 4s linear infinite;
+        @keyframes rotateV3D {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
         }
 
-        .spin-360-reverse {
-            animation: rotate360Reverse 6s linear infinite;
-        }
-
-        @keyframes rotate360 {
+        @keyframes spinContinuous {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes rotate360Reverse {
+        @keyframes spinReverse {
             0% { transform: rotate(360deg); }
             100% { transform: rotate(0deg); }
         }
 
-        /* 3D Rotating Crest Effect */
-        .logo-3d-rotate {
-            animation: spin3D 5s ease-in-out infinite alternate;
-            transform-style: preserve-3d;
+        .brand-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #FFFFFF 0%, #CBD5E1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
         }
 
-        @keyframes spin3D {
-            0% { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
-            50% { transform: perspective(1000px) rotateY(180deg) rotateX(10deg); }
-            100% { transform: perspective(1000px) rotateY(360deg) rotateX(0deg); }
+        .brand-tagline {
+            font-size: 13px;
+            color: var(--primary-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 45px;
         }
 
-        /* Glowing Progress Bar */
-        .progress-fill {
-            background: linear-gradient(90deg, #A855F7 0%, #D4AF37 50%, #06B6D4 100%);
-            box-shadow: 0 0 18px rgba(212, 175, 55, 0.7), 0 0 28px rgba(168, 85, 247, 0.5);
-            transition: width 0.12s linear;
+        .progress-box {
+            width: 100%;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
 
-        /* Active Gold/White Google Button */
-        .btn-google-active {
-            background: #ffffff;
-            color: #1f2937;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 0 15px rgba(212, 175, 55, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.9);
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--primary-gold), var(--neon-blue));
+            border-radius: 20px;
+            box-shadow: 0 0 12px var(--primary-gold);
+            transition: width 0.1s linear;
+        }
+
+        .progress-text-group {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .counter-num {
+            color: var(--primary-gold);
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* ================= STAGE 2: LOGIN CARD ================= */
+        .glass-card {
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow);
+            border-radius: 28px;
+            padding: 32px 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #FFF;
+        }
+
+        .welcome-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 28px;
+        }
+
+        .age-checkbox-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
             cursor: pointer;
-            opacity: 1;
-            transform: translateY(0);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .btn-google-active:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.4), 0 0 20px rgba(212, 175, 55, 0.5);
-        }
-
-        .btn-google-active:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        /* Disabled Google Button */
-        .btn-google-disabled {
-            background: rgba(255, 255, 255, 0.05);
-            color: #6b7280;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: none;
-            cursor: not-allowed;
-            opacity: 0.5;
-            transition: all 0.35s ease;
-        }
-
-        /* Custom Checkbox Styling */
         .custom-checkbox {
-            appearance: none;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.4);
             width: 22px;
             height: 22px;
+            border: 2px solid var(--text-muted);
             border-radius: 6px;
-            display: inline-grid;
-            place-content: center;
-            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
             transition: all 0.2s ease;
         }
 
-        .custom-checkbox::before {
-            content: "\f00c";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
+        .custom-checkbox i {
+            color: #060812;
             font-size: 12px;
-            color: #030308;
-            transform: scale(0);
-            transition: 0.2s transform ease-in-out;
+            display: none;
         }
 
-        .custom-checkbox:checked {
-            background: linear-gradient(135deg, #FFE27A 0%, #D4AF37 100%);
-            border-color: #D4AF37;
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+        #ageCheck {
+            display: none;
         }
 
-        .custom-checkbox:checked::before {
-            transform: scale(1);
+        #ageCheck:checked + .custom-checkbox {
+            background: var(--primary-gold);
+            border-color: var(--primary-gold);
         }
 
-        /* Shimmer Overlay */
-        .shimmer-bg {
-            position: relative;
-            overflow: hidden;
-        }
-        .shimmer-bg::after {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: -100%;
-            width: 300%;
-            height: 300%;
-            background: linear-gradient(
-                45deg,
-                transparent 45%,
-                rgba(255, 255, 255, 0.15) 50%,
-                transparent 55%
-            );
-            animation: shimmerMove 3.5s infinite;
+        #ageCheck:checked + .custom-checkbox i {
+            display: block;
         }
 
-        @keyframes shimmerMove {
-            0% { transform: translate(-100%, -100%); }
-            100% { transform: translate(100%, 100%); }
+        .checkbox-label {
+            font-size: 13px;
+            color: #E2E8F0;
+            text-align: left;
+        }
+
+        .checkbox-label span {
+            color: var(--primary-gold);
+            font-weight: 700;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            background: #FFFFFF;
+            color: #1E293B;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            opacity: 0.4;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-google.active {
+            opacity: 1;
+            pointer-events: all;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .security-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 20px;
+        }
+
+        .security-tag i {
+            color: #10B981;
         }
     </style>
 </head>
-<body class="h-screen w-screen flex items-center justify-center relative">
+<body>
 
-    <!-- Canvas Particle Animation -->
-    <canvas id="particleCanvas" class="absolute inset-0 z-0 pointer-events-none"></canvas>
+    <!-- Particle Canvas -->
+    <canvas id="particleCanvas"></canvas>
 
-    <!-- Glowing Background Ambient Spheres -->
-    <div class="ambient-glow-1 top-5 left-5"></div>
-    <div class="ambient-glow-2 bottom-5 right-5"></div>
+    <!-- Glow Orbs -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
 
-    <!-- Main Shell Container -->
-    <main class="relative z-10 w-full max-w-md px-6 flex flex-col items-center">
+    <div class="app-container">
 
-        <!-- ================= STAGE 1: SPLASH LOADING SCREEN ================= -->
-        <div id="splashScreen" class="w-full flex flex-col items-center text-center transition-all duration-700">
-            
-            <!-- Dynamic 360 Rotating 'V' Logo -->
-            <div class="relative w-40 h-40 mb-10 flex items-center justify-center">
-                <!-- Outer Neon Spin Ring -->
-                <div class="spin-360 absolute inset-0 rounded-full border-2 border-transparent border-t-amber-400 border-r-purple-500 shadow-[0_0_15px_rgba(212,175,55,0.4)]"></div>
-                <!-- Inner Counter-Spin Ring -->
-                <div class="spin-360-reverse absolute inset-3 rounded-full border border-transparent border-b-cyan-400 border-l-amber-300 opacity-80"></div>
+        <!-- STAGE 1: SPLASH -->
+        <div id="stageSplash" class="stage stage-active">
+            <div class="logo-wrapper">
+                <div class="ring-outer"></div>
+                <div class="ring-inner"></div>
+                <div class="logo-3d-v">V</div>
+            </div>
+
+            <h1 class="brand-title">VYRO REWARD</h1>
+            <p class="brand-tagline">Play • Earn • Redeem</p>
+
+            <div class="progress-box">
+                <div class="progress-bar-bg">
+                    <div id="progressFill" class="progress-bar-fill"></div>
+                </div>
+                <div class="progress-text-group">
+                    <span>Loading resources...</span>
+                    <span class="counter-num"><span id="progressNum">0</span>%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 2: AGE & AUTH -->
+        <div id="stageAuth" class="stage stage-hidden">
+            <div class="glass-card">
+                <div class="card-icon">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
                 
-                <!-- Center 3D Glass Badge with Animated 'V' Logo -->
-                <div class="w-28 h-28 rounded-3xl glass-card flex items-center justify-center relative z-10 border border-amber-400/40 shadow-2xl shimmer-bg">
-                    <div class="logo-3d-rotate flex items-center justify-center">
-                        <span class="text-6xl font-black text-gradient-gold tracking-tighter drop-shadow-[0_0_20px_rgba(212,175,55,0.9)]">
-                            V
-                        </span>
+                <h2 class="welcome-title">Welcome to Vyro</h2>
+                <p class="welcome-subtitle">Join thousands of users earning daily rewards. Sign in to continue.</p>
+
+                <!-- 18+ Checkbox -->
+                <label class="age-checkbox-container" for="ageCheck">
+                    <input type="checkbox" id="ageCheck" onchange="toggleGoogleBtn()">
+                    <div class="custom-checkbox">
+                        <i class="fa-solid fa-check"></i>
                     </div>
-                </div>
-            </div>
-
-            <!-- App Title & Tagline -->
-            <div class="space-y-2 mb-10">
-                <h1 class="text-4xl font-black tracking-wider uppercase text-gradient-gold drop-shadow-md">
-                    VYRO REWARD
-                </h1>
-                <p class="text-xs text-gray-400 tracking-[0.3em] font-tech uppercase">
-                    Premium Elite Rewards System
-                </p>
-            </div>
-
-            <!-- Subtitle Transition -->
-            <div class="h-8 mb-6">
-                <p id="revealText" class="text-sm font-semibold text-amber-200/90 tracking-wide opacity-0 transition-opacity duration-700 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-sparkles text-amber-400 text-xs"></i>
-                    Welcome to Vyro Reward
-                </p>
-            </div>
-
-            <!-- Progress Bar Block -->
-            <div class="w-full glass-card p-5 rounded-2xl border border-white/10 space-y-3 shadow-2xl">
-                <div class="flex justify-between items-center text-xs font-tech">
-                    <span class="text-gray-400 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-                        INITIALIZING SYSTEM
-                    </span>
-                    <span id="percentage" class="text-amber-400 font-bold text-sm tracking-widest">0%</span>
-                </div>
-
-                <!-- Bar Background -->
-                <div class="w-full h-3 bg-black/60 rounded-full overflow-hidden p-0.5 border border-white/10">
-                    <div id="progressBar" class="h-full rounded-full progress-fill w-0"></div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- ================= STAGE 2: AGE VERIFICATION & LOGIN SCREEN ================= -->
-        <div id="loginScreen" class="w-full glass-card p-8 rounded-3xl border border-amber-400/30 text-center space-y-6 hidden opacity-0 transform translate-y-10 transition-all duration-700 ease-out shadow-2xl">
-            
-            <!-- Small Rotating Brand Icon -->
-            <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
-                <div class="spin-360 absolute inset-0 rounded-full border border-amber-400/50"></div>
-                <div class="w-16 h-16 rounded-2xl bg-amber-400/10 border border-amber-400/40 flex items-center justify-center shadow-inner">
-                    <span class="text-3xl font-black text-gradient-gold">V</span>
-                </div>
-            </div>
-
-            <div class="space-y-2">
-                <h2 class="text-2xl font-black text-white tracking-wide">Welcome to Vyro</h2>
-                <p class="text-xs text-gray-400 leading-relaxed">
-                    Verify your age to unlock your reward portal and continue with Google.
-                </p>
-            </div>
-
-            <!-- Age Verification Checkbox Section -->
-            <div class="bg-black/40 p-4 rounded-2xl border border-white/10 flex items-center justify-between text-left gap-3">
-                <label for="ageCheckbox" class="flex items-center gap-3 cursor-pointer text-xs font-medium text-gray-300 hover:text-white transition-colors">
-                    <input type="checkbox" id="ageCheckbox" class="custom-checkbox" onchange="toggleGoogleLogin(this)">
-                    <span>I confirm that I am <strong>18 years old or above</strong></span>
+                    <div class="checkbox-label">
+                        I confirm that I am <span>18 years</span> or older and accept terms.
+                    </div>
                 </label>
-            </div>
 
-            <!-- Google Login Button (Initially Disabled) -->
-            <button id="googleBtn" disabled onclick="handleGoogleSignIn()" class="w-full py-4 px-5 rounded-xl btn-google-disabled text-sm font-bold tracking-wide flex items-center justify-center gap-3 transition-all duration-300">
-                <!-- Official Google SVG Icon -->
-                <svg class="w-5 h-5" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                </svg>
-                <span id="googleBtnText">Sign in with Google</span>
-            </button>
-            
-            <div class="text-[10px] text-gray-500 font-tech uppercase tracking-widest pt-2 border-t border-white/5 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-shield-halved text-amber-400"></i>
-                Firebase Secured • Official OAuth
+                <!-- Google Login Button -->
+                <button id="btnGoogle" class="btn-google" onclick="handleGoogleLogin()">
+                    <svg class="google-icon" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.37 7.36 24 12 24z"/>
+                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.15 0 9.99 0 12s.45 3.85 1.24 5.42l4.04-3.15z"/>
+                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.36 0 3.26 2.63 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                    </svg>
+                    <span id="btnText">Sign in with Google</span>
+                </button>
+
+                <div class="security-tag">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Protected with Firebase Security</span>
+                </div>
             </div>
         </div>
 
-    </main>
+    </div>
 
-    <!-- Interactive Script -->
-    <script>
-        // Interactive Ambient Canvas Particles
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
+    <!-- MODULE SCRIPT TO IMPORT firebase.js AND HANDLE GOOGLE LOGIN -->
+    <script type="module">
+        import { auth } from "./firebase.js";
+        import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        const particles = [];
-        const particleCount = 45;
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.3;
-                this.speedY = (Math.random() - 0.5) * 0.3;
-                this.alpha = Math.random() * 0.6 + 0.2;
-                this.color = Math.random() > 0.5 ? '#D4AF37' : '#A855F7';
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-                    this.reset();
-                }
-            }
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        // Stage 1: Splash Progress Logic
-        let progress = 0;
-
-        function runSplashSequence() {
-            const splashScreen = document.getElementById('splashScreen');
-            const loginScreen = document.getElementById('loginScreen');
-            const progressBar = document.getElementById('progressBar');
-            const percentageText = document.getElementById('percentage');
-            const revealText = document.getElementById('revealText');
-
-            setTimeout(() => {
-                revealText.classList.remove('opacity-0');
-                revealText.classList.add('opacity-100');
-            }, 400);
-
-            const progressInterval = setInterval(() => {
-                const step = Math.floor(Math.random() * 4) + 2;
-                progress += step;
-
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(progressInterval);
-
-                    // Smooth transition to Stage 2 (Login Screen)
-                    setTimeout(() => {
-                        splashScreen.classList.add('opacity-0');
-                        
-                        setTimeout(() => {
-                            splashScreen.classList.add('hidden');
-                            loginScreen.classList.remove('hidden');
-                            
-                            setTimeout(() => {
-                                loginScreen.classList.remove('opacity-0', 'translate-y-10');
-                            }, 50);
-                        }, 600);
-                    }, 300);
-                }
-
-                progressBar.style.width = progress + '%';
-                percentageText.innerText = progress + '%';
-            }, 60);
-        }
-
-        // Toggle Google Login Button Active / Disabled State
-        function toggleGoogleLogin(checkbox) {
-            const googleBtn = document.getElementById('googleBtn');
+        // Global function for Google Login button click
+        window.handleGoogleLogin = function() {
+            const btnText = document.getElementById('btnText');
+            if (btnText) btnText.innerText = "Connecting Google...";
             
-            if (checkbox.checked) {
-                googleBtn.removeAttribute('disabled');
-                googleBtn.classList.remove('btn-google-disabled');
-                googleBtn.classList.add('btn-google-active');
+            const provider = new GoogleAuthProvider();
+
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    alert("स्वागत है, " + user.displayName + "! लॉगिन सफल रहा।");
+                    console.log("Logged In User:", user);
+                    // Yahan se aap agle page par redirect kar sakte hain
+                })
+                .catch((error) => {
+                    console.error("Login Error:", error);
+                    alert("लॉगिन असफल रहा: " + error.message);
+                    if (btnText) btnText.innerText = "Sign in with Google";
+                });
+        }
+    </script>
+
+    <!-- GENERAL UI SCRIPT (Splash & Particles) -->
+    <script>
+        const progressFill = document.getElementById('progressFill');
+        const progressNum = document.getElementById('progressNum');
+        const stageSplash = document.getElementById('stageSplash');
+        const stageAuth = document.getElementById('stageAuth');
+
+        let progress = 0;
+        
+        function updateProgress() {
+            if (progress < 100) {
+                progress += Math.floor(Math.random() * 3) + 2;
+                if (progress > 100) progress = 100;
+                
+                if (progressFill) progressFill.style.width = progress + '%';
+                if (progressNum) progressNum.innerText = progress;
+
+                setTimeout(updateProgress, 40);
             } else {
-                googleBtn.setAttribute('disabled', 'true');
-                googleBtn.classList.remove('btn-google-active');
-                googleBtn.classList.add('btn-google-disabled');
+                setTimeout(() => {
+                    if (stageSplash) {
+                        stageSplash.classList.remove('stage-active');
+                        stageSplash.classList.add('stage-hidden');
+                    }
+                    setTimeout(() => {
+                        if (stageAuth) {
+                            stageAuth.classList.remove('stage-hidden');
+                            stageAuth.classList.add('stage-active');
+                        }
+                    }, 300);
+                }, 400);
             }
         }
 
-        // Action when 'Sign in with Google' is clicked
-        function handleGoogleSignIn() {
-            const googleBtnText = document.getElementById('googleBtnText');
-            const googleBtn = document.getElementById('googleBtn');
+        window.addEventListener('DOMContentLoaded', () => {
+            updateProgress();
+            initParticles();
+        });
 
-            // Show temporary loading state
-            googleBtnText.innerText = "Connecting Google Auth...";
-            googleBtn.style.opacity = "0.8";
+        function initParticles() {
+            const canvas = document.getElementById('particleCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
 
-            setTimeout(() => {
-                // Here Firebase Google Login logic will be triggered
-                alert("🔑 Connecting to Firebase Google Login flow...");
-                googleBtnText.innerText = "Sign in with Google";
-                googleBtn.style.opacity = "1";
-            }, 1000);
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const particles = Array.from({ length: 35 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 0.5,
+                speedX: (Math.random() - 0.5) * 0.4,
+                speedY: (Math.random() - 0.5) * 0.4,
+                color: Math.random() > 0.5 ? '#FFD700' : '#8A2BE2'
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
         }
 
-        // Start on Page Load
-        window.onload = function() {
-            runSplashSequence();
-        };
+        function toggleGoogleBtn() {
+            const isChecked = document.getElementById('ageCheck').checked;
+            const btnGoogle = document.getElementById('btnGoogle');
+            if (isChecked) {
+                btnGoogle.classList.add('active');
+            } else {
+                btnGoogle.classList.remove('active');
+            }
+        }
     </script>
 </body>
 </html>
-```

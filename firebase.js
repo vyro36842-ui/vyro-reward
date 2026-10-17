@@ -1,6 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-
+// Firebase Configuration (Standard Global Setup)
 const firebaseConfig = {
   apiKey: "AIzaSyCsm_-KZPtiUPF6yi_rlxS0TBMlV-9rscM",
   authDomain: "vyro-6012f.firebaseapp.com",
@@ -10,5 +8,6 @@ const firebaseConfig = {
   appId: "1:193659877181:web:e6113f1c79a93d125af754"
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
-export const auth = getAuth(firebaseApp);
+// CDN Script se firebase global object milta hai
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();

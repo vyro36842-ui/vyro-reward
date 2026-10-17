@@ -1,133 +1,736 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vyro Reward - Final Fix</title>
-    
-    <!-- स्क्रिप्ट को एकदम लेटेस्ट और फ़ास्ट वर्ज़न पर अपडेट किया -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
-    
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .login-card { background: white; padding: 40px 30px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; width: 100%; max-width: 380px; }
-        .logo-area { font-size: 48px; margin-bottom: 10px; }
-        h2 { color: #333; margin-bottom: 8px; font-size: 24px; }
-        p { color: #666; font-size: 14px; margin-bottom: 30px; }
-        .google-btn { background: #fff; color: #444; border: 2px solid #e1e1e1; padding: 12px 16px; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
-        .welcome-box { display: none; }
-        .welcome-box.active { display: block; }
-        .login-box.hidden { display: none; }
-        .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid #667eea; margin-bottom: 15px; }
-        .logout-btn { background: #ff4d4d; color: white; border: none; padding: 12px; border-radius: 8px; margin-top: 20px; cursor: pointer; width: 100%; font-weight: bold; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#120d16">
+  <title>Vyro Reward</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #120d16;
+      --panel: #201824;
+      --red: #ff3655;
+      --yellow: #ffd34f;
+      --muted: #aaa0b2;
+      --border: #3b2d40;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 15% 0%, #70203435, transparent 42%),
+        radial-gradient(ellipse at 100% 100%, #5c3d1225, transparent 40%),
+        var(--bg);
+      color: #fff;
+      font-family: Inter, sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #loading {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .logo {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 25px;
+      color: #25131a;
+      background: linear-gradient(145deg, #ffe783, #ffb72f);
+      font-size: 40px;
+      font-weight: 900;
+      box-shadow: 0 12px 50px #ffb52f20;
+    }
+
+    .brand {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -1.4px;
+    }
+
+    .brand span { color: var(--yellow); }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .loader {
+      width: min(260px, 100%);
+      margin-top: 46px;
+    }
+
+    .track {
+      height: 5px;
+      overflow: hidden;
+      background: #392d3e;
+      border-radius: 10px;
+      margin-bottom: 13px;
+    }
+
+    #progress {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--red), var(--yellow));
+      transition: width .08s linear;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    #percent { color: var(--yellow); font-weight: 800; }
+
+    #auth {
+      justify-content: center;
+    }
+
+    .auth-wrap {
+      width: 100%;
+      max-width: 420px;
+      margin: auto;
+    }
+
+    .auth-wrap .logo {
+      width: 62px;
+      height: 62px;
+      border-radius: 20px;
+      font-size: 32px;
+      margin: 0 0 28px;
+    }
+
+    .eyebrow {
+      color: var(--yellow);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.2px;
+      margin-bottom: 13px;
+    }
+
+    h1 {
+      font-size: clamp(30px, 8vw, 40px);
+      letter-spacing: -1.8px;
+      line-height: 1.13;
+      margin: 0 0 13px;
+    }
+
+    .description {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    .switcher {
+      display: flex;
+      gap: 5px;
+      padding: 5px;
+      background: #1b1420;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 23px;
+    }
+
+    .switcher button {
+      flex: 1;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 5px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .switcher button.active {
+      background: #3a2532;
+      color: var(--yellow);
+    }
+
+    .field-label {
+      display: block;
+      margin: 18px 0 9px;
+      color: #e6dce9;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .field {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      outline: none;
+      background: #201824;
+      color: white;
+      font-size: 14px;
+    }
+
+    .field:focus { border-color: var(--yellow); }
+
+    .primary {
+      width: 100%;
+      margin-top: 23px;
+      padding: 16px;
+      border: 0;
+      border-radius: 13px;
+      color: #25131a;
+      background: linear-gradient(100deg, #ffe16a, #ffba32);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .primary:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    #authMessage {
+      min-height: 20px;
+      margin-top: 13px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #ff8294;
+    }
+
+    .fine-print {
+      margin-top: 22px;
+      color: #84788d;
+      font-size: 10px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    #app { padding: 0 0 95px; }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 22px;
+    }
+
+    .small-brand {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -.8px;
+    }
+
+    .small-brand span { color: var(--yellow); }
+
+    .avatar {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, var(--red), #8e2349);
+      font-weight: 900;
+    }
+
+    .page {
+      display: none;
+      padding: 5px 22px 25px;
+    }
+
+    .page.active { display: block; }
+
+    .page h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: -1px;
+    }
+
+    .balance {
+      margin-top: 25px;
+      padding: 24px;
+      border: 1px solid #593544;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 100% 0%, #ffd34f24, transparent 48%),
+        linear-gradient(135deg, #3a202f, #211824);
+    }
+
+    .balance-label {
+      color: #d4c2d0;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .balance-number {
+      margin: 13px 0 8px;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: -1.4px;
+    }
+
+    .balance-number span {
+      color: var(--yellow);
+      font-size: 23px;
+    }
+
+    .balance-note {
+      color: #b9a9b8;
+      font-size: 11px;
+    }
+
+    .section-title {
+      margin: 28px 0 14px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 17px;
+      margin-bottom: 11px;
+      border: 1px solid #33283a;
+      border-radius: 17px;
+      background: var(--panel);
+    }
+
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 47px;
+      height: 47px;
+      border-radius: 14px;
+      background: #ff36551c;
+      font-size: 22px;
+    }
+
+    .feature-title {
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .feature-sub {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .empty {
+      padding: 27px 18px;
+      border: 1px dashed #49394d;
+      border-radius: 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 0;
+      border-bottom: 1px solid #33283a;
+      font-size: 12px;
+    }
+
+    .setting-row span:last-child { color: var(--muted); }
+
+    .signout {
+      width: 100%;
+      padding: 15px;
+      margin-top: 25px;
+      border: 1px solid #ff36554a;
+      border-radius: 13px;
+      background: #ff365511;
+      color: #ff8395;
+      font-weight: 800;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px 7px calc(10px + env(safe-area-inset-bottom));
+      border-top: 1px solid #382c40;
+      background: #19131ef5;
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      border: 0;
+      padding: 7px 0;
+      background: transparent;
+      color: #8e8497;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .nav-btn.active { color: var(--yellow); }
+    .nav-icon { font-size: 21px; }
+
+    @media (min-width: 600px) {
+      .screen { max-width: 480px; margin: auto; }
+      #app {
+        max-width: 480px;
+        margin: auto;
+        border-left: 1px solid #302535;
+        border-right: 1px solid #302535;
+      }
+      .bottom-nav {
+        left: 50%;
+        right: auto;
+        width: 100%;
+        max-width: 480px;
+        transform: translateX(-50%);
+      }
+    }
+  </style>
 </head>
+
 <body>
-
-    <div class="login-card">
-        <div id="login-container" class="login-box">
-            <div class="logo-area">💰</div>
-            <h2>Vyro Reward</h2>
-            <p>लॉगिन करें और असली रिवॉर्ड्स कमाना शुरू करें</p>
-            <button id="btn-login" class="google-btn">
-                <img class="google-icon" style="width:20px;" src="https://gstatic.com" alt="Google">
-                Google अकाउंट से जुड़ें
-            </button>
-        </div>
-
-        <div id="welcome-container" class="welcome-box">
-            <img id="user-avatar" class="profile-img" src="" alt="User">
-            <h2>नमस्ते, <span id="user-display-name">User</span>!</h2>
-            <p id="user-display-email">user@gmail.com</p>
-            <div style="background: #f0f2ff; border: 1px dashed #667eea; padding: 15px; border-radius: 12px; margin-top: 15px;">
-                <span style="font-size: 14px; color: #555;">आपका असली बैलेंस</span>
-                <h3 style="font-size: 28px; color: #764ba2; margin-top: 5px;"><span id="user-coins">Loading...</span> Coins</h3>
-            </div>
-            <button id="btn-logout" class="logout-btn">अकाउंट लॉगआउट करें</button>
-        </div>
+  <section class="screen active" id="loading">
+    <div>
+      <div class="logo">V</div>
+      <div class="brand">VYRO <span>REWARD</span></div>
+      <p class="muted">A smarter rewards experience</p>
     </div>
 
-    <script>
-        const firebaseConfig = {
-          apiKey: "AIzaSyBWhmQlSv2Bz2hWspsE7M-I6lL1V4AeLy0",
-          authDomain: "://firebaseapp.com",
-          projectId: "vyro-75bbc",
-          storageBucket: "vyro-75bbc.firebasestorage.app",
-          messagingSenderId: "1077764939396",
-          appId: "1:1077764939396:web:ab5bc74dd831c7b33becd1"
+    <div class="loader">
+      <div class="track"><div id="progress"></div></div>
+      <div class="progress-row">
+        <span>Preparing your experience</span>
+        <span id="percent">0%</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="auth">
+    <div class="auth-wrap">
+      <div class="logo">V</div>
+      <div class="eyebrow">WELCOME TO VYRO</div>
+      <h1 id="authTitle">Your next chapter starts here.</h1>
+      <p class="description" id="authDescription">
+        Sign in to continue to your Vyro Reward account.
+      </p>
+
+      <div class="switcher">
+        <button type="button" class="active" id="loginTab">Sign In</button>
+        <button type="button" id="signupTab">Create Account</button>
+      </div>
+
+      <form id="authForm">
+        <label class="field-label" for="email">EMAIL ADDRESS</label>
+        <input class="field" id="email" type="email"
+          placeholder="you@example.com" autocomplete="email" required>
+
+        <label class="field-label" for="password">PASSWORD</label>
+        <input class="field" id="password" type="password"
+          placeholder="At least 6 characters" minlength="6"
+          autocomplete="current-password" required>
+
+        <button class="primary" id="submitButton" type="submit">
+          Continue →
+        </button>
+        <div id="authMessage" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="fine-print">
+        By continuing, you agree to use Vyro Reward responsibly.
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="app">
+    <header class="header">
+      <div class="small-brand">VYRO <span>REWARD</span></div>
+      <div class="avatar">V</div>
+    </header>
+
+    <main>
+      <section class="page active" id="home">
+        <div class="eyebrow">YOUR SPACE</div>
+        <h2>Welcome to Vyro.</h2>
+        <p class="muted">Your rewards journey starts here.</p>
+
+        <div class="balance">
+          <div class="balance-label">DIAMOND BALANCE</div>
+          <div class="balance-number">0 <span>◆</span></div>
+          <div class="balance-note">Your current balance</div>
+        </div>
+
+        <div class="section-title">Explore Vyro</div>
+
+        <div class="feature">
+          <div class="feature-icon">🏏</div>
+          <div>
+            <div class="feature-title">Cricket Game</div>
+            <div class="feature-sub">A new experience is coming soon.</div>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🎁</div>
+          <div>
+            <div class="feature-title">Daily Check-in</div>
+            <div class="feature-sub">Your daily rewards feature is coming soon.</div>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">⭐</div>
+          <div>
+            <div class="feature-title">Prime Offer</div>
+            <div class="feature-sub">Exclusive offers are coming soon.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="referral">
+        <div class="eyebrow">GROW TOGETHER</div>
+        <h2>Referral</h2>
+        <p class="muted">Your invitation space.</p>
+        <div class="empty">Referral features are not active yet.</div>
+      </section>
+
+      <section class="page" id="wallet">
+        <div class="eyebrow">YOUR ASSETS</div>
+        <h2>My Wallet</h2>
+        <p class="muted">Your balances and transaction history.</p>
+
+        <div class="balance">
+          <div class="balance-label">DIAMONDS</div>
+          <div class="balance-number">0 <span>◆</span></div>
+          <div class="balance-note">Current balance</div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🪙</div>
+          <div>
+            <div class="feature-title">Coins</div>
+            <div class="feature-sub">0 Coins</div>
+          </div>
+        </div>
+
+        <div class="section-title">Recent Transactions</div>
+        <div class="empty">No transactions yet.</div>
+      </section>
+
+      <section class="page" id="setting">
+        <div class="eyebrow">PERSONAL SPACE</div>
+        <h2>Settings</h2>
+        <p class="muted">Manage your account.</p>
+
+        <div class="setting-row">
+          <span>Email</span><span id="accountEmail">Signed in</span>
+        </div>
+        <div class="setting-row">
+          <span>App Version</span><span>1.0.0</span>
+        </div>
+
+        <button class="signout" id="signoutButton">Sign Out</button>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-page="home">
+        <span class="nav-icon">⌂</span><span>Home</span>
+      </button>
+      <button class="nav-btn" data-page="referral">
+        <span class="nav-icon">♧</span><span>Referral</span>
+      </button>
+      <button class="nav-btn" data-page="wallet">
+        <span class="nav-icon">◈</span><span>Wallet</span>
+      </button>
+      <button class="nav-btn" data-page="setting">
+        <span class="nav-icon">⚙</span><span>Setting</span>
+      </button>
+    </nav>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCsm_-KZPtiUPF6yi_rlxS0TBMlV-9-9scM",
+      authDomain: "vyro-6012f.firebaseapp.com",
+      projectId: "vyro-6012f",
+      storageBucket: "vyro-6012f.firebasestorage.app",
+      messagingSenderId: "193659877181",
+      appId: "1:193659877181:web:e6113f1c79a93d125af754"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const $ = id => document.getElementById(id);
+    let mode = "login";
+    let authReady = false;
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.toggle("active", screen.id === id);
+      });
+    }
+
+    function showMessage(message, success = false) {
+      $("authMessage").textContent = message;
+      $("authMessage").style.color = success ? "#8de0ae" : "#ff8294";
+    }
+
+    function setMode(nextMode) {
+      mode = nextMode;
+      const login = mode === "login";
+
+      $("loginTab").classList.toggle("active", login);
+      $("signupTab").classList.toggle("active", !login);
+      $("authTitle").textContent = login
+        ? "Your next chapter starts here."
+        : "Create your Vyro account.";
+      $("authDescription").textContent = login
+        ? "Sign in to continue to your Vyro Reward account."
+        : "Create an account to get started.";
+      $("submitButton").textContent = login
+        ? "Continue →"
+        : "Create Account →";
+      $("password").autocomplete = login
+        ? "current-password"
+        : "new-password";
+      showMessage("");
+    }
+
+    $("loginTab").addEventListener("click", () => setMode("login"));
+    $("signupTab").addEventListener("click", () => setMode("signup"));
+
+    $("authForm").addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (!authReady) {
+        showMessage("Please wait while the app connects.");
+        return;
+      }
+
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      const button = $("submitButton");
+
+      button.disabled = true;
+      showMessage("");
+
+      try {
+        if (mode === "signup") {
+          await createUserWithEmailAndPassword(auth, email, password);
+          showMessage("Account created successfully.", true);
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+        }
+      } catch (error) {
+        const messages = {
+          "auth/email-already-in-use": "This email already has an account. Please sign in.",
+          "auth/invalid-email": "Please enter a valid email address.",
+          "auth/weak-password": "Please use a stronger password with at least 6 characters.",
+          "auth/invalid-credential": "Email or password is incorrect.",
+          "auth/network-request-failed": "Network error. Check your internet and try again.",
+          "auth/too-many-requests": "Too many attempts. Please wait and try again.",
+          "auth/operation-not-allowed": "Email/Password sign-in is not enabled in Firebase."
         };
 
-        // Firebase को बिल्कुल नए सिरे से चालू करना
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+        showMessage(messages[error.code] || "Could not continue. Please try again.");
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    $("signoutButton").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+      } catch {
+        alert("Could not sign out. Please try again.");
+      }
+    });
+
+    document.querySelectorAll(".nav-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const page = button.dataset.page;
+
+        document.querySelectorAll(".page").forEach(item => {
+          item.classList.toggle("active", item.id === page);
+        });
+
+        document.querySelectorAll(".nav-btn").forEach(item => {
+          item.classList.toggle("active", item === button);
+        });
+      });
+    });
+
+    onAuthStateChanged(auth, user => {
+      authReady = true;
+
+      if (user) {
+        $("accountEmail").textContent = user.email || "Signed in";
+        showScreen("app");
+      } else {
+        showScreen("auth");
+      }
+    });
+
+    let progressValue = 0;
+    const progressTimer = setInterval(() => {
+      progressValue = Math.min(100, progressValue + 2);
+      $("progress").style.width = progressValue + "%";
+      $("percent").textContent = progressValue + "%";
+
+      if (progressValue >= 100) {
+        clearInterval(progressTimer);
+        if (!authReady) {
+          $("percent").textContent = "100%";
         }
-        
-        const auth = firebase.auth();
-        const db = firebase.firestore(); 
-        const provider = new firebase.auth.GoogleAuthProvider();
-        
-        // मोबाइल के लिए बिना रुकावट वाला सेटिंग प्रॉम्प्ट जोड़ना
-        provider.setCustomParameters({ prompt: 'select_account' });
-
-        const loginContainer = document.getElementById('login-container');
-        const welcomeContainer = document.getElementById('welcome-container');
-        const btnLogin = document.getElementById('btn-login');
-        const btnLogout = document.getElementById('btn-logout');
-
-        // मोबाइल ब्राउज़र पर रीडायरेक्ट सबसे बेस्ट और 100% काम करता है
-        btnLogin.addEventListener('click', () => {
-            auth.signInWithRedirect(provider);
-        });
-
-        btnLogout.addEventListener('click', () => {
-            auth.signOut().then(() => {
-                window.location.reload();
-            });
-        });
-
-        // पेज लोड होते ही चेक करेगा कि लॉगिन के बाद वापस आया है या नहीं
-        auth.getRedirectResult().then((result) => {
-            if (result && result.user) {
-                console.log("लॉगिन हो गया!");
-            }
-        }).catch((err) => {
-            alert("फ़ायरबेस एरर: " + err.message + "\nकोड: " + err.code);
-        });
-
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                loginContainer.classList.add('hidden');
-                welcomeContainer.classList.add('active');
-                document.getElementById('user-avatar').src = user.photoURL || 'https://placeholder.com';
-                document.getElementById('user-display-name').innerText = user.displayName || 'User';
-                document.getElementById('user-display-email').innerText = user.email;
-
-                const userRef = db.collection('users').doc(user.uid);
-                userRef.onSnapshot(doc => {
-                    if (doc.exists) {
-                        document.getElementById('user-coins').innerText = doc.data().coins;
-                    } else {
-                        userRef.set({
-                            uid: user.uid,
-                            name: user.displayName || 'User',
-                            email: user.email,
-                            coins: 100, 
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        }).then(() => {
-                            document.getElementById('user-coins').innerText = "100";
-                        }).catch(() => {
-                            document.getElementById('user-coins').innerText = "100 (Local)";
-                        });
-                    }
-                });
-            } else {
-                loginContainer.classList.remove('hidden');
-                welcomeContainer.classList.remove('active');
-            }
-        });
-    </script>
+      }
+    }, 35);
+  </script>
 </body>
 </html>

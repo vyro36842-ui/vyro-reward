@@ -429,12 +429,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: bounceIn 0.5s ease;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0.85); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
         }
 
         .offline-icon-box {
@@ -450,12 +444,6 @@
             color: var(--neon-red);
             margin-bottom: 20px;
             box-shadow: 0 0 20px rgba(255, 51, 102, 0.3);
-            animation: pulseRed 2s infinite ease-in-out;
-        }
-
-        @keyframes pulseRed {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 51, 102, 0.3); }
-            50% { transform: scale(1.08); box-shadow: 0 0 30px rgba(255, 51, 102, 0.6); }
         }
 
         .offline-title {
@@ -487,11 +475,6 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-retry:active {
-            transform: scale(0.97);
         }
     </style>
 </head>
@@ -592,15 +575,10 @@
         window.firebaseUser = null;
         window.firebaseChecked = false;
 
-        // Listen for Firebase Auth status
+        // Save Auth State as soon as Firebase responds
         onAuthStateChanged(auth, (user) => {
             window.firebaseUser = user;
             window.firebaseChecked = true;
-
-            // If splash is already at 100%, redirect immediately
-            if (window.splashDone) {
-                handleDestination();
-            }
         });
 
         // Google Login
@@ -627,8 +605,26 @@
         }
     </script>
 
-    <!-- UI & SPLASH LOADER SCRIPT -->
+    <!-- PURE UI & GUARANTEED 0-100% LOADER SCRIPT -->
     <script>
         const progressFill = document.getElementById('progressFill');
         const progressNum = document.getElementById('progressNum');
-        const stageSpl
+        const stageSplash = document.getElementById('stageSplash');
+        const stageAuth = document.getElementById('stageAuth');
+        const offlineOverlay = document.getElementById('offlineOverlay');
+
+        let percent = 0;
+
+        // Step 1: Smooth 0 to 100% Loader (Runs completely independent)
+        function runLoader() {
+            if (!navigator.onLine) {
+                showOfflineOverlay();
+                return;
+            }
+
+            if (percent < 100) {
+                percent += Math.floor(Math.random() * 3) + 2;
+                if (percent > 100) percent = 100;
+
+                if (progressFill) progressFill.style.width = percent + '%';
+                if (progressNum) progressNum.innerText = perce

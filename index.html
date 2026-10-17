@@ -522,7 +522,7 @@
                     <div id="progressFill" class="progress-bar-fill"></div>
                 </div>
                 <div class="progress-text-group">
-                    <span>Loading resources...</span>
+                    <span id="loadingStatusText">Checking Session...</span>
                     <span class="counter-num"><span id="progressNum">0</span>%</span>
                 </div>
             </div>
@@ -589,23 +589,27 @@
         import { auth } from "./firebase.js";
         import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
-        window.isUserLoggedIn = false;
+        window.authChecked = false;
+        window.currentUser = null;
 
-        // Check persistent auth status
+        // Firebase Auth listener - Always runs first
         onAuthStateChanged(auth, (user) => {
+            window.authChecked = true;
+            window.currentUser = user;
+
             if (user) {
-                console.log("User pehle se logged in hai:", user.displayName);
-                window.isUserLoggedIn = true;
-                if (window.isSplashFinished && navigator.onLine) {
-                    window.location.href = "dashboard.html";
-                }
+                console.log("Logged In User Found:", user.displayName);
             } else {
-                console.log("Koi user logged in nahi hai.");
-                window.isUserLoggedIn = false;
+                console.log("No Active Session");
+            }
+
+            // Check if splash loading is already finished
+            if (window.isSplashFinished) {
+                proceedAfterSplash();
             }
         });
 
-        // Google Login
+        // Google Login Handler
         window.handleGoogleLogin = function() {
             if (!navigator.onLine) {
                 showOfflineOverlay();
@@ -625,4 +629,4 @@
                 .catch((error) => {
                     console.error("Login Error:", error);
                     alert("Login failed: " + error.message);
-                    if (btnText) btnText.innerText = "Sign
+     

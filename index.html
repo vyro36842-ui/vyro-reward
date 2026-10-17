@@ -461,6 +461,7 @@
         }
 
         .btn-retry {
+            width: 10% auto;
             width: 100%;
             padding: 15px;
             border-radius: 16px;
@@ -567,56 +568,53 @@
         </div>
     </div>
 
-    <!-- PURE UI & INDEPENDENT LOADER SCRIPT -->
+    <!-- PURE INDEPENDENT 0-100% LOADER SCRIPT -->
     <script>
-        window.firebaseUser = null;
-        window.firebaseChecked = false;
-        window.splashDone = false;
-
-        var percent = 0;
+        var progressPercent = 0;
         var progressFill = document.getElementById('progressFill');
         var progressNum = document.getElementById('progressNum');
         var stageSplash = document.getElementById('stageSplash');
         var stageAuth = document.getElementById('stageAuth');
         var offlineOverlay = document.getElementById('offlineOverlay');
 
-        // Immediate 0-100% Animation Logic
-        function runLoader() {
+        // Pure Local Timer Loader (Will NEVER block or stick at 0)
+        function startPureLoader() {
             if (!navigator.onLine) {
                 showOfflineOverlay();
                 return;
             }
 
-            if (percent < 100) {
-                percent += Math.floor(Math.random() * 4) + 3;
-                if (percent > 100) percent = 100;
+            if (progressPercent < 100) {
+                progressPercent += Math.floor(Math.random() * 4) + 3;
+                if (progressPercent > 100) progressPercent = 100;
 
-                if (progressFill) progressFill.style.width = percent + '%';
-                if (progressNum) progressNum.innerText = percent;
+                if (progressFill) progressFill.style.width = progressPercent + '%';
+                if (progressNum) progressNum.innerText = progressPercent;
 
-                setTimeout(runLoader, 30);
+                setTimeout(startPureLoader, 25);
             } else {
-                window.splashDone = true;
-                checkWhereToGo();
+                // 100% Reached! Now evaluate login state from window variables set by Firebase module
+                evaluateDestination();
             }
         }
 
-        // Navigate after 100%
-        function checkWhereToGo() {
+        function evaluateDestination() {
             if (!navigator.onLine) {
                 showOfflineOverlay();
                 return;
             }
 
-            // Wait briefly if Firebase has not resolved yet
-            if (!window.firebaseChecked) {
-                setTimeout(checkWhereToGo, 100);
+            // If Firebase hasn't responded yet, wait 100ms
+            if (window.firebaseUserSession === undefined) {
+                setTimeout(evaluateDestination, 100);
                 return;
             }
 
-            if (window.firebaseUser) {
+            if (window.firebaseUserSession) {
+                // Already Logged In -> Go to Dashboard
                 window.location.href = "dashboard.html";
             } else {
+                // Not Logged In -> Show Login Card
                 if (stageSplash) {
                     stageSplash.classList.remove('stage-active');
                     stageSplash.classList.add('stage-hidden');
@@ -626,13 +624,4 @@
                         stageAuth.classList.remove('stage-hidden');
                         stageAuth.classList.add('stage-active');
                     }
-                }, 300);
-            }
-        }
-
-        // Network Handlers
-        function showOfflineOverlay() {
-            if (offlineOverlay) offlineOverlay.classList.add('active');
-        }
-
-   
+                }

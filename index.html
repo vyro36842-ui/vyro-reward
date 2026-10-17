@@ -522,7 +522,7 @@
                     <div id="progressFill" class="progress-bar-fill"></div>
                 </div>
                 <div class="progress-text-group">
-                    <span id="loadingStatusText">Checking Session...</span>
+                    <span>Loading resources...</span>
                     <span class="counter-num"><span id="progressNum">0</span>%</span>
                 </div>
             </div>
@@ -569,7 +569,7 @@
 
     </div>
 
-    <!-- OFFLINE ERROR SCREEN OVERLAY -->
+    <!-- OFFLINE ERROR OVERLAY -->
     <div id="offlineOverlay" class="offline-overlay">
         <div class="offline-card">
             <div class="offline-icon-box">
@@ -584,32 +584,26 @@
         </div>
     </div>
 
-    <!-- MODULE SCRIPT TO CHECK AUTO LOGIN AND HANDLE GOOGLE AUTH -->
+    <!-- FIREBASE MODULE -->
     <script type="module">
         import { auth } from "./firebase.js";
         import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
-        window.authChecked = false;
-        window.currentUser = null;
+        window.firebaseUser = null;
+        window.firebaseChecked = false;
 
-        // Firebase Auth listener - Always runs first
+        // Listen for Firebase Auth status
         onAuthStateChanged(auth, (user) => {
-            window.authChecked = true;
-            window.currentUser = user;
+            window.firebaseUser = user;
+            window.firebaseChecked = true;
 
-            if (user) {
-                console.log("Logged In User Found:", user.displayName);
-            } else {
-                console.log("No Active Session");
-            }
-
-            // Check if splash loading is already finished
-            if (window.isSplashFinished) {
-                proceedAfterSplash();
+            // If splash is already at 100%, redirect immediately
+            if (window.splashDone) {
+                handleDestination();
             }
         });
 
-        // Google Login Handler
+        // Google Login
         window.handleGoogleLogin = function() {
             if (!navigator.onLine) {
                 showOfflineOverlay();
@@ -623,10 +617,18 @@
 
             signInWithPopup(auth, provider)
                 .then((result) => {
-                    console.log("Login Successful:", result.user);
                     window.location.href = "dashboard.html";
                 })
                 .catch((error) => {
                     console.error("Login Error:", error);
                     alert("Login failed: " + error.message);
-     
+                    if (btnText) btnText.innerText = "Sign in with Google";
+                });
+        }
+    </script>
+
+    <!-- UI & SPLASH LOADER SCRIPT -->
+    <script>
+        const progressFill = document.getElementById('progressFill');
+        const progressNum = document.getElementById('progressNum');
+        const stageSpl

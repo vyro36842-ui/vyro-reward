@@ -461,7 +461,6 @@
         }
 
         .btn-retry {
-            width: 10% auto;
             width: 100%;
             padding: 15px;
             border-radius: 16px;
@@ -568,60 +567,67 @@
         </div>
     </div>
 
-    <!-- PURE INDEPENDENT 0-100% LOADER SCRIPT -->
+    <!-- 100% INDEPENDENT VANILLA JAVASCRIPT (ZERO FIREBASE DEPENDENCY IN LOADER) -->
     <script>
-        var progressPercent = 0;
-        var progressFill = document.getElementById('progressFill');
-        var progressNum = document.getElementById('progressNum');
-        var stageSplash = document.getElementById('stageSplash');
-        var stageAuth = document.getElementById('stageAuth');
-        var offlineOverlay = document.getElementById('offlineOverlay');
+        var count = 0;
+        var pFill = document.getElementById('progressFill');
+        var pNum = document.getElementById('progressNum');
+        var splash = document.getElementById('stageSplash');
+        var authStage = document.getElementById('stageAuth');
+        var offlineBox = document.getElementById('offlineOverlay');
 
-        // Pure Local Timer Loader (Will NEVER block or stick at 0)
-        function startPureLoader() {
+        // Guaranteed 0-100 Loader Loop
+        function runPureProgress() {
             if (!navigator.onLine) {
-                showOfflineOverlay();
+                if (offlineBox) offlineBox.classList.add('active');
                 return;
             }
 
-            if (progressPercent < 100) {
-                progressPercent += Math.floor(Math.random() * 4) + 3;
-                if (progressPercent > 100) progressPercent = 100;
+            if (count < 100) {
+                count += Math.floor(Math.random() * 4) + 3;
+                if (count > 100) count = 100;
 
-                if (progressFill) progressFill.style.width = progressPercent + '%';
-                if (progressNum) progressNum.innerText = progressPercent;
+                if (pFill) pFill.style.width = count + '%';
+                if (pNum) pNum.innerText = count;
 
-                setTimeout(startPureLoader, 25);
+                setTimeout(runPureProgress, 25);
             } else {
-                // 100% Reached! Now evaluate login state from window variables set by Firebase module
-                evaluateDestination();
+                // Loader Reached 100%!
+                finishSplash();
             }
         }
 
-        function evaluateDestination() {
+        function finishSplash() {
             if (!navigator.onLine) {
-                showOfflineOverlay();
+                if (offlineBox) offlineBox.classList.add('active');
                 return;
             }
 
-            // If Firebase hasn't responded yet, wait 100ms
-            if (window.firebaseUserSession === undefined) {
-                setTimeout(evaluateDestination, 100);
-                return;
-            }
-
-            if (window.firebaseUserSession) {
-                // Already Logged In -> Go to Dashboard
+            // Check if Firebase session listener saved a user session
+            if (window.loggedInUser) {
                 window.location.href = "dashboard.html";
             } else {
-                // Not Logged In -> Show Login Card
-                if (stageSplash) {
-                    stageSplash.classList.remove('stage-active');
-                    stageSplash.classList.add('stage-hidden');
+                if (splash) {
+                    splash.classList.remove('stage-active');
+                    splash.classList.add('stage-hidden');
                 }
                 setTimeout(function() {
-                    if (stageAuth) {
-                        stageAuth.classList.remove('stage-hidden');
-                        stageAuth.classList.add('stage-active');
+                    if (authStage) {
+                        authStage.classList.remove('stage-hidden');
+                        authStage.classList.add('stage-active');
                     }
+                }, 300);
+            }
+        }
+
+        function checkNetworkAndRetry() {
+            if (navigator.onLine) {
+                if (offlineBox) offlineBox.classList.remove('active');
+                if (count >= 100) {
+                    finishSplash();
+                } else {
+                    runPureProgress();
                 }
+            } else {
+                var btnSpan = document.querySelector('.btn-retry span');
+  

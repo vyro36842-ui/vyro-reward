@@ -226,6 +226,7 @@
             font-size: 14px;
             color: #E2E8F0;
             text-decoration: none;
+            cursor: pointer;
         }
 
         .setting-row:last-child {
@@ -318,6 +319,42 @@
 
         .btn-logout:active {
             transform: scale(0.98);
+        }
+
+        /* TERMS STYLING */
+        .highlight-box {
+            background: rgba(255, 51, 102, 0.1);
+            border-left: 4px solid var(--neon-red);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #FFD1DC;
+            line-height: 1.5;
+        }
+
+        .bullet-list {
+            list-style: none;
+            margin-top: 8px;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #E2E8F0;
+            line-height: 1.5;
+        }
+
+        .bullet-list li::before {
+            content: "•";
+            color: var(--primary-gold);
+            font-weight: bold;
+            font-size: 16px;
+            position: absolute;
+            left: 0;
+            top: -2px;
         }
 
         /* BOTTOM NAV BAR */
@@ -587,23 +624,23 @@
                 </div>
             </div>
 
-            <!-- Support & Information -->
+            <!-- Legal & Info (Terms of Use Tab) -->
             <div class="dash-card">
                 <div class="card-heading">
-                    <i class="fa-solid fa-headset"></i>
-                    <span>Support & Info</span>
+                    <i class="fa-solid fa-file-contract"></i>
+                    <span>Legal & Info</span>
                 </div>
 
-                <a class="setting-row" href="https://t.me" target="_blank">
+                <div class="setting-row" onclick="switchTab('Terms', this)">
                     <div class="setting-left">
-                        <i class="fa-brands fa-telegram" style="color: #0088cc;"></i>
-                        <span>Official Telegram</span>
+                        <i class="fa-solid fa-shield-cat" style="color: var(--primary-gold);"></i>
+                        <span>Terms of Use & Rules</span>
                     </div>
                     <div class="setting-right">
-                        <span>Join</span>
+                        <span>Read</span>
                         <i class="fa-solid fa-angle-right"></i>
                     </div>
-                </a>
+                </div>
 
                 <div class="setting-row">
                     <div class="setting-left">
@@ -622,6 +659,37 @@
                 <span>Logout Account</span>
             </button>
 
+        </div>
+
+        <!-- TERMS OF USE TAB -->
+        <div id="sectionTerms" class="tab-section">
+            <div class="dash-card">
+                <div class="dash-title" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--neon-red);"></i>
+                    <span>Important Notice</span>
+                </div>
+                <div class="highlight-box">
+                    <strong>ध्यान दें:</strong> Vyro Reward एक टास्क और एक्टिविटी-बेस्ड <strong>रिवॉर्ड प्लेटफॉर्म (Reward App)</strong> है। यह कोई सरकारी या प्राइवेट नौकरी (Job) नहीं है और न ही इसमें कोई फिक्स्ड मंथली सैलरी (Monthly Salary) दी जाती है।
+                </div>
+            </div>
+
+            <div class="dash-card">
+                <div class="dash-title" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-gavel"></i>
+                    <span>Platform Rules</span>
+                </div>
+                <p class="dash-desc">ऐप इस्तेमाल करने से पहले कृपया नियमों को ध्यान से पढ़ें:</p>
+                <ul class="bullet-list">
+                    <li><strong>No Monthly Salary:</strong> कृपया हर महीने सैलरी या फिक्स्ड जॉब का क्लेम न करें। यह ऐप केवल टास्क पूरे करने पर कॉइन्स देता है।</li>
+                    <li><strong>Task Based Rewards:</strong> आपके द्वारा सही तरीके से किए गए टास्क और रेफ़रल के आधार पर ही कॉइन्स मिलते हैं।</li>
+                    <li><strong>Fair Usage Policy:</strong> फेक अकाउंट, स्क्रिप्ट या ऑटो-क्लिकर इस्तेमाल करने पर अकाउंट बैन हो जाएगा।</li>
+                </ul>
+            </div>
+
+            <button class="btn-logout" style="border-color: rgba(255, 215, 0, 0.4); background: rgba(255, 215, 0, 0.1); color: var(--primary-gold);" onclick="switchTab('Setting', document.querySelectorAll('.nav-item')[3])">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back to Settings</span>
+            </button>
         </div>
     </main>
 
@@ -651,7 +719,7 @@
             <div style="font-size: 38px; color: var(--neon-red); margin-bottom: 10px;">
                 <i class="fa-solid fa-circle-exclamation"></i>
             </div>
-            <h3 style="color: #FFF; font-size: 17px; margin-bottom: 6px;">Logout Confirmation3>
+            <h3 style="color: #FFF; font-size: 17px; margin-bottom: 6px;">Logout Confirmation</h3>
             <p style="color: var(--text-muted); font-size: 13px;">Kya aap sach me apne account se logout karna chahte hain?</p>
             <div class="modal-btns">
                 <button class="btn-modal-cancel" onclick="closeLogoutModal()">Cancel</button>
@@ -702,13 +770,15 @@
             sections.forEach(function(sec) { sec.classList.remove('active'); });
 
             var navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(function(item) { item.classList.remove('active'); });
+            if (tabName !== 'Terms') {
+                navItems.forEach(function(item) { item.classList.remove('active'); });
+                if (element) element.classList.add('active');
+            }
 
             var targetSection = document.getElementById('section' + tabName);
             if (targetSection) {
                 targetSection.classList.add('active');
             }
-            element.classList.add('active');
         }
 
         // Logout Modal Functions
@@ -795,4 +865,5 @@
         };
     </script>
 </body>
-</html>
+    </html>
+                    

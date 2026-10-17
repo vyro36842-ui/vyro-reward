@@ -11,6 +11,10 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase SDKs (CDN Version - No Module Blocking) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
     <style>
         :root {
             --bg-color: #060812;
@@ -45,7 +49,6 @@
             position: relative;
         }
 
-        /* Particle Canvas Background */
         #particleCanvas {
             position: absolute;
             top: 0;
@@ -56,40 +59,6 @@
             pointer-events: none;
         }
 
-        /* Glow Orbs */
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.5;
-            animation: pulseGlow 8s infinite alternate ease-in-out;
-        }
-
-        .orb-1 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, var(--accent-purple), transparent);
-            top: -10%;
-            left: -10%;
-        }
-
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
-            bottom: -10%;
-            right: -10%;
-            animation-delay: -4s;
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.4; }
-            100% { transform: scale(1.3) translate(30px, -30px); opacity: 0.7; }
-        }
-
-        /* Container */
         .app-container {
             position: relative;
             z-index: 10;
@@ -103,7 +72,6 @@
             min-height: 100vh;
         }
 
-        /* Stage Handling */
         .stage {
             width: 100%;
             display: flex;
@@ -126,7 +94,7 @@
             position: relative;
         }
 
-        /* ================= STAGE 1: SPLASH ================= */
+        /* Splash Styles */
         .logo-wrapper {
             position: relative;
             width: 140px;
@@ -135,7 +103,6 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 35px;
-            perspective: 1000px;
         }
 
         .ring-outer {
@@ -147,34 +114,16 @@
             border-top-color: var(--primary-gold);
             border-right-color: var(--neon-blue);
             animation: spinContinuous 3s linear infinite;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
         }
 
-        .ring-inner {
-            position: absolute;
-            width: 80%;
-            height: 80%;
-            border-radius: 50%;
-            border: 2px dashed rgba(138, 43, 226, 0.6);
-            animation: spinReverse 6s linear infinite;
-        }
-
-        /* 360 Rotating 'V' Logo */
         .logo-3d-v {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 72px;
             font-weight: 900;
-            background: linear-gradient(135deg, #FFF 0%, var(--primary-gold) 50%, var(--secondary-gold) 100%);
+            background: linear-gradient(135deg, #FFF 0%, var(--primary-gold) 50%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.6));
-            transform-style: preserve-3d;
-            animation: rotateV3D 4s linear infinite;
-        }
-
-        @keyframes rotateV3D {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
         }
 
         @keyframes spinContinuous {
@@ -182,20 +131,12 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes spinReverse {
-            0% { transform: rotate(360deg); }
-            100% { transform: rotate(0deg); }
-        }
-
         .brand-title {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 36px;
             font-weight: 800;
             letter-spacing: 2px;
-            text-transform: uppercase;
-            background: linear-gradient(180deg, #FFFFFF 0%, #CBD5E1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #FFFFFF;
             margin-bottom: 6px;
         }
 
@@ -223,7 +164,6 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             overflow: hidden;
-            position: relative;
         }
 
         .progress-bar-fill {
@@ -231,8 +171,6 @@
             width: 0%;
             background: linear-gradient(90deg, var(--accent-purple), var(--primary-gold), var(--neon-blue));
             border-radius: 20px;
-            box-shadow: 0 0 12px var(--primary-gold);
-            transition: width 0.1s linear;
         }
 
         .progress-text-group {
@@ -241,25 +179,22 @@
             justify-content: space-between;
             font-size: 13px;
             color: var(--text-muted);
-            font-weight: 500;
         }
 
         .counter-num {
             color: var(--primary-gold);
             font-weight: 700;
-            font-family: 'Space Grotesk', sans-serif;
         }
 
-        /* ================= STAGE 2: LOGIN CARD ================= */
+        /* Login Card */
         .glass-card {
             width: 100%;
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-glow);
             border-radius: 28px;
             padding: 32px 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -290,7 +225,6 @@
         .welcome-subtitle {
             font-size: 13px;
             color: var(--text-muted);
-            line-height: 1.5;
             margin-bottom: 28px;
         }
 
@@ -316,7 +250,6 @@
             justify-content: center;
             align-items: center;
             flex-shrink: 0;
-            transition: all 0.2s ease;
         }
 
         .custom-checkbox i {
@@ -374,25 +307,7 @@
             box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
         }
 
-        .google-icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        .security-tag {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 20px;
-        }
-
-        .security-tag i {
-            color: #10B981;
-        }
-
-        /* ================= OFFLINE ERROR OVERLAY ================= */
+        /* Offline Overlay */
         .offline-overlay {
             position: fixed;
             top: 0;
@@ -400,8 +315,6 @@
             width: 100vw;
             height: 100vh;
             background: rgba(6, 8, 18, 0.96);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             z-index: 9999;
             display: flex;
             justify-content: center;
@@ -425,7 +338,6 @@
             border-radius: 28px;
             padding: 36px 24px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(255, 51, 102, 0.2);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -436,28 +348,12 @@
             height: 75px;
             border-radius: 50%;
             background: rgba(255, 51, 102, 0.12);
-            border: 1px solid rgba(255, 51, 102, 0.4);
+            color: var(--neon-red);
+            font-size: 32px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 32px;
-            color: var(--neon-red);
             margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(255, 51, 102, 0.3);
-        }
-
-        .offline-title {
-            font-size: 22px;
-            font-weight: 800;
-            color: #FFF;
-            margin-bottom: 10px;
-        }
-
-        .offline-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 28px;
         }
 
         .btn-retry {
@@ -465,38 +361,25 @@
             padding: 15px;
             border-radius: 16px;
             border: none;
-            background: linear-gradient(135deg, var(--neon-red), #D91B5C);
+            background: var(--neon-red);
             color: #FFF;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(255, 51, 102, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Particle Canvas -->
     <canvas id="particleCanvas"></canvas>
 
-    <!-- Glow Orbs -->
-    <div class="glow-orb orb-1"></div>
-    <div class="glow-orb orb-2"></div>
-
     <div class="app-container">
-
-        <!-- STAGE 1: SPLASH -->
+        <!-- SPLASH STAGE -->
         <div id="stageSplash" class="stage stage-active">
             <div class="logo-wrapper">
                 <div class="ring-outer"></div>
-                <div class="ring-inner"></div>
                 <div class="logo-3d-v">V</div>
             </div>
-
             <h1 class="brand-title">VYRO REWARD</h1>
             <p class="brand-tagline">Play • Earn • Redeem</p>
 
@@ -505,129 +388,140 @@
                     <div id="progressFill" class="progress-bar-fill"></div>
                 </div>
                 <div class="progress-text-group">
-                    <span>Loading resources...</span>
+                    <span>Loading...</span>
                     <span class="counter-num"><span id="progressNum">0</span>%</span>
                 </div>
             </div>
         </div>
 
-        <!-- STAGE 2: AGE & AUTH -->
+        <!-- AUTH STAGE -->
         <div id="stageAuth" class="stage stage-hidden">
             <div class="glass-card">
-                <div class="card-icon">
-                    <i class="fa-solid fa-gift"></i>
-                </div>
-                
+                <div class="card-icon"><i class="fa-solid fa-gift"></i></div>
                 <h2 class="welcome-title">Welcome to Vyro</h2>
-                <p class="welcome-subtitle">Join thousands of users earning daily rewards. Sign in to continue.</p>
+                <p class="welcome-subtitle">Sign in to start earning rewards.</p>
 
-                <!-- 18+ Checkbox -->
                 <label class="age-checkbox-container" for="ageCheck">
                     <input type="checkbox" id="ageCheck" onchange="toggleGoogleBtn()">
-                    <div class="custom-checkbox">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                    <div class="checkbox-label">
-                        I confirm that I am <span>18 years</span> or older and accept terms.
-                    </div>
+                    <div class="custom-checkbox"><i class="fa-solid fa-check"></i></div>
+                    <div class="checkbox-label">I am <span>18 years</span> or older.</div>
                 </label>
 
-                <!-- Google Login Button -->
                 <button id="btnGoogle" class="btn-google" onclick="handleGoogleLogin()">
-                    <svg class="google-icon" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.37 7.36 24 12 24z"/>
-                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.15 0 9.99 0 12s.45 3.85 1.24 5.42l4.04-3.15z"/>
-                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.36 0 3.26 2.63 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-                    </svg>
-                    <span id="btnText">Sign in with Google</span>
+                    <i class="fa-brands fa-google" style="color: #EA4335;"></i>
+                    <span>Sign in with Google</span>
                 </button>
-
-                <div class="security-tag">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span>Protected with Firebase Security</span>
-                </div>
             </div>
         </div>
-
     </div>
 
-    <!-- OFFLINE ERROR OVERLAY -->
+    <!-- OFFLINE OVERLAY -->
     <div id="offlineOverlay" class="offline-overlay">
         <div class="offline-card">
-            <div class="offline-icon-box">
-                <i class="fa-solid fa-wifi"></i>
-            </div>
-            <h3 class="offline-title">Connection Lost</h3>
-            <p class="offline-desc">Internet connection is required to access Vyro Reward. Please check your data or Wi-Fi network.</p>
-            <button class="btn-retry" onclick="checkNetworkAndRetry()">
-                <i class="fa-solid fa-rotate-right"></i>
-                <span>Retry Connection</span>
-            </button>
+            <div class="offline-icon-box"><i class="fa-solid fa-wifi"></i></div>
+            <h3 style="color: #FFF; margin-bottom: 10px;">Connection Lost</h3>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">Please check your internet connection.</p>
+            <button class="btn-retry" onclick="location.reload()">Retry</button>
         </div>
     </div>
 
-    <!-- 100% INDEPENDENT VANILLA JAVASCRIPT (ZERO FIREBASE DEPENDENCY IN LOADER) -->
+    <!-- Firebase Config File -->
+    <script src="firebase.js"></script>
+
+    <!-- App Script -->
     <script>
-        var count = 0;
+        var progress = 0;
         var pFill = document.getElementById('progressFill');
         var pNum = document.getElementById('progressNum');
-        var splash = document.getElementById('stageSplash');
+        var splashStage = document.getElementById('stageSplash');
         var authStage = document.getElementById('stageAuth');
         var offlineBox = document.getElementById('offlineOverlay');
 
-        // Guaranteed 0-100 Loader Loop
-        function runPureProgress() {
+        // 1. Check Offline first
+        if (!navigator.onLine) {
+            offlineBox.classList.add('active');
+        }
+
+        // 2. Guaranteed 0-100% Loader
+        function runLoader() {
             if (!navigator.onLine) {
-                if (offlineBox) offlineBox.classList.add('active');
+                offlineBox.classList.add('active');
                 return;
             }
 
-            if (count < 100) {
-                count += Math.floor(Math.random() * 4) + 3;
-                if (count > 100) count = 100;
+            if (progress < 100) {
+                progress += Math.floor(Math.random() * 5) + 3;
+                if (progress > 100) progress = 100;
 
-                if (pFill) pFill.style.width = count + '%';
-                if (pNum) pNum.innerText = count;
+                if (pFill) pFill.style.width = progress + '%';
+                if (pNum) pNum.innerText = progress;
 
-                setTimeout(runPureProgress, 25);
+                setTimeout(runLoader, 25);
             } else {
-                // Loader Reached 100%!
-                finishSplash();
+                // 100% complete! Check Firebase Persistent Auth
+                checkAuthSession();
             }
         }
 
-        function finishSplash() {
-            if (!navigator.onLine) {
-                if (offlineBox) offlineBox.classList.add('active');
-                return;
-            }
-
-            // Check if Firebase session listener saved a user session
-            if (window.loggedInUser) {
-                window.location.href = "dashboard.html";
-            } else {
-                if (splash) {
-                    splash.classList.remove('stage-active');
-                    splash.classList.add('stage-hidden');
-                }
-                setTimeout(function() {
-                    if (authStage) {
+        function checkAuthSession() {
+            auth.onAuthStateChanged(function(user) {
+                if (user) {
+                    // Already logged in -> Direct Dashboard
+                    window.location.href = "dashboard.html";
+                } else {
+                    // Show Login card
+                    splashStage.classList.remove('stage-active');
+                    splashStage.classList.add('stage-hidden');
+                    setTimeout(function() {
                         authStage.classList.remove('stage-hidden');
                         authStage.classList.add('stage-active');
-                    }
-                }, 300);
+                    }, 300);
+                }
+            });
+        }
+
+        // Google Login Function
+        function handleGoogleLogin() {
+            if (!navigator.onLine) {
+                offlineBox.classList.add('active');
+                return;
+            }
+
+            var provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then(function(result) {
+                    window.location.href = "dashboard.html";
+                })
+                .catch(function(error) {
+                    alert("Login failed: " + error.message);
+                });
+        }
+
+        function toggleGoogleBtn() {
+            var isChecked = document.getElementById('ageCheck').checked;
+            var btnGoogle = document.getElementById('btnGoogle');
+            if (isChecked) {
+                btnGoogle.classList.add('active');
+            } else {
+                btnGoogle.classList.remove('active');
             }
         }
 
-        function checkNetworkAndRetry() {
+        // Start Loader on Load
+        window.onload = function() {
             if (navigator.onLine) {
-                if (offlineBox) offlineBox.classList.remove('active');
-                if (count >= 100) {
-                    finishSplash();
-                } else {
-                    runPureProgress();
-                }
-            } else {
-                var btnSpan = document.querySelector('.btn-retry span');
-  
+                runLoader();
+            }
+        };
+
+        window.addEventListener('online', function() {
+            offlineBox.classList.remove('active');
+            if (progress >= 100) checkAuthSession();
+        });
+
+        window.addEventListener('offline', function() {
+            offlineBox.classList.add('active');
+        });
+    </script>
+</body>
+</html>

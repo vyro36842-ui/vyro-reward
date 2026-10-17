@@ -481,9 +481,10 @@
             signInWithPopup(auth, provider)
                 .then((result) => {
                     const user = result.user;
-                    alert("स्वागत है, " + user.displayName + "! लॉगिन सफल रहा।");
                     console.log("Logged In User:", user);
-                    // Yahan se aap agle page par redirect kar sakte hain
+                    
+                    // Direct dashboard.html par redirect karega
+                    window.location.href = "dashboard.html";
                 })
                 .catch((error) => {
                     console.error("Login Error:", error);

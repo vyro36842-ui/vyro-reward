@@ -1,321 +1,151 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#8b001b">
   <title>Vyro Reward</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #180b16;
-      color: #fff;
-    }
-
-    .container {
-      max-width: 430px;
-      margin: auto;
-      padding: 24px 18px;
-    }
-
-    .logo {
-      text-align: center;
-      color: #ffca28;
-      font-size: 32px;
-      font-weight: bold;
-      margin: 30px 0 10px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #c9b9c6;
-      margin-bottom: 30px;
-    }
-
-    .card {
-      background: #291527;
-      border: 1px solid #51233f;
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 18px;
-    }
-
-    h2 {
-      margin-top: 0;
-      color: #ffca28;
-    }
-
-    p {
-      color: #d9cbd6;
-      line-height: 1.5;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 12px;
-    }
-
-    .google-btn {
-      background: #ffca28;
-      color: #241020;
-    }
-
-    .logout-btn {
-      background: #e53935;
-      color: white;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .profile {
-      text-align: center;
-    }
-
-    .profile img {
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
-      margin-bottom: 10px;
-    }
-
-    .balance {
-      font-size: 30px;
-      font-weight: bold;
-      color: #ffca28;
-    }
-
-    .loading {
-      text-align: center;
-      margin-top: 60px;
-      color: #ffca28;
-    }
-
-    .nav {
-      display: flex;
-      gap: 8px;
-      margin-top: 20px;
-    }
-
-    .nav button {
-      font-size: 13px;
-      padding: 12px 5px;
-      background: #40203a;
-      color: white;
-    }
-
-    .nav button.active {
-      background: #ffca28;
-      color: #241020;
-    }
-  </style>
+  <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
-  <div id="loading" class="loading">
-    Vyro Reward लोड हो रहा है...
-  </div>
+  <main id="app">
+    <!-- Loading screen -->
+    <section id="loadingScreen" class="screen loading-screen">
+      <div class="glow glow-one"></div>
+      <div class="glow glow-two"></div>
 
-  <main class="container hidden" id="loginScreen">
-    <div class="logo">VYRO REWARD</div>
-    <p class="subtitle">कमाओ डायमंड्स, पाओ रिवॉर्ड्स!</p>
+      <div class="brand-icon">V</div>
+      <h1 class="brand-title">VYRO <span>REWARD</span></h1>
+      <p class="tagline">A Smarter Rewards Experience</p>
 
-    <section class="card">
-      <h2>स्वागत है भाई! 👋</h2>
-      <p>अपने Google अकाउंट से लॉगिन करो।</p>
+      <div class="welcome">
+        <span class="welcome-line"></span>
+        <span>WELCOME TO</span>
+        <span class="welcome-line"></span>
+      </div>
 
-      <button id="googleLogin" class="google-btn">
-        Google से लॉगिन करें
-      </button>
+      <h2 class="welcome-title">VYRO <span>REWARD</span></h2>
 
-      <p id="errorMessage" role="alert"></p>
-    </section>
-  </main>
+      <div class="progress-track">
+        <div id="progressBar" class="progress-fill"></div>
+      </div>
 
-  <main class="container hidden" id="appScreen">
-    <section class="card profile">
-      <img id="userPhoto" class="hidden" alt="प्रोफ़ाइल फोटो">
-      <h2 id="userName">नमस्ते!</h2>
-      <p id="userEmail"></p>
-    </section>
-
-    <section id="homeTab" class="card">
-      <h2>🏠 होम</h2>
-      <p>तुम्हारा डायमंड बैलेंस</p>
-      <div class="balance" id="diamondBalance">0 💎</div>
-      <p>यह अभी शुरुआती स्क्रीन है। असली रिवॉर्ड सिस्टम बाद में जोड़ा जाएगा।</p>
+      <p id="loadingMessage" class="loading-message">
+        Checking your connection...
+      </p>
+      <p id="loadingPercent" class="loading-percent">0%</p>
     </section>
 
-    <section id="referralTab" class="card hidden">
-      <h2>👥 रेफरल</h2>
-      <p>रेफरल सिस्टम अभी जोड़ा नहीं गया है।</p>
-    </section>
-
-    <section id="walletTab" class="card hidden">
-      <h2>💰 वॉलेट</h2>
-      <p>वॉलेट और पेमेंट सिस्टम अभी जोड़ा नहीं गया है।</p>
-    </section>
-
-    <section id="settingsTab" class="card hidden">
-      <h2>⚙️ सेटिंग्स</h2>
-      <p>अपना अकाउंट यहाँ देख सकते हो।</p>
-      <button id="logoutButton" class="logout-btn">
-        लॉगआउट करें
+    <!-- Offline screen -->
+    <section id="offlineScreen" class="screen message-screen hidden">
+      <div class="message-icon">!</div>
+      <h1>Connection Lost</h1>
+      <p>
+        भाई, इंटरनेट कनेक्शन उपलब्ध नहीं है।
+        कृपया इंटरनेट चालू करके फिर कोशिश करें।
+      </p>
+      <button id="retryButton" class="primary-button">
+        दोबारा कोशिश करें
       </button>
     </section>
 
-    <nav class="nav">
-      <button class="active" data-tab="homeTab">होम</button>
-      <button data-tab="referralTab">रेफरल</button>
-      <button data-tab="walletTab">वॉलेट</button>
-      <button data-tab="settingsTab">सेटिंग्स</button>
-    </nav>
+    <!-- Age eligibility screen -->
+    <section id="ageScreen" class="screen form-screen hidden">
+      <div class="small-brand">V<span>R</span></div>
+      <p class="eyebrow">WELCOME TO VYRO REWARD</p>
+      <h1>Before We Begin</h1>
+      <p class="description">
+        आगे बढ़ने से पहले कृपया ऐप की उम्र संबंधी पात्रता पढ़ें।
+      </p>
+
+      <label class="age-option">
+        <input type="checkbox" id="ageCheckbox">
+        <span class="custom-check"></span>
+        <span>
+          मैं पुष्टि करता/करती हूँ कि मैं ऐप की निर्धारित
+          उम्र की पात्रता पूरी करता/करती हूँ।
+        </span>
+      </label>
+
+      <p id="ageError" class="error-message hidden">
+        आगे बढ़ने के लिए पात्रता की पुष्टि आवश्यक है।
+      </p>
+
+      <button id="continueButton" class="primary-button" disabled>
+        आगे बढ़ें <span>→</span>
+      </button>
+
+      <p class="footer-note">
+        कृपया सही जानकारी दें।
+      </p>
+    </section>
+
+    <!-- Google login screen -->
+    <section id="loginScreen" class="screen form-screen hidden">
+      <div class="small-brand">V<span>R</span></div>
+      <p class="eyebrow">YOUR REWARDS JOURNEY STARTS HERE</p>
+      <h1>Welcome Back!</h1>
+      <p class="description">
+        अपने Google अकाउंट से सुरक्षित रूप से लॉगिन करें
+        और Vyro Reward में आगे बढ़ें।
+      </p>
+
+      <div class="login-card">
+        <div class="google-letter">G</div>
+        <h2>Continue with Google</h2>
+        <p>आगे बढ़ने के लिए अपना Google अकाउंट चुनें।</p>
+
+        <button id="googleLoginButton" class="google-button">
+          <span class="google-symbol">G</span>
+          <span>Google से लॉगिन करें</span>
+        </button>
+
+        <p id="loginError" class="error-message hidden"></p>
+      </div>
+
+      <p class="footer-note">
+        Secure sign-in powered by Firebase
+      </p>
+    </section>
+
+    <!-- Main app screen -->
+    <section id="mainScreen" class="screen main-screen hidden">
+      <header class="top-header">
+        <div class="small-brand">V<span>R</span></div>
+        <div>
+          <strong>VYRO REWARD</strong>
+          <p>Welcome to your journey</p>
+        </div>
+      </header>
+
+      <div id="pageContent" class="page-content">
+        <h1 id="pageTitle">Home</h1>
+        <p id="pageDescription">Welcome to Vyro Reward.</p>
+      </div>
+
+      <nav class="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="home">
+          <span>⌂</span>
+          <small>Home</small>
+        </button>
+        <button class="nav-item" data-page="rewards">
+          <span>◇</span>
+          <small>Rewards</small>
+        </button>
+        <button class="nav-item" data-page="wallet">
+          <span>▣</span>
+          <small>Wallet</small>
+        </button>
+        <button class="nav-item" data-page="profile">
+          <span>○</span>
+          <small>Profile</small>
+        </button>
+      </nav>
+    </section>
   </main>
 
-  <script type="module">
-    import { auth } from "./firebase.js";
-
-    import {
-      GoogleAuthProvider,
-      signInWithPopup,
-      signInWithRedirect,
-      getRedirectResult,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-
-    const loading = document.getElementById("loading");
-    const loginScreen = document.getElementById("loginScreen");
-    const appScreen = document.getElementById("appScreen");
-    const googleLogin = document.getElementById("googleLogin");
-    const errorMessage = document.getElementById("errorMessage");
-
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({
-      prompt: "select_account"
-    });
-
-    let redirectInProgress = false;
-
-    function showLogin() {
-      loading.classList.add("hidden");
-      appScreen.classList.add("hidden");
-      loginScreen.classList.remove("hidden");
-    }
-
-    function showApp(user) {
-      loading.classList.add("hidden");
-      loginScreen.classList.add("hidden");
-      appScreen.classList.remove("hidden");
-
-      document.getElementById("userName").textContent =
-        user.displayName || "Vyro User";
-
-      document.getElementById("userEmail").textContent =
-        user.email || "";
-
-      const photo = document.getElementById("userPhoto");
-
-      if (user.photoURL) {
-        photo.src = user.photoURL;
-        photo.classList.remove("hidden");
-      } else {
-        photo.classList.add("hidden");
-      }
-    }
-
-    googleLogin.addEventListener("click", async () => {
-      googleLogin.disabled = true;
-      errorMessage.textContent = "";
-      errorMessage.style.color = "#ff7777";
-
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (error) {
-        if (
-          error.code === "auth/popup-blocked" ||
-          error.code === "auth/popup-closed-by-user" ||
-          error.code === "auth/operation-not-supported-in-this-environment"
-        ) {
-          try {
-            redirectInProgress = true;
-            await signInWithRedirect(auth, provider);
-            return;
-          } catch (redirectError) {
-            redirectInProgress = false;
-            errorMessage.textContent =
-              "लॉगिन नहीं हुआ। दोबारा कोशिश करो।";
-            console.error(redirectError);
-          }
-        } else {
-          errorMessage.textContent =
-            "लॉगिन नहीं हुआ: " + error.message;
-          console.error(error);
-        }
-      } finally {
-        if (!redirectInProgress) {
-          googleLogin.disabled = false;
-        }
-      }
-    });
-
-    document.getElementById("logoutButton").addEventListener(
-      "click",
-      async () => {
-        try {
-          await signOut(auth);
-        } catch (error) {
-          alert("लॉगआउट नहीं हुआ। दोबारा कोशिश करो।");
-          console.error(error);
-        }
-      }
-    );
-
-    document.querySelectorAll(".nav button").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".nav button").forEach(item => {
-          item.classList.remove("active");
-        });
-
-        button.classList.add("active");
-
-        document.querySelectorAll(
-          "#appScreen > section[id$='Tab']"
-        ).forEach(tab => {
-          tab.classList.add("hidden");
-        });
-
-        document.getElementById(
-          button.dataset.tab
-        ).classList.remove("hidden");
-      });
-    });
-
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        showApp(user);
-      } else {
-        showLogin();
-      }
-    });
-
-    getRedirectResult(auth).catch(error => {
-      console.error("Google redirect login error:", error);
-      errorMessage.textContent =
-        "Google लॉगिन में समस्या आई। दोबारा कोशिश करो।";
-    });
-  </script>
+  <script type="module" src="./js/app.js"></script>
 </body>
 </html>

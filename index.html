@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -18,7 +18,7 @@
             --secondary-gold: #FFA500;
             --accent-purple: #8A2BE2;
             --neon-blue: #00F3FF;
-            --card-bg: rgba(18, 22, 41, 0.65);
+            --card-bg: rgba(18, 22, 41, 0.75);
             --border-glow: rgba(255, 215, 0, 0.25);
             --text-main: #FFFFFF;
             --text-muted: #94A3B8;
@@ -44,7 +44,7 @@
             position: relative;
         }
 
-        /* Particle Canvas Background */
+        /* Canvas Particle Background */
         #particleCanvas {
             position: absolute;
             top: 0;
@@ -55,7 +55,7 @@
             pointer-events: none;
         }
 
-        /* Background Glow Orbs */
+        /* Glow Orbs */
         .glow-orb {
             position: absolute;
             border-radius: 50%;
@@ -88,7 +88,7 @@
             100% { transform: scale(1.3) translate(30px, -30px); opacity: 0.7; }
         }
 
-        /* Main Container */
+        /* Container */
         .app-container {
             position: relative;
             z-index: 10;
@@ -102,18 +102,18 @@
             min-height: 100vh;
         }
 
-        /* Stage View Controller */
+        /* Stage Handling */
         .stage {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .stage-hidden {
             opacity: 0;
-            transform: scale(0.92) translateY(30px);
+            transform: scale(0.92) translateY(20px);
             pointer-events: none;
             position: absolute;
         }
@@ -125,7 +125,7 @@
             position: relative;
         }
 
-        /* ================= STAGE 1: SPLASH SCREEN ================= */
+        /* ================= STAGE 1: SPLASH ================= */
         .logo-wrapper {
             position: relative;
             width: 140px;
@@ -137,7 +137,6 @@
             perspective: 1000px;
         }
 
-        /* Continuous 360 Rotation Rings */
         .ring-outer {
             position: absolute;
             width: 100%;
@@ -159,7 +158,7 @@
             animation: spinReverse 6s linear infinite;
         }
 
-        /* 360-Degree Continuous Rotating 3D 'V' Logo */
+        /* 360 Rotating 'V' Logo */
         .logo-3d-v {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 72px;
@@ -189,7 +188,7 @@
 
         .brand-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 38px;
+            font-size: 36px;
             font-weight: 800;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -197,20 +196,17 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 6px;
-            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
         .brand-tagline {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--primary-gold);
             letter-spacing: 3px;
             text-transform: uppercase;
             font-weight: 600;
             margin-bottom: 45px;
-            opacity: 0.9;
         }
 
-        /* Progress Bar Section */
         .progress-box {
             width: 100%;
             max-width: 300px;
@@ -223,11 +219,9 @@
         .progress-bar-bg {
             width: 100%;
             height: 8px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 2px;
             position: relative;
         }
 
@@ -237,7 +231,7 @@
             background: linear-gradient(90deg, var(--accent-purple), var(--primary-gold), var(--neon-blue));
             border-radius: 20px;
             box-shadow: 0 0 12px var(--primary-gold);
-            transition: width 0.1s ease-out;
+            transition: width 0.1s linear;
         }
 
         .progress-text-group {
@@ -264,33 +258,18 @@
             border: 1px solid var(--border-glow);
             border-radius: 28px;
             padding: 32px 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7),
-                        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 200%;
-            height: 100%;
-            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.03), transparent);
-            transform: rotate(30deg);
-            pointer-events: none;
         }
 
         .card-icon {
             width: 60px;
             height: 60px;
             border-radius: 18px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(138, 43, 226, 0.15));
+            background: rgba(255, 215, 0, 0.15);
             border: 1px solid rgba(255, 215, 0, 0.3);
             display: flex;
             justify-content: center;
@@ -298,7 +277,6 @@
             font-size: 26px;
             color: var(--primary-gold);
             margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
         .welcome-title {
@@ -313,304 +291,10 @@
             color: var(--text-muted);
             line-height: 1.5;
             margin-bottom: 28px;
-            padding: 0 10px;
         }
 
-        /* 18+ Checkbox Section */
         .age-checkbox-container {
             width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .age-checkbox-container:hover {
-            border-color: rgba(255, 215, 0, 0.4);
-            background: rgba(255, 215, 0, 0.02);
-        }
-
-        /* Custom Checkbox Design */
-        .custom-checkbox {
-            position: relative;
-            width: 22px;
-            height: 22px;
-            border: 2px solid var(--text-muted);
-            border-radius: 6px;
-            transition: all 0.25s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .custom-checkbox i {
-            color: #060812;
-            font-size: 12px;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.2s ease;
-        }
-
-        #ageCheck {
-            display: none;
-        }
-
-        #ageCheck:checked + .custom-checkbox {
-            background: var(--primary-gold);
-            border-color: var(--primary-gold);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        #ageCheck:checked + .custom-checkbox i {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .checkbox-label {
-            font-size: 13px;
-            color: #E2E8F0;
-            font-weight: 500;
-            text-align: left;
-            line-height: 1.3;
-            cursor: pointer;
-        }
-
-        .checkbox-label span {
-            color: var(--primary-gold);
-            font-weight: 700;
-        }
-
-        /* Google Login Button */
-        .btn-google {
-            width: 100%;
-            padding: 16px 20px;
-            border-radius: 16px;
-            border: none;
-            background: #FFFFFF;
-            color: #1E293B;
-            font-size: 15px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            opacity: 0.4;
-            pointer-events: none;
-            filter: grayscale(0.6);
-        }
-
-        /* Active Google Button state */
-        .btn-google.active {
-            opacity: 1;
-            pointer-events: all;
-            filter: grayscale(0);
-            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.25);
-        }
-
-        .btn-google.active:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
-            background: #FFFFFF;
-        }
-
-        .btn-google.active:active {
-            transform: translateY(1deg);
-        }
-
-        .google-icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        .security-tag {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 20px;
-        }
-
-        .security-tag i {
-            color: #10B981;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Particle Canvas Background -->
-    <canvas id="particleCanvas"></canvas>
-
-    <!-- Glowing Background Blur Orbs -->
-    <div class="glow-orb orb-1"></div>
-    <div class="glow-orb orb-2"></div>
-
-    <div class="app-container">
-
-        <!-- ================= STAGE 1: SPLASH SCREEN ================= -->
-        <div id="stageSplash" class="stage stage-active">
-            <div class="logo-wrapper">
-                <div class="ring-outer"></div>
-                <div class="ring-inner"></div>
-                <!-- 360 Continuous Rotating 'V' Logo -->
-                <div class="logo-3d-v">V</div>
-            </div>
-
-            <h1 class="brand-title">VYRO REWARD</h1>
-            <p class="brand-tagline">Play • Earn • Redeem</p>
-
-            <div class="progress-box">
-                <div class="progress-bar-bg">
-                    <div id="progressFill" class="progress-bar-fill"></div>
-                </div>
-                <div class="progress-text-group">
-                    <span>Loading resources...</span>
-                    <span class="counter-num"><span id="progressNum">0</span>%</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= STAGE 2: AGE VERIFICATION & LOGIN ================= -->
-        <div id="stageAuth" class="stage stage-hidden">
-            <div class="glass-card">
-                <div class="card-icon">
-                    <i class="fa-solid fa-gift"></i>
-                </div>
-                
-                <h2 class="welcome-title">Welcome to Vyro</h2>
-                <p class="welcome-subtitle">Join thousands of users earning daily rewards. Sign in to continue your journey.</p>
-
-                <!-- 18+ Age Checkbox -->
-                <label class="age-checkbox-container" for="ageCheck">
-                    <input type="checkbox" id="ageCheck" onchange="toggleGoogleBtn()">
-                    <div class="custom-checkbox">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                    <div class="checkbox-label">
-                        I confirm that I am <span>18 years</span> or older and accept terms.
-                    </div>
-                </label>
-
-                <!-- Google Sign In Button -->
-                <button id="btnGoogle" class="btn-google" onclick="handleGoogleLogin()">
-                    <svg class="google-icon" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.37 7.36 24 12 24z"/>
-                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.15 0 9.99 0 12s.45 3.85 1.24 5.42l4.04-3.15z"/>
-                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.36 0 3.26 2.63 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-                    </svg>
-                    <span id="btnText">Sign in with Google</span>
-                </button>
-
-                <div class="security-tag">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span>Protected with Firebase Security</span>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        /* ================= 1. CANVAS PARTICLES ================= */
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        const particles = [];
-        const particleCount = 45;
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.speedY = (Math.random() - 0.5) * 0.4;
-                this.alpha = Math.random() * 0.6 + 0.2;
-                this.color = Math.random() > 0.5 ? '#FFD700' : '#8A2BE2';
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-                    this.reset();
-                }
-            }
-
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        /* ================= 2. SPLASH LOADING TIMER ================= */
-        let progress = 0;
-        const progressFill = document.getElementById('progressFill');
-        const progressNum = document.getElementById('progressNum');
-        const stageSplash = document.getElementById('stageSplash');
-        const stageAuth = document.getElementById('stageAuth');
-
-        const interval = setInterval(() => {
-            // Speed control for initial fast and smooth slowdown near end
-            let increment = Math.floor(Math.random() * 4) + 1;
-            if (progress > 80) increment = 1;
-            
-            progress += increment;
-
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(interval);
-                
-                // Smooth Transition to Stage 2
-                setTimeout(() => {
-                    stageSplash.classList.remove('stage-active');
-                    stageSplash.classList.add('stage-hidden');
-                    
-                    setTimeout(() => {
-                        stageAuth.classList.remove('stage-hidden');
-                        stageAuth.classList.add('stage-active');
-                    }
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255,
+                                   

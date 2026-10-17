@@ -18,7 +18,8 @@
             --secondary-gold: #FFA500;
             --accent-purple: #8A2BE2;
             --neon-blue: #00F3FF;
-            --card-bg: rgba(18, 22, 41, 0.75);
+            --neon-red: #FF3366;
+            --card-bg: rgba(18, 22, 41, 0.85);
             --border-glow: rgba(255, 215, 0, 0.25);
             --text-main: #FFFFFF;
             --text-muted: #94A3B8;
@@ -390,6 +391,108 @@
         .security-tag i {
             color: #10B981;
         }
+
+        /* ================= OFFLINE ERROR OVERLAY ================= */
+        .offline-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(6, 8, 18, 0.96);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .offline-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .offline-card {
+            width: 100%;
+            max-width: 380px;
+            background: rgba(22, 16, 28, 0.9);
+            border: 1px solid rgba(255, 51, 102, 0.3);
+            border-radius: 28px;
+            padding: 36px 24px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(255, 51, 102, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .offline-icon-box {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: rgba(255, 51, 102, 0.12);
+            border: 1px solid rgba(255, 51, 102, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            color: var(--neon-red);
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.3);
+            animation: pulseRed 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseRed {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 51, 102, 0.3); }
+            50% { transform: scale(1.08); box-shadow: 0 0 30px rgba(255, 51, 102, 0.6); }
+        }
+
+        .offline-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #FFF;
+            margin-bottom: 10px;
+        }
+
+        .offline-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .btn-retry {
+            width: 100%;
+            padding: 15px;
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, var(--neon-red), #D91B5C);
+            color: #FFF;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 51, 102, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-retry:active {
+            transform: scale(0.97);
+        }
     </style>
 </head>
 <body>
@@ -466,13 +569,50 @@
 
     </div>
 
-    <!-- MODULE SCRIPT TO IMPORT firebase.js AND HANDLE GOOGLE LOGIN -->
+    <!-- OFFLINE ERROR SCREEN OVERLAY -->
+    <div id="offlineOverlay" class="offline-overlay">
+        <div class="offline-card">
+            <div class="offline-icon-box">
+                <i class="fa-solid fa-wifi"></i>
+            </div>
+            <h3 class="offline-title">Connection Lost</h3>
+            <p class="offline-desc">Internet connection is required to access Vyro Reward. Please check your data or Wi-Fi network.</p>
+            <button class="btn-retry" onclick="checkNetworkAndRetry()">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>Retry Connection</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODULE SCRIPT TO CHECK AUTO LOGIN AND HANDLE GOOGLE AUTH -->
     <script type="module">
         import { auth } from "./firebase.js";
-        import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+        import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
-        // Global function for Google Login button click
+        // Global flag to track user login status
+        window.isUserLoggedIn = false;
+
+        // Automatically Check if User is Already Logged In
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("User pehle se logged in hai:", user.displayName);
+                window.isUserLoggedIn = true;
+                if (window.isSplashFinished && navigator.onLine) {
+                    window.location.href = "dashboard.html";
+                }
+            } else {
+                console.log("Koi user logged in nahi hai.");
+                window.isUserLoggedIn = false;
+            }
+        });
+
+        // Function for Google Login Click
         window.handleGoogleLogin = function() {
+            if (!navigator.onLine) {
+                showOfflineOverlay();
+                return;
+            }
+
             const btnText = document.getElementById('btnText');
             if (btnText) btnText.innerText = "Connecting Google...";
             
@@ -480,107 +620,9 @@
 
             signInWithPopup(auth, provider)
                 .then((result) => {
-                    const user = result.user;
-                    console.log("Logged In User:", user);
-                    
-                    // Direct dashboard.html par redirect karega
+                    console.log("Login Successful:", result.user);
                     window.location.href = "dashboard.html";
                 })
                 .catch((error) => {
                     console.error("Login Error:", error);
-                    alert("लॉगिन असफल रहा: " + error.message);
-                    if (btnText) btnText.innerText = "Sign in with Google";
-                });
-        }
-    </script>
-
-    <!-- GENERAL UI SCRIPT (Splash & Particles) -->
-    <script>
-        const progressFill = document.getElementById('progressFill');
-        const progressNum = document.getElementById('progressNum');
-        const stageSplash = document.getElementById('stageSplash');
-        const stageAuth = document.getElementById('stageAuth');
-
-        let progress = 0;
-        
-        function updateProgress() {
-            if (progress < 100) {
-                progress += Math.floor(Math.random() * 3) + 2;
-                if (progress > 100) progress = 100;
-                
-                if (progressFill) progressFill.style.width = progress + '%';
-                if (progressNum) progressNum.innerText = progress;
-
-                setTimeout(updateProgress, 40);
-            } else {
-                setTimeout(() => {
-                    if (stageSplash) {
-                        stageSplash.classList.remove('stage-active');
-                        stageSplash.classList.add('stage-hidden');
-                    }
-                    setTimeout(() => {
-                        if (stageAuth) {
-                            stageAuth.classList.remove('stage-hidden');
-                            stageAuth.classList.add('stage-active');
-                        }
-                    }, 300);
-                }, 400);
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            updateProgress();
-            initParticles();
-        });
-
-        function initParticles() {
-            const canvas = document.getElementById('particleCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            resize();
-            window.addEventListener('resize', resize);
-
-            const particles = Array.from({ length: 35 }, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 2 + 0.5,
-                speedX: (Math.random() - 0.5) * 0.4,
-                speedY: (Math.random() - 0.5) * 0.4,
-                color: Math.random() > 0.5 ? '#FFD700' : '#8A2BE2'
-            }));
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    p.x += p.speedX;
-                    p.y += p.speedY;
-                    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-                    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
-        }
-
-        function toggleGoogleBtn() {
-            const isChecked = document.getElementById('ageCheck').checked;
-            const btnGoogle = document.getElementById('btnGoogle');
-            if (isChecked) {
-                btnGoogle.classList.add('active');
-            } else {
-                btnGoogle.classList.remove('active');
-            }
-        }
-    </script>
-</body>
-</html>
+                    alert("Log

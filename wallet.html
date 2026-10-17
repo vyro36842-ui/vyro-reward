@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyro Reward - Wallet Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at 50% 30%, #121829 0%, #060812 100%);
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFA500;
+            --accent-purple: #8A2BE2;
+            --neon-green: #10B981;
+            --neon-red: #FF3366;
+            --text-main: #FFFFFF;
+            --text-muted: #94A3B8;
+            --card-bg: rgba(18, 22, 41, 0.85);
+            --border-glow: rgba(255, 215, 0, 0.25);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Outfit', sans-serif; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg-gradient); background-color: #060812; color: var(--text-main); min-height: 100vh; padding: 16px; padding-bottom: 40px; overflow-x: hidden; }
+        .wallet-view { max-width: 480px; margin: 0 auto; }
+        .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .page-title { font-size: 20px; font-weight: 800; color: var(--primary-gold); font-family: 'Space Grotesk', sans-serif; display: flex; align-items: center; gap: 10px; }
+        
+        .balance-card { background: linear-gradient(135deg, rgba(25, 20, 45, 0.95) 0%, rgba(12, 10, 25, 0.98) 100%); border: 1px solid var(--border-glow); border-radius: 24px; padding: 24px 20px; margin-bottom: 22px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6); text-align: center; position: relative; overflow: hidden; }
+        .balance-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; }
+        .balance-amount { font-size: 34px; font-weight: 900; color: var(--neon-green); font-family: 'Space Grotesk', sans-serif; margin-bottom: 6px; text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+        .coins-subtext { font-size: 13px; color: var(--primary-gold); font-weight: 600; }
+
+        .dash-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-glow); border-radius: 22px; padding: 20px; margin-bottom: 18px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
+        .card-heading { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--primary-gold); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+
+        .method-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+        .method-tab { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 12px; text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .method-tab.active { background: rgba(255, 215, 0, 0.12); border-color: var(--primary-gold); color: var(--primary-gold); }
+
+        .redeem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+        .redeem-btn-option { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px 8px; color: #FFF; text-align: center; }
+        .redeem-btn-option span { display: block; font-size: 16px; font-weight: 800; color: var(--primary-gold); margin-bottom: 2px; }
+        .redeem-btn-option small { font-size: 10px; color: var(--text-muted); }
+
+        .btn-withdraw { width: 100%; background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold)); color: #060812; border: none; padding: 15px; border-radius: 16px; font-weight: 800; font-size: 15px; box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+        .history-empty { text-align: center; padding: 20px 0; color: var(--text-muted); font-size: 13px; }
+    </style>
+</head>
+<body>
+    <main class="wallet-view">
+        <div class="page-header">
+            <div class="page-title"><i class="fa-solid fa-wallet"></i> Wallet & Payout</div>
+        </div>
+
+        <div class="balance-card">
+            <div class="balance-label">Total Redeemable Balance</div>
+            <div class="balance-amount">₹ 0.00</div>
+            <div class="coins-subtext"><i class="fa-solid fa-coins" style="color: var(--primary-gold);"></i> 0 Coins (100 Coins = ₹1)</div>
+        </div>
+
+        <div class="dash-card">
+            <div class="card-heading"><i class="fa-solid fa-money-bill-transfer"></i> Choose Payout Method</div>
+            
+            <div class="method-tabs">
+                <div class="method-tab active" id="tabBank" onclick="switchMethod('bank')"><i class="fa-solid fa-building-columns"></i> UPI / Bank</div>
+                <div class="method-tab" id="tabCode" onclick="switchMethod('code')"><i class="fa-solid fa-ticket"></i> Redeem Code</div>
+            </div>
+
+            <div class="redeem-grid">
+                <div class="redeem-btn-option">
+                    <span>₹55</span>
+                    <small>5,500 Coins</small>
+                </div>
+                <div class="redeem-btn-option">
+                    <span>₹105</span>
+                    <small>10,500 Coins</small>
+                </div>
+                <div class="redeem-btn-option">
+                    <span>₹255</span>
+                    <small>25,500 Coins</small>
+                </div>
+            </div>
+
+            <button class="btn-withdraw">
+                <i class="fa-solid fa-paper-plane"></i> Request Withdrawal
+            </button>
+        </div>
+
+        <div class="dash-card">
+            <div class="card-heading"><i class="fa-solid fa-clock-rotate-left"></i> Payout History</div>
+            <div class="history-empty">
+                <i class="fa-solid fa-box-open" style="font-size: 24px; margin-bottom: 6px; display: block; color: var(--text-muted);"></i>
+                No payout records found yet.
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchMethod(method) {
+            document.getElementById('tabBank').classList.remove('active');
+            document.getElementById('tabCode').classList.remove('active');
+            if(method === 'bank') {
+                document.getElementById('tabBank').classList.add('active');
+            } else {
+                document.getElementById('tabCode').classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
